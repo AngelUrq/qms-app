@@ -38,6 +38,9 @@
     }
   },
   "lint-staged": {
-    "*.js": ["./node_modules/.bin/eslint -fix", "git add"]
+    "*.Vue": [
+      "./node_modules/.bin/eslint -fix",
+      "git add"
+    ]
   }
 }
