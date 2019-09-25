@@ -1,4 +1,4 @@
-# qms-app
+# Quality Management System app
 
 ## Project setup
 ```
