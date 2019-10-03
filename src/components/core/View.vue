@@ -14,7 +14,7 @@ export default {
 
   metaInfo () {
     return {
-      title: 'Vue Material Dashboard by CreativeTim'
+      title: 'Quality Management System App'
     }
   }
 }

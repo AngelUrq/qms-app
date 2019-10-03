@@ -21,14 +21,14 @@
     <v-list-item two-line>
       <v-list-item-avatar color="white">
         <v-img
-          src="https://cdn.vuetifyjs.com/images/logos/v.png"
+          src="https://our.umbraco.com/media/wiki/140890/635578860265270330_appsjpg.jpg"
           height="34"
           contain
         />
       </v-list-item-avatar>
 
       <v-list-item-title class="title">
-        SGC App
+        SGC
       </v-list-item-title>
     </v-list-item>
 
@@ -73,37 +73,37 @@ export default {
       {
         to: '/',
         icon: 'mdi-view-dashboard',
-        text: 'Dashboard'
+        text: 'Panel de administración'
       },
       {
         to: '/user-profile',
         icon: 'mdi-account',
-        text: 'User Profile'
+        text: 'Gestor de usuarios'
       },
       {
         to: '/table-list',
         icon: 'mdi-clipboard-outline',
-        text: 'Table List'
+        text: 'Planes de acción'
       },
       {
         to: '/typography',
-        icon: 'mdi-format-font',
-        text: 'Typography'
+        icon: 'mdi-chart-bar',
+        text: 'Estadísticas'
       },
       {
         to: '/icons',
         icon: 'mdi-chart-bubble',
-        text: 'Icons'
+        text: 'Iconos'
       },
       {
         to: '/maps',
         icon: 'mdi-map-marker',
-        text: 'Maps'
+        text: 'Mapas'
       },
       {
         to: '/notifications',
         icon: 'mdi-bell',
-        text: 'Notifications'
+        text: 'Notificaciones'
       }
     ]
   }),
