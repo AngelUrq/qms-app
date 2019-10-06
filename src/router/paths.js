@@ -5,7 +5,7 @@
  */
 export default [
   {
-    path: '',
+    path: '/dashboard',
     // Relative to /src/views
     view: 'Dashboard'
   },
@@ -39,5 +39,9 @@ export default [
     path: '/user-manager',
     name: 'Gestor de usuarios',
     view: 'UserManager'
+  },
+  {
+    path: '/',
+    view: 'Login'
   }
 ]
