@@ -1,9 +1,9 @@
 <template>
   <v-app>
-      <core-app-bar />
-      <core-view />
-      <core-footer />
-      <core-drawer />
+    <core-app-bar />
+    <core-view />
+    <core-footer />
+    <core-drawer />
   </v-app>
 </template>
 
@@ -16,10 +16,5 @@ export default {
     CoreAppBar: () => import('@/components/core/AppBar'),
     CoreView: () => import('@/components/core/View')
   }
-  /* data () {
-    return {
-      isLogged: false
-    }
-  } */
 }
 </script>

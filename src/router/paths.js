@@ -5,7 +5,7 @@
  */
 export default [
   {
-    path: '/home',
+    path: '/',
     // Relative to /src/views
     view: 'Dashboard'
   },
@@ -36,7 +36,7 @@ export default [
     view: 'Notifications'
   },
   {
-    path: '/',
+    path: '/login',
     view: 'Login'
   }
 ]
