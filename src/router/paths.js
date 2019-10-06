@@ -34,5 +34,10 @@ export default [
   {
     path: '/notifications',
     view: 'Notifications'
+  },
+  {
+    path: '/user-manager',
+    name: 'Gestor de usuarios',
+    view: 'UserManager'
   }
 ]
