@@ -1,90 +1,116 @@
 <template>
-  <div>
-    <material-card
-      color="orange"
-      title="Employee Stats"
-      text="New employees on 15th September, 2016"
-    >
-      <v-data-table :headers="headers" :items="items" hide-default-footer />
-    </material-card>
-  </div>
+  <material-card
+          class="card-tabs"
+          color="blue"
+        >
+          <template v-slot:header>
+          <span
+                class="subheading font-weight-light mx-5"
+                style="align-self: center; font-size:150%"
+              >Usuarios</span>
+            <v-container>
+              <v-row
+              class="mx-5"
+              justify="end"
+              >
+                <RegistrarUsuario @click="hey()"/>
+              </v-row>
+            </v-container>
+          </template>
+          <v-data-table
+            :headers="headers"
+            :items="Users"
+            :page.sync="page"
+            :items-per-page="10"
+            hide-default-footer
+            class="elevation-1"
+            @page-count="pageCount = $event"
+          ></v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination color="orange lighten-1" v-model="page" :length="pageCount"></v-pagination>
+          </div>
+        </material-card>
 </template>
 
 <script>
+import RegistrarUsuario from './RegistrarUsuario'
+import axios from 'axios'
 export default {
+  components: { RegistrarUsuario },
   data () {
     return {
+      page: 1,
+      pageCount: 0,
+      Users: [],
       headers: [
         {
           sortable: false,
-          text: 'ID',
-          value: 'id'
+          text: 'Codigo',
+          value: 'code'
         },
         {
           sortable: false,
-          text: 'Name',
-          value: 'name'
+          text: 'Role',
+          value: 'role'
         },
         {
           sortable: false,
-          text: 'Salary',
-          value: 'salary',
+          text: 'Nombre',
+          value: 'firstNames'
+        },
+        {
+          sortable: false,
+          text: 'Apellido Paterno',
+          value: 'parentalLastName',
           align: 'right'
         },
         {
           sortable: false,
-          text: 'Country',
-          value: 'country',
+          text: 'Apellido Materno',
+          value: 'maternalLastName',
           align: 'right'
         },
         {
           sortable: false,
-          text: 'City',
+          text: 'Correo',
+          value: 'email',
+          align: 'right'
+        },
+        {
+          sortable: false,
+          text: 'Ciudad',
           value: 'city',
           align: 'right'
-        }
-      ],
-      items: [
-        {
-          id: 1,
-          name: 'Dakota Rice',
-          country: 'Niger',
-          city: 'Oud-Tunrhout',
-          salary: '$35,738'
         },
         {
-          id: 2,
-          name: 'Minerva Hooper',
-          country: 'Curaçao',
-          city: 'Sinaai-Waas',
-          salary: '$23,738'
+          sortable: false,
+          text: 'Celular',
+          value: 'phone',
+          align: 'right'
         },
         {
-          id: 3,
-          name: 'Sage Rodriguez',
-          country: 'Netherlands',
-          city: 'Overland Park',
-          salary: '$56,142'
-        },
-        {
-          id: 4,
-          name: 'Philip Chanley',
-          country: 'Korea, South',
-          city: 'Gloucester',
-          salary: '$38,735'
-        },
-        {
-          id: 5,
-          name: 'Doris Greene',
-          country: 'Malawi',
-          city: 'Feldkirchen in Kārnten',
-          salary: '$63,542'
+          sortable: false,
+          text: 'Notas',
+          value: 'notes',
+          align: 'right'
         }
       ]
+    }
+  },
+  mounted () {
+    this.getUsers()
+  },
+  methods: {
+    getUsers () {
+      axios.get('http://localhost:3000/signup')
+        .then((response) => {
+          console.log(response.data)
+          this.Users = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }
 </script>
-
-<style scoped>
-</style>
