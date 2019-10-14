@@ -11,4 +11,5 @@ export default {
     CoreView: () => import('@/components/core/View')
   }
 }
+
 </script>

@@ -76,9 +76,9 @@ export default {
         text: 'Panel de administración'
       },
       {
-        to: '/typography',
-        icon: 'mdi-chart-bar',
-        text: 'Estadísticas'
+        to: '/reports',
+        icon: 'mdi-file-document ',
+        text: 'Informes'
       },
       {
         to: '/table-list',
@@ -94,6 +94,11 @@ export default {
         to: '/user-manager',
         icon: 'mdi-account-group',
         text: 'Gestor de usuarios'
+      },
+      {
+        to: '/typography',
+        icon: 'mdi-chart-bar',
+        text: 'Estadísticas'
       },
       {
         to: '/icons',
