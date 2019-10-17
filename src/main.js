@@ -8,6 +8,8 @@ import { sync } from 'vuex-router-sync'
 
 sync(store, router)
 
+export const EventBus = new Vue()
+
 Vue.config.productionTip = false
 
 new Vue({

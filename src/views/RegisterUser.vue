@@ -1,6 +1,5 @@
 <template>
-  <v-row justify="end">
-    <v-dialog v-model="dialog" scrollable max-width="500px">
+    <v-dialog v-model="dialog" scrollable>
       <template v-slot:activator="{ on }">
         <v-btn
         class="orange lighten-1 blue--text text--lighten-1"
@@ -64,7 +63,11 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field prepend-icon="mdi-cellphone" color="blue" label="Celular/Telefono*" v-model="User.phone"></v-text-field>
+                <v-text-field
+                prepend-icon="mdi-cellphone"
+                color="blue"
+                label="Celular/Telefono*"
+                v-model="User.phone"></v-text-field>
               </v-col>
               <v-col cols="12" md="12">
                 <v-textarea
@@ -80,15 +83,15 @@
         <v-card-actions>
           <div class="flex-grow-1"></div>
           <v-btn color="blue darken-1" small class="blue lighten-1 orange--text text--lighten-2" @click="RegisterUserAPI()">Registrar
-            <v-icon small="" right>mdi-checkbox-marked-circle</v-icon>
+            <v-icon small right>mdi-checkbox-marked-circle</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
 </template>
 
 <script>
+import { EventBus } from '../main'
 import axios from 'axios'
 export default {
   data () {
@@ -126,6 +129,7 @@ export default {
       axios.post('http://localhost:3000/signup', newUser)
         .then((response) => {
           console.log(response)
+          EventBus.$emit('refreshTable', 'getUsers')
         })
         .catch((error) => {
           console.log(error)

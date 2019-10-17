@@ -13,7 +13,7 @@
               class="mx-5"
               justify="end"
               >
-                <RegistrarUsuario @click="hey()"/>
+                <RegisterUser/>
               </v-row>
             </v-container>
           </template>
@@ -25,7 +25,30 @@
             hide-default-footer
             class="elevation-1"
             @page-count="pageCount = $event"
-          ></v-data-table>
+            ref="table"
+          >
+            <template slot="item.action" slot-scope="user">
+              <v-btn
+              class="blue lighten-1 orange--text text--lighten-1; mx-2"
+              depressed
+              fab
+              x-small
+              @click="openEditUser(user.item)"
+              >
+                <v-icon>mdi-account-edit</v-icon>
+              </v-btn>
+              <EditUser v-model="showEditUser"/>
+              <v-btn
+              class="blue lighten-1 orange--text text--lighten-1"
+              depressed
+              fab
+              x-small
+              @click="deleteUser(user.item)"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </template>
+          </v-data-table>
           <div class="text-center pt-2">
             <v-pagination color="orange lighten-1" v-model="page" :length="pageCount"></v-pagination>
           </div>
@@ -33,14 +56,18 @@
 </template>
 
 <script>
-import RegistrarUsuario from './RegistrarUsuario'
+import { EventBus } from '../main'
+import RegisterUser from './RegisterUser'
+import EditUser from './EditUser'
 import axios from 'axios'
 export default {
-  components: { RegistrarUsuario },
+  components: { RegisterUser, EditUser },
   data () {
     return {
+      showEditUser: false,
       page: 1,
       pageCount: 0,
+      dialog: '',
       Users: [],
       headers: [
         {
@@ -93,12 +120,23 @@ export default {
           text: 'Notas',
           value: 'notes',
           align: 'right'
+        },
+        {
+          sortable: false,
+          text: 'Acciones',
+          value: 'action',
+          align: 'right'
         }
       ]
     }
   },
   mounted () {
     this.getUsers()
+  },
+  created () {
+    EventBus.$on('refreshTable', data => {
+      this.getUsers()
+    })
   },
   methods: {
     getUsers () {
@@ -110,6 +148,20 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    deleteUser (user) {
+      axios.delete('http://localhost:3000/signup/' + user._id)
+        .then((response) => {
+          const index = this.Users.indexOf(user)
+          this.Users.splice(index, 1)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    openEditUser (user) {
+      this.showEditUser = true
+      EventBus.$emit('editUserInfo', user)
     }
   }
 }
