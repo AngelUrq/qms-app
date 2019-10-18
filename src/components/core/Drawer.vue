@@ -92,10 +92,6 @@ export default {
           },
           {
             to: '/',
-            text: 'Crear'
-          },
-          {
-            to: '/',
             text: 'Cargar'
           }
         ]

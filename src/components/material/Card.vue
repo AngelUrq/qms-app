@@ -1,15 +1,6 @@
 <template>
-  <v-card
-    :style="styles"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <helper-offset
-      v-if="hasOffset"
-      :inline="inline"
-      :full-width="fullWidth"
-      :offset="offset"
-    >
+  <v-card :style="styles" v-bind="$attrs" v-on="$listeners">
+    <helper-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
       <v-card
         v-if="!$slots.offset"
         :color="color"
@@ -18,39 +9,26 @@
         dark
         min-height="80"
       >
-        <slot
-          v-if="!title && !text"
-          name="header"
-        />
-        <div
-          v-else
-          class="px-3"
-        >
-          <h4
-            class="title font-weight-light mb-2"
-            v-text="title"
-          />
-          <p
-            class="category font-weight-thin mb-0"
-            v-text="text"
-          />
-        </div>
+          <slot v-if="!title && !text" name="header" />
+          <div v-else class="px-3">
+            <h4 class="title font-weight-light mb-2" v-text="title" />
+            <p class="category font-weight-thin mb-0" v-text="text" />
+          </div>
+          <v-row class="pr-5" v-if="buttonActivated" justify="end">
+            <v-btn class="mx-2" fab dark :color="buttonColor">
+              <v-icon dark>mdi-plus</v-icon>
+            </v-btn>
+          </v-row>
       </v-card>
 
-      <slot
-        v-else
-        name="offset"
-      />
+      <slot v-else name="offset" />
     </helper-offset>
 
     <v-card-text>
       <slot />
     </v-card-text>
 
-    <v-divider
-      v-if="$slots.actions"
-      class="mx-3"
-    />
+    <v-divider v-if="$slots.actions" class="mx-3" />
 
     <v-card-actions v-if="$slots.actions">
       <slot name="actions" />
@@ -92,15 +70,22 @@ export default {
     text: {
       type: String,
       default: undefined
+    },
+    buttonActivated: {
+      type: Boolean,
+      default: false
+    },
+    buttonColor: {
+      type: String,
+      default: undefined
     }
   },
 
   computed: {
     hasOffset () {
-      return this.$slots.header ||
-          this.$slots.offset ||
-          this.title ||
-          this.text
+      return (
+        this.$slots.header || this.$slots.offset || this.title || this.text
+      )
     },
     styles () {
       if (!this.hasOffset) return null
