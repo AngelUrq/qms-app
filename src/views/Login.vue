@@ -72,6 +72,8 @@ export default {
           if (response.status === 200) {
             localStorage.setItem('token', authToken)
             this.$router.push('/dashboard')
+            this.$store.commit('saveToken', authToken)
+            console.log(this.$store.getters.token)
           }
         })
         .catch(error => {
