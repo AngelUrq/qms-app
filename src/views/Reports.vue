@@ -18,7 +18,12 @@ export default {
     DecoupledEditor.create(
       document.querySelector('.document-editor__editable'),
       {
-        cloudServices: {}
+        autosave: {
+          waitingTime: 5000,
+          save (editor) {
+            console.log(editor.getData())
+          }
+        }
       }
     )
       .then(editor => {
@@ -135,7 +140,6 @@ Preserve the relative scale, though. */
 .document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
   font-size: 1.75em;
   font-weight: normal;
-  color: hsl(203, 100%, 50%);
 }
 
 .document-editor
