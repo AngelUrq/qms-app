@@ -3,6 +3,7 @@
     <div class="document-editor__toolbar"></div>
     <div class="document-editor__editable-container">
       <div class="document-editor__editable">
+        <h1>My title</h1>
         <p>The initial editor data.</p>
       </div>
     </div>
@@ -10,7 +11,7 @@
 </template>
 
 <script>
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor'
+import DecoupledEditor from 'ckeditor5-build-decoupled-document-qms-version/build/ckeditor'
 
 export default {
   mounted: function () {
