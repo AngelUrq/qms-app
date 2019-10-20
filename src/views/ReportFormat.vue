@@ -30,18 +30,44 @@
                   <h4>Titulo:</h4>
                   <v-text-field solo v-model="item.title"></v-text-field>
                   <v-row no-gutters>
-                    <h4 class="mb-2">Subtítulos:</h4>
-                    <v-btn
-                      fab
-                      dark
-                      x-small
-                      class="mb-5 ml-5"
-                      color="indigo darken-1"
+                    <h4 class="mb- mr-3">Subtítulos:</h4>
+                    <v-speed-dial
+                      v-model="fab"
+                      direction="right"
+                      :open-on-hover=true
+                    >
+                      <template v-slot:activator>
+                        <v-btn
+                          x-small
+                          v-model="fab"
+                          color="blue darken-2"
+                          class="mb-3"
+                          dark
+                          fab
+                        >
+                          <v-icon v-if="fab">mdi-close</v-icon>
+                          <v-icon v-else>mdi-pencil-circle</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-btn
+                        fab
+                        dark
+                        x-small
+                        color="green"
+                        class="mb-3"
                       >
-                      <v-icon>
-                         mdi-pencil-circle
-                      </v-icon>
-                    </v-btn>
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
+                      <v-btn
+                        fab
+                        dark
+                        x-small
+                        color="deep-orange lighten-1"
+                        class="mb-3"
+                      >
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                    </v-speed-dial>
                   </v-row>
                   <draggable>
                     <transition-group>
@@ -104,6 +130,7 @@ export default {
     draggable
   },
   data: () => ({
+    fab: false,
     headers: [
       {
         sortable: false,
