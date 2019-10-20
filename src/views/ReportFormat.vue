@@ -98,22 +98,19 @@
                 </div>
               </td>
             </template>
-            <template v-slot:item.action="{ item }">
+            <template v-slot:item.update="{ item }">
+              <EditReportFormat />
+            </template>
+            <template v-slot:item.delete="{ item }">
               <v-btn
                 x-small
                 text
                 icon
                 color="blue-grey lighten-1"
                 >
-                  <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-              <v-btn
-                x-small
-                text
-                icon
-                color="blue-grey lighten-1"
-                >
-                <v-icon>mdi-delete</v-icon>
+                <v-icon>
+                mdi-delete
+                </v-icon>
               </v-btn>
             </template>
           </v-data-table>
@@ -125,10 +122,12 @@
 
 <script>
 import draggable from 'vuedraggable'
+import EditReportFormat from './EditReportFormat'
 
 export default {
   components: {
-    draggable
+    draggable,
+    EditReportFormat
   },
   data: () => ({
     fab: false,
@@ -155,8 +154,13 @@ export default {
       },
       {
         sortable: false,
-        text: 'Actions',
-        value: 'action'
+        text: '',
+        value: 'update'
+      },
+      {
+        sortable: false,
+        text: '',
+        value: 'delete'
       }
     ],
     items: [
