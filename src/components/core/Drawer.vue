@@ -91,7 +91,7 @@ export default {
             text: 'Formatos'
           },
           {
-            to: '/',
+            to: '/load-report-format',
             text: 'Cargar'
           }
         ]
