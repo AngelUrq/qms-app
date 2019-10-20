@@ -15,10 +15,16 @@
             <p class="category font-weight-thin mb-0" v-text="text" />
           </div>
           <v-row class="pr-5" v-if="buttonActivated" justify="end">
-            <v-btn class="mx-2" fab dark :color="buttonColor">
-              <v-icon dark>mdi-plus</v-icon>
-            </v-btn>
+            <v-dialog v-model="dialog" max-width="50%">
+              <template v-slot:activator="{ on }">
+                <v-btn class="mx-2" fab dark v-on="on" :color="buttonColor">
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </template>
+              <RegisterReportFormat v-if="reportFormatActionsActivated" />
+             </v-dialog>
           </v-row>
+
       </v-card>
 
       <slot v-else name="offset" />
@@ -37,11 +43,14 @@
 </template>
 
 <script>
+import RegisterReportFormat from '../../views/RegisterReportFormat'
+
 export default {
   name: 'MaterialCard',
-
+  components: {
+    RegisterReportFormat
+  },
   inheritAttrs: false,
-
   props: {
     color: {
       type: String,
@@ -78,9 +87,17 @@ export default {
     buttonColor: {
       type: String,
       default: undefined
+    },
+    reportFormatActionsActivated: {
+      type: Boolean,
+      default: false
     }
   },
-
+  data () {
+    return {
+      dialog: false
+    }
+  },
   computed: {
     hasOffset () {
       return (

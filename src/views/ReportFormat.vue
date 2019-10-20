@@ -7,6 +7,7 @@
           title="Versiones de formato para informe de auditor"
           buttonActivated="true"
           buttonColor="lime darken-4"
+          reportFormatActionsActivated=true
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
@@ -92,7 +93,7 @@
                     </transition-group>
                   </draggable>
                   <v-row no-gutters justify="end">
-                    <v-btn class="mt-4" color="green lighten-1">Guardar</v-btn>
+                    <v-btn class="mt-4 white--text" color="green lighten-1">Guardar</v-btn>
                   </v-row>
                 </div>
               </td>
