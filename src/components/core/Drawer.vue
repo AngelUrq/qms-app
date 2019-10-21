@@ -76,11 +76,6 @@ export default {
         text: 'Panel de administración'
       },
       {
-        to: '/reports',
-        icon: 'mdi-file-document ',
-        text: 'Informes'
-      },
-      {
         to: '/table-list',
         icon: 'mdi-clipboard-outline',
         text: 'Planes de acción'
