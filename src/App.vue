@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <core-app-bar  v-if='isVisible'/>
-    <core-drawer  v-if='isVisible'/>
+    <core-app-bar v-if='isVisible'/>
+    <core-drawer v-if='isVisible'/>
     <core-view/>
-    <core-footer  v-if='isVisible'/>
+    <core-footer v-if='isVisible'/>
   </v-app>
 </template>
 
@@ -16,16 +16,16 @@ export default {
     CoreFooter: () => import('@/components/core/Footer'),
     CoreAppBar: () => import('@/components/core/AppBar')
   },
-  created  () {
+  created () {
     this.$store.commit('saveToken', localStorage.getItem('token'))
   },
-
   computed: {
     isVisible () {
       return this.$route.path !== '/'
     }
   }
 }
+
 window.addEventListener('beforeunload', function (e) {
   localStorage.setItem('token', this.$store.getters.token)
 })
