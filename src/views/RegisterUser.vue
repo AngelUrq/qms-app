@@ -82,7 +82,7 @@
           </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" small class="blue lighten-1 orange--text text--lighten-2" @click="RegisterUserAPI()">Registrar
+          <v-btn color="blue darken-1" small class="blue lighten-1 orange--text text--lighten-2" @click="registerUserAPI()">Registrar
             <v-icon small right>mdi-checkbox-marked-circle</v-icon>
           </v-btn>
         </v-card-actions>
@@ -93,6 +93,8 @@
 <script>
 import { EventBus } from '../main'
 import axios from 'axios'
+import { serverIP } from '@/data.js'
+
 export default {
   data () {
     return {
@@ -113,7 +115,7 @@ export default {
     }
   },
   methods: {
-    RegisterUserAPI () {
+    registerUserAPI () {
       let newUser = {
         code: this.User.code,
         password: this.User.password,
@@ -126,7 +128,7 @@ export default {
         notes: this.User.notes,
         role: this.User.role
       }
-      axios.post('http://localhost:3000/signup', newUser)
+      axios.post('http://' + serverIP + ':3000/signup', newUser)
         .then((response) => {
           console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')

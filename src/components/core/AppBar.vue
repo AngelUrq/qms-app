@@ -29,7 +29,7 @@
         <v-text-field
           class="mr-4 purple-input"
           color="purple"
-          label="Search..."
+          label="Buscar..."
           hide-details
         />
 

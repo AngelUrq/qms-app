@@ -115,8 +115,23 @@ export default {
       {
         to: '/user-manager',
         icon: 'mdi-account-group',
-        text: 'Gestor de usuarios',
-        containsSubitems: false
+        containsSubitems: false,
+        text: 'Gestor de usuarios'
+      },
+      {
+        to: '/typography',
+        icon: 'mdi-chart-bar',
+        text: 'Estadísticas'
+      },
+      {
+        to: '/icons',
+        icon: 'mdi-chart-bubble',
+        text: 'Iconos'
+      },
+      {
+        to: '/maps',
+        icon: 'mdi-map-marker',
+        text: 'Mapas'
       },
       {
         to: '/notifications',

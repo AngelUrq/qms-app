@@ -5,6 +5,9 @@ import { store } from './vuexStore/store'
 import './plugins'
 import vuetify from './plugins/vuetify'
 import { sync } from 'vuex-router-sync'
+import CKEditor from '@ckeditor/ckeditor5-vue'
+
+Vue.use(CKEditor)
 
 sync(store, router)
 
