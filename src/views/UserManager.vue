@@ -61,6 +61,8 @@ import { EventBus } from '../main'
 import RegisterUser from './RegisterUser'
 import EditUser from './EditUser'
 import axios from 'axios'
+import { backendURL } from '@/data.js'
+
 export default {
   components: { RegisterUser, EditUser },
   data () {
@@ -141,7 +143,7 @@ export default {
   },
   methods: {
     getUsers () {
-      axios.get('http://localhost:3000/signup')
+      axios.get(backendURL + '/signup')
         .then((response) => {
           console.log(response.data)
           this.Users = response.data
@@ -151,7 +153,7 @@ export default {
         })
     },
     deleteUser (user) {
-      axios.delete('http://localhost:3000/signup/' + user._id)
+      axios.delete(backendURL + '/signup/' + user._id)
         .then((response) => {
           const index = this.Users.indexOf(user)
           this.Users.splice(index, 1)

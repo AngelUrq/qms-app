@@ -16,7 +16,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="10" md="5">
-                  <v-text-field  color="blue" label="Codigo*" v-model="User.code" required></v-text-field>
+                  <v-text-field color="blue" label="Codigo*" v-model="User.code" required></v-text-field>
                 </v-col>
                  <v-col cols="12" sm="6">
                 <v-select
@@ -93,7 +93,7 @@
 <script>
 import { EventBus } from '../main'
 import axios from 'axios'
-import { serverIP } from '@/data.js'
+import { backendURL } from '@/data.js'
 
 export default {
   data () {
@@ -128,7 +128,7 @@ export default {
         notes: this.User.notes,
         role: this.User.role
       }
-      axios.post('http://' + serverIP + ':3000/signup', newUser)
+      axios.post(backendURL + '/signup', newUser)
         .then((response) => {
           console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')

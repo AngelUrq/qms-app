@@ -44,10 +44,9 @@
 </template>
 <script>
 import axios from 'axios'
-import { serverIP } from '@/data.js'
+import { backendURL } from '@/data.js'
 
 export default {
-
   data () {
     return {
       User: {
@@ -67,7 +66,7 @@ export default {
         password: this.User.password
       }
       console.log(requirements)
-      axios.post('http://' + serverIP + ':3000/signin', requirements)
+      axios.post(backendURL + '/signin', requirements)
         .then(response => {
           let authToken = response.data.token
           if (response.status === 200) {
