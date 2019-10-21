@@ -4,9 +4,9 @@
       <v-col cols="12">
         <material-card
           color="indigo darken-3"
-          title="Versiones de formato para informe de auditor"
+          title="Versiones de formato para informe de auditoría"
           buttonActivated="true"
-          buttonColor="lime darken-4"
+          buttonColor="blue darken-3"
           reportFormatActionsActivated="true"
         >
           <v-card-title class="mb-5">
@@ -44,16 +44,21 @@
                     </transition-group>
                   </draggable>
                   <v-row no-gutters justify="end">
-                    <v-btn class="mt-4 white--text" color="green lighten-1">Guardar</v-btn>
+                    <v-btn class="mt-4 white--text" color="light-blue darken-4" text>Guardar</v-btn>
                   </v-row>
                 </div>
               </td>
+            </template>
+            <template v-slot:item.create="{ item }">
+              <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+                <v-icon>mdi-clipboard-text-outline</v-icon>
+              </v-btn>
             </template>
             <template v-slot:item.update="{ item }">
               <EditReportFormat />
             </template>
             <template v-slot:item.delete="{ item }">
-              <v-btn x-small text icon color="blue-grey lighten-1">
+              <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
@@ -101,12 +106,17 @@ export default {
       },
       {
         sortable: false,
-        text: '',
+        text: 'Crear',
+        value: 'create'
+      },
+      {
+        sortable: false,
+        text: 'Actualizar',
         value: 'update'
       },
       {
         sortable: false,
-        text: '',
+        text: 'Eliminar',
         value: 'delete'
       }
     ],
