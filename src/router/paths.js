@@ -46,7 +46,7 @@ export default [
     view: 'UserManager'
   },
   {
-    path: '/',
+    path: '/login',
     view: 'Login'
   },
   {

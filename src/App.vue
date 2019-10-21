@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { production } from '@/data.js'
 
 export default {
   components: {
@@ -21,7 +22,7 @@ export default {
   },
   computed: {
     isVisible () {
-      return this.$route.path !== '/'
+      return this.$route.path !== '/login' && production
     }
   }
 }
