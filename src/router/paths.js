@@ -43,5 +43,15 @@ export default [
   {
     path: '/',
     view: 'Login'
+  },
+  {
+    path: '/report-format',
+    name: 'Formatos del reporte',
+    view: 'ReportFormat'
+  },
+  {
+    path: '/load-report-format',
+    name: 'Reporte',
+    view: 'LoadReportFormat'
   }
 ]

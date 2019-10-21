@@ -12,10 +12,7 @@
     width="260"
   >
     <template v-slot:img="attrs">
-      <v-img
-        v-bind="attrs"
-        gradient="to top, rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)"
-      />
+      <v-img v-bind="attrs" gradient="to top, rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)" />
     </template>
 
     <v-list-item two-line>
@@ -27,9 +24,7 @@
         />
       </v-list-item-avatar>
 
-      <v-list-item-title class="title">
-        SGC
-      </v-list-item-title>
+      <v-list-item-title class="title">QMS</v-list-item-title>
     </v-list-item>
 
     <v-divider class="mx-3 mb-3" />
@@ -37,29 +32,33 @@
     <v-list nav>
       <!-- Bug in Vuetify for first child of v-list not receiving proper border-radius -->
       <div />
+      <div v-for="(item, i) in items" :key="i">
+        <v-list-group v-if="item.containsSubitems" :prepend-icon="item.icon" color="transparent" active-class="white--text">
+          <template v-slot:activator>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
+          </template>
 
-      <v-list-item
-        v-for="(link, i) in links"
-        :key="i"
-        :to="link.to"
-        active-class="primary white--text"
-      >
-        <v-list-item-action>
-          <v-icon>{{ link.icon }}</v-icon>
-        </v-list-item-action>
+          <v-list-item v-for="(subitem, j) in item.subitems" :key="j" :to="subitem.to" active-class="light-blue darken-4 white--text">
+            <v-list-item-content>
+              <v-list-item-title v-text="subitem.text"/>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
 
-        <v-list-item-title v-text="link.text" />
-      </v-list-item>
+        <v-list-item v-else :to="item.to" active-class="light-blue darken-4 white--text">
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-title v-text="item.text" />
+        </v-list-item>
+      </div>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
 // Utilities
-import {
-  mapMutations,
-  mapState
-} from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   props: {
@@ -69,46 +68,61 @@ export default {
     }
   },
   data: () => ({
-    links: [
+    items: [
       {
         to: '/',
         icon: 'mdi-view-dashboard',
-        text: 'Panel de administración'
+        text: 'Panel de administración',
+        containsSubitems: false
       },
       {
         to: '/typography',
         icon: 'mdi-chart-bar',
-        text: 'Estadísticas'
+        text: 'Estadísticas',
+        containsSubitems: false
+      },
+      {
+        icon: 'mdi-clipboard-text-outline',
+        text: 'Informes',
+        containsSubitems: true,
+        subitems: [
+          {
+            to: '/report-format',
+            text: 'Formatos'
+          },
+          {
+            to: '/',
+            text: 'Crear desde cero'
+          },
+          {
+            to: '/load-report-format',
+            text: 'Cargar'
+          }
+        ]
       },
       {
         to: '/table-list',
         icon: 'mdi-clipboard-outline',
-        text: 'Planes de acción'
+        text: 'Planes de acción',
+        containsSubitems: false
       },
       {
         to: '/user-profile',
         icon: 'mdi-account',
-        text: 'Perfil'
+        text: 'Perfil',
+        containsSubitems: false
       },
       {
         to: '/user-manager',
         icon: 'mdi-account-group',
-        text: 'Gestor de usuarios'
-      },
-      {
-        to: '/icons',
-        icon: 'mdi-chart-bubble',
-        text: 'Iconos'
-      },
-      {
-        to: '/maps',
-        icon: 'mdi-map-marker',
-        text: 'Mapas'
+        text: 'Gestor de usuarios',
+        containsSubitems: false
       },
       {
         to: '/notifications',
         icon: 'mdi-bell',
-        text: 'Notificaciones'
+        text: 'Notificaciones',
+        containsSubitems: false
       }
     ]
   }),
@@ -122,6 +136,9 @@ export default {
       set (val) {
         this.setDrawer(val)
       }
+    },
+    showItemsWithSubitems: function () {
+      return this.items.filter(i => i.containsSubitems)
     }
   },
 

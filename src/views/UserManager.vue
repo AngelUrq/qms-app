@@ -1,13 +1,14 @@
 <template>
   <material-card
           class="card-tabs"
-          color="blue"
+          color="orange"
         >
           <template v-slot:header>
           <span
                 class="subheading font-weight-light mx-5"
                 style="align-self: center; font-size:150%"
-              >Usuarios</span>
+          >
+          Usuarios</span>
             <v-container>
               <v-row
               class="mx-5"
