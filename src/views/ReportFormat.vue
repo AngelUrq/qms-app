@@ -7,84 +7,35 @@
           title="Versiones de formato para informe de auditor"
           buttonActivated="true"
           buttonColor="lime darken-4"
-          reportFormatActionsActivated=true
+          reportFormatActionsActivated="true"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
-            <v-text-field
-              append-icon="mdi-magnify"
-              label="Buscar"
-              single-line
-              hide-details
-            ></v-text-field>
+            <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
             <v-spacer></v-spacer>
           </v-card-title>
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            item-key="name"
-            show-expand
-          >
+          <v-data-table :headers="headers" :items="items" item-key="name" show-expand>
             <template v-slot:expanded-item="{ headers, item }">
-              <td class="pa-5 " :colspan="headers.length">
+              <td class="pa-4" :colspan="headers.length">
                 <div>
                   <h4>Titulo:</h4>
                   <v-text-field solo v-model="item.title"></v-text-field>
                   <v-row no-gutters>
                     <h4 class="mb- mr-3">Subtítulos:</h4>
-                    <v-speed-dial
-                      v-model="fab"
-                      direction="right"
-                      :open-on-hover=true
-                    >
-                      <template v-slot:activator>
-                        <v-btn
-                          x-small
-                          v-model="fab"
-                          color="blue darken-2"
-                          class="mb-3"
-                          dark
-                          fab
-                        >
-                          <v-icon v-if="fab">mdi-close</v-icon>
-                          <v-icon v-else>mdi-pencil-circle</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-btn
-                        fab
-                        dark
-                        x-small
-                        color="green"
-                        class="mb-3"
-                      >
-                        <v-icon>mdi-plus</v-icon>
-                      </v-btn>
-                      <v-btn
-                        fab
-                        dark
-                        x-small
-                        color="deep-orange lighten-1"
-                        class="mb-3"
-                      >
-                        <v-icon>mdi-pencil</v-icon>
-                      </v-btn>
-                    </v-speed-dial>
+                    <AddSubtitleToReportFormat />
                   </v-row>
                   <draggable>
                     <transition-group>
-                      <v-card class="pa-3" v-for="(element, i) in item.subtitles" :key="i">
+                      <v-card class="pb-4" v-for="element in item.subtitles" :key="element">
                         <v-row no-gutters>
-                          <v-col :cols="8">
-                            <v-icon>mdi-drag</v-icon>
-                            {{ element }}
+                          <v-col :cols="2">
+                            <v-icon class="pt-3 pl-3">mdi-drag</v-icon>
                           </v-col>
-                          <v-col :cols="4" class="d-flex flex-row-reverse">
-                            <v-btn
-                              x-small
-                              text
-                              icon
-                              color="blue-grey lighten-1"
-                            >
+                          <v-col :cols="8">
+                            <v-text-field class="text-field" :value="element"></v-text-field>
+                          </v-col>
+                          <v-col :cols="2" class="d-flex flex-row-reverse">
+                            <v-btn class="mt-3 mr-3" x-small text icon color="blue-grey lighten">
                               <v-icon :class="'d-flex justify-end'">mdi-delete</v-icon>
                             </v-btn>
                           </v-col>
@@ -102,15 +53,8 @@
               <EditReportFormat />
             </template>
             <template v-slot:item.delete="{ item }">
-              <v-btn
-                x-small
-                text
-                icon
-                color="blue-grey lighten-1"
-                >
-                <v-icon>
-                mdi-delete
-                </v-icon>
+              <v-btn x-small text icon color="blue-grey lighten-1">
+                <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
           </v-data-table>
@@ -123,14 +67,17 @@
 <script>
 import draggable from 'vuedraggable'
 import EditReportFormat from './EditReportFormat'
+import AddSubtitleToReportFormat from './AddSubtitleToReportFormat'
 
 export default {
   components: {
     draggable,
-    EditReportFormat
+    EditReportFormat,
+    AddSubtitleToReportFormat
   },
   data: () => ({
     fab: false,
+    dialago: false,
     headers: [
       {
         sortable: false,
@@ -184,3 +131,10 @@ export default {
   })
 }
 </script>
+
+<style scoped>
+.text-field {
+  height: 3em;
+  font-size: 90%;
+}
+</style>
