@@ -38,6 +38,11 @@ export default {
       .catch(err => {
         console.error(err)
       })
+
+    if (this.$route.params.create) {
+      var structure = this.$route.params.structure
+      console.log(structure)
+    }
   }
 }
 </script>

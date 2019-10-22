@@ -50,7 +50,7 @@
               </td>
             </template>
             <template v-slot:item.create="{ item }">
-              <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+              <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1" @click="createReport(item)">
                 <v-icon>mdi-clipboard-text-outline</v-icon>
               </v-btn>
             </template>
@@ -138,7 +138,16 @@ export default {
         subtitles: ['Planes de accion', 'Responsables']
       }
     ]
-  })
+  }),
+  methods: {
+    createReport: function (item) {
+      var structure = {}
+      structure.title = item.title
+      structure.subtitles = item.subtitles
+
+      this.$router.push({ name: 'Editor de informes', params: { 'structure': structure, 'create': true } })
+    }
+  }
 }
 </script>
 
