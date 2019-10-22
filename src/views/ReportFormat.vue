@@ -145,7 +145,7 @@ export default {
       structure.title = item.title
       structure.subtitles = item.subtitles
 
-      this.$router.push({ name: 'Editor de informes', params: { 'structure': structure, 'create': true } })
+      this.$router.push({ name: 'Editor de informes', params: { structure: structure, create: true } })
     }
   }
 }

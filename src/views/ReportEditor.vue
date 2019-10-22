@@ -1,10 +1,39 @@
 <template>
-  <div class="document-editor">
-    <div class="document-editor__toolbar"></div>
-    <div class="document-editor__editable-container">
-      <div class="document-editor__editable">
-        <h1>My title</h1>
-        <p>The initial editor data.</p>
+  <div>
+    <v-snackbar
+      v-model="snackbar"
+      right="right"
+      top="top"
+      :color="notificationColor"
+      :timeout="10000"
+    >
+      <v-icon color="white" class="mr-3">mdi-bell-plus</v-icon>
+      {{ notificationText }}
+      <v-btn icon @click="snackbar = false">
+        <v-icon>mdi-close-circle</v-icon>
+      </v-btn>
+    </v-snackbar>
+
+    <v-row class="justify-center" no-gutters>
+      <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-text-field solo v-model="filename" placeholder="Nombre del archivo" class="pa-1"></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-btn
+          class="ma-2"
+          :loading="loading"
+          :disabled="loading"
+          :color="isDataSaved"
+          @click="saveData"
+        >{{ saveButtonText }}</v-btn>
+      </v-col>
+    </v-row>
+
+    <div class="document-editor">
+      <div class="document-editor__toolbar"></div>
+      <div class="document-editor__editable-container">
+        <div class="document-editor__editable"></div>
       </div>
     </div>
   </div>
@@ -14,14 +43,36 @@
 import DecoupledEditor from 'ckeditor5-build-decoupled-document-qms-version/build/ckeditor'
 
 export default {
+  data: function () {
+    return {
+      editor: null,
+      loader: null,
+      loading: false,
+      data: '',
+      temporalData: '',
+      saveButtonText: 'Guardar',
+      filename: '',
+      isFileCreated: false,
+      notificationText: '',
+      notificationColor: '',
+      snackbar: false
+    }
+  },
   mounted: function () {
+    var self = this
+
     DecoupledEditor.create(
       document.querySelector('.document-editor__editable'),
       {
         autosave: {
-          waitingTime: 5000,
+          waitingTime: 500,
           save (editor) {
-            console.log(editor.getData())
+            self.temporalData = editor.getData()
+
+            self.saveButtonText =
+              (self.temporalData === self.data) && self.isFileCreated
+                ? 'Guardado'
+                : 'Guardar'
           }
         }
       }
@@ -34,14 +85,61 @@ export default {
         toolbarContainer.appendChild(editor.ui.view.toolbar.element)
 
         window.editor = editor
+        this.editor = editor
       })
       .catch(err => {
         console.error(err)
       })
+      .then(() => {
+        if (this.$route.params.create) {
+          let structure = this.$route.params.structure
 
-    if (this.$route.params.create) {
-      var structure = this.$route.params.structure
-      console.log(structure)
+          let data =
+            '<h2 style="text-align:center;"><strong>' +
+            structure.title +
+            '</strong></h2>'
+
+          for (let subtitle of structure.subtitles) {
+            data += '<h3><strong>' + subtitle + '</strong></h3><p>&nbsp;</p>'
+          }
+
+          this.editor.data.set(data)
+        }
+      })
+  },
+  methods: {
+    saveData: function () {
+      if (this.saveButtonText === 'Guardar') {
+        if (this.filename !== '') {
+          this.snackbar = false
+          this.loader = 'loading'
+          this.data = this.editor.getData()
+          this.saveButtonText = 'Guardado'
+
+          if (!this.isFileCreated) {
+            this.isFileCreated = true
+          }
+        } else {
+          this.notificationText = '¡Debes ingresar el nombre del archivo!'
+          this.notificationColor = 'error'
+          this.snackbar = true
+        }
+      }
+    }
+  },
+  computed: {
+    isDataSaved: function () {
+      return this.saveButtonText === 'Guardar' ? 'success' : 'accent'
+    }
+  },
+  watch: {
+    loader () {
+      const loader = this.loader
+      this[loader] = !this[loader]
+
+      setTimeout(() => (this[loader] = false), 3000)
+
+      this.loader = null
     }
   }
 }
@@ -130,7 +228,7 @@ Preserve the relative scale, though. */
 /* Set the styles for "Heading 1". */
 .document-editor .ck-content h2,
 .document-editor .ck-heading-dropdown .ck-heading_heading1 .ck-button__label {
-  font-size: 2.18em;
+  font-size: 2em;
   font-weight: normal;
 }
 
@@ -143,7 +241,7 @@ Preserve the relative scale, though. */
 /* Set the styles for "Heading 2". */
 .document-editor .ck-content h3,
 .document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
-  font-size: 1.75em;
+  font-size: 1.5em;
   font-weight: normal;
 }
 
@@ -156,7 +254,7 @@ Preserve the relative scale, though. */
 
 /* Set the styles for "Heading 2". */
 .document-editor .ck-content h3 {
-  line-height: 1.86em;
+  line-height: 1.7em;
   padding-top: 0.171em;
   margin-bottom: 0.357em;
 }
@@ -187,5 +285,42 @@ Preserve the relative scale, though. */
   font-family: Georgia, serif;
   margin-left: calc(2 * var(--ck-spacing-large));
   margin-right: calc(2 * var(--ck-spacing-large));
+}
+
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
