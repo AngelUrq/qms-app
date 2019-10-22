@@ -14,7 +14,7 @@
                 label="E-mail"
                 id="login"
                 type="text"
-                v-model="User.email"
+                v-model="User.emailOrCode"
                 color="amber accent-4"
               ></v-text-field>
               <v-text-field
@@ -50,7 +50,7 @@ export default {
   data () {
     return {
       User: {
-        email: '',
+        emailOrCode: '',
         password: ''
       },
       alert: {
@@ -62,11 +62,12 @@ export default {
   methods: {
     loginUser () {
       let requirements = {
-        email: this.User.email,
+        email: this.User.emailOrCode,
+        code: this.User.emailOrCode,
         password: this.User.password
       }
       console.log(requirements)
-      axios.post(backendURL + '/signin', requirements)
+      axios.post(backendURL + ':3000/api/users/signin', requirements)
         .then(response => {
           let authToken = response.data.token
           if (response.status === 200) {
@@ -78,7 +79,7 @@ export default {
         .catch(error => {
           console.log(error.response.data)
           this.alert.error = true
-          this.alert.message = error.response.data
+          this.alert.message = error.response.data.message
         })
     }
   }
