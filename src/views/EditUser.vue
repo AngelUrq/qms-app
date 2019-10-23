@@ -82,7 +82,10 @@
 
 <script>
 import { EventBus } from '../main'
+import { backendURL } from '@/data.js'
+
 import axios from 'axios'
+
 export default {
   props: {
     value: Boolean
@@ -124,7 +127,7 @@ export default {
   },
   methods: {
     saveUser () {
-      axios.patch('http://localhost:3000/signup/' + this.userid, {
+      axios.patch(backendURL + 'api/users/signup/' + this.userid, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
         parentalLastName: this.EditUser.parentalLastName,
