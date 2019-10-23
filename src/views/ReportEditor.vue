@@ -41,6 +41,9 @@
 
 <script>
 import DecoupledEditor from 'ckeditor5-build-decoupled-document-qms-version/build/ckeditor'
+import axios from 'axios'
+
+import { backendURL } from '@/data.js'
 
 export default {
   data: function () {
@@ -108,6 +111,32 @@ export default {
       })
   },
   methods: {
+    showNotificationError: function (message) {
+      this.notificationText = message
+      this.notificationColor = 'error'
+      this.snackbar = true
+    },
+    createFile: function () {
+      let filename = this.filename
+      let data = this.data
+      let actualDate = new Date()
+
+      let report = { filename, data, 'creationDate': actualDate, 'lastModificationDate': actualDate }
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.post(backendURL + '/api/reports', report, config)
+        .then(response => {
+          if (response.data.created) {
+            this.isFileCreated = true
+          } else {
+            this.showNotificationError('¡No se pudo crear el archivo en la base de datos!')
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.showNotificationError('¡Error al enviar el informe!')
+        })
+    },
     saveData: function () {
       if (this.saveButtonText === 'Guardar') {
         if (this.filename !== '') {
@@ -117,12 +146,11 @@ export default {
           this.saveButtonText = 'Guardado'
 
           if (!this.isFileCreated) {
+            this.createFile()
             this.isFileCreated = true
           }
         } else {
-          this.notificationText = '¡Debes ingresar el nombre del archivo!'
-          this.notificationColor = 'error'
-          this.snackbar = true
+          this.showNotificationError('¡Debes ingresar el nombre del archivo!')
         }
       }
     }
