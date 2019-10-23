@@ -111,6 +111,12 @@ export default {
       })
   },
   methods: {
+    stopLoadingAnimation: function () {
+      const loader = this.loader
+
+      this[loader] = false
+      this.loader = null
+    },
     showNotificationError: function (message) {
       this.notificationText = message
       this.notificationColor = 'error'
@@ -131,6 +137,8 @@ export default {
           } else {
             this.showNotificationError('¡No se pudo crear el archivo en la base de datos!')
           }
+
+          this.stopLoadingAnimation()
         })
         .catch(error => {
           console.log(error)
@@ -143,12 +151,13 @@ export default {
           this.snackbar = false
           this.loader = 'loading'
           this.data = this.editor.getData()
-          this.saveButtonText = 'Guardado'
 
           if (!this.isFileCreated) {
             this.createFile()
             this.isFileCreated = true
           }
+
+          this.saveButtonText = 'Guardado'
         } else {
           this.showNotificationError('¡Debes ingresar el nombre del archivo!')
         }
@@ -164,10 +173,6 @@ export default {
     loader () {
       const loader = this.loader
       this[loader] = !this[loader]
-
-      setTimeout(() => (this[loader] = false), 3000)
-
-      this.loader = null
     }
   }
 }
