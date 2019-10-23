@@ -25,7 +25,7 @@
           :loading="loading"
           :disabled="loading"
           :color="isDataSaved"
-          @click="saveData"
+          @click="saveDataLocally"
         >{{ saveButtonText }}</v-btn>
       </v-col>
     </v-row>
@@ -48,6 +48,7 @@ import { backendURL } from '@/data.js'
 export default {
   data: function () {
     return {
+      id: 0,
       editor: null,
       loader: null,
       loading: false,
@@ -108,9 +109,18 @@ export default {
 
           this.editor.data.set(data)
         }
+
+        if (this.$route.params.load) {
+          this.id = this.$route.params.id
+          this.filename = this.$route.params.filename
+          this.isFileCreated = true
+        }
       })
   },
   methods: {
+    startLoadingAnimation: function () {
+      this.loader = 'loading'
+    },
     stopLoadingAnimation: function () {
       const loader = this.loader
 
@@ -133,29 +143,47 @@ export default {
       axios.post(backendURL + '/api/reports', report, config)
         .then(response => {
           if (response.data.created) {
+            this.id = response.data.id
             this.isFileCreated = true
           } else {
             this.showNotificationError('¡No se pudo crear el archivo en la base de datos!')
           }
-
-          this.stopLoadingAnimation()
         })
         .catch(error => {
           console.log(error)
           this.showNotificationError('¡Error al enviar el informe!')
         })
     },
-    saveData: function () {
+    saveFile: function () {
+      let filename = this.filename
+      let data = this.data
+      let actualDate = new Date()
+
+      let report = { filename, data, 'lastModificationDate': actualDate }
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.patch(backendURL + '/api/reports/' + this.id, report, config)
+        .then(response => {
+          if (!response.data.updated) {
+            this.showNotificationError('¡No se pudo guardar el archivo!')
+          }
+        })
+    },
+    saveDataLocally: function () {
       if (this.saveButtonText === 'Guardar') {
         if (this.filename !== '') {
           this.snackbar = false
-          this.loader = 'loading'
           this.data = this.editor.getData()
+
+          this.startLoadingAnimation()
 
           if (!this.isFileCreated) {
             this.createFile()
-            this.isFileCreated = true
+          } else {
+            this.saveFile()
           }
+
+          this.stopLoadingAnimation()
 
           this.saveButtonText = 'Guardado'
         } else {
