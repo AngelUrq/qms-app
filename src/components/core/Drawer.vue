@@ -70,15 +70,9 @@ export default {
   data: () => ({
     items: [
       {
-        to: '/',
+        to: '/dashboard',
         icon: 'mdi-view-dashboard',
         text: 'Panel de administración',
-        containsSubitems: false
-      },
-      {
-        to: '/typography',
-        icon: 'mdi-chart-bar',
-        text: 'Estadísticas',
         containsSubitems: false
       },
       {
@@ -91,8 +85,8 @@ export default {
             text: 'Formatos'
           },
           {
-            to: '/',
-            text: 'Crear desde cero'
+            to: '/report-editor',
+            text: 'Editor'
           },
           {
             to: '/load-report-format',
@@ -117,21 +111,6 @@ export default {
         icon: 'mdi-account-group',
         containsSubitems: false,
         text: 'Gestor de usuarios'
-      },
-      {
-        to: '/typography',
-        icon: 'mdi-chart-bar',
-        text: 'Estadísticas'
-      },
-      {
-        to: '/icons',
-        icon: 'mdi-chart-bubble',
-        text: 'Iconos'
-      },
-      {
-        to: '/maps',
-        icon: 'mdi-map-marker',
-        text: 'Mapas'
       },
       {
         to: '/notifications',

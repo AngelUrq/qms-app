@@ -128,7 +128,7 @@ export default {
         notes: this.User.notes,
         role: this.User.role
       }
-      axios.post(backendURL + '/signup', newUser)
+      axios.post(backendURL + '/api/users/signup', newUser)
         .then((response) => {
           console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')

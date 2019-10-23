@@ -52,8 +52,13 @@ export default [
   },
   {
     path: '/report-format',
-    name: 'Formatos del reporte',
+    name: 'Formatos de informe',
     view: 'ReportFormat'
+  },
+  {
+    path: '/report-editor',
+    name: 'Editor de informes',
+    view: 'ReportEditor'
   },
   {
     path: '/load-report-format',

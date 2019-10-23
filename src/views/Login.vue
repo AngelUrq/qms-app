@@ -67,7 +67,7 @@ export default {
         password: this.User.password
       }
       console.log(requirements)
-      axios.post(backendURL + ':3000/api/users/signin', requirements)
+      axios.post(backendURL + '/api/users/signin', requirements)
         .then(response => {
           let authToken = response.data.token
           if (response.status === 200) {
