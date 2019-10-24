@@ -58,7 +58,7 @@
               <EditReportFormat />
             </template>
             <template v-slot:item.delete="{ item }">
-              <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+              <v-btn x-small text icon color="blue-grey lighten-1" @click="deleteReportFormat(item)" class="mr-1">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
@@ -134,14 +134,27 @@ export default {
           'x-access-token': this.$store.state.token
         }
       }
-
       axios.get(backendURL + '/api/report-format', config)
         .then(response => {
           this.items = response.data
           console.log(this.items)
         })
         .catch(e => {
-          console.log(e)
+          console.log('An exception has occurred: ' + e)
+        })
+    },
+    deleteReportFormat (item) {
+      var config = {
+        headers: {
+          'x-access-token': this.$store.state.token
+        }
+      }
+      axios.delete(backendURL + '/api/report-format/' + item._id, config)
+        .then(response => {
+          console.log('Item deleted successfully')
+        })
+        .catch(e => {
+          console.log('An exception has occurred: ' + e)
         })
     },
     createReport: function (item) {
