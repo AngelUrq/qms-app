@@ -7,7 +7,7 @@
           title="Versiones de formato para informe de auditoría"
           buttonActivated
           buttonColor="blue darken-3"
-          reportFormatActionsActivated
+          reportFormatActionsActivated="true"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
