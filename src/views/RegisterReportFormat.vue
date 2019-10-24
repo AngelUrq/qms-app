@@ -7,7 +7,12 @@
       <v-container>
         <v-row>
           <v-col cols="12">
-            <v-text-field label="Nombre" v-model="reportFormat.name" prepend-icon="mdi-clipboard-text" required></v-text-field>
+            <v-text-field
+              label="Nombre"
+              v-model="reportFormat.name"
+              prepend-icon="mdi-clipboard-text"
+              required
+            ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field label="Versión" v-model="reportFormat.version" required></v-text-field>
@@ -16,22 +21,17 @@
             <v-text-field label="Título" v-model="reportFormat.title" required></v-text-field>
           </v-col>
           <v-row class="pa-3" no-gutters>
-              <h3>Subtítulos: </h3>
-              <v-text-field solo v-model="newSubtitle" class="ml-3 mr-3"></v-text-field>
-              <v-btn
-                fab
-                dark
-                color="green"
-                @click="addSubtitle()"
-              >
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
+            <h3>Subtítulos:</h3>
+            <v-text-field solo v-model="newSubtitle" class="ml-3 mr-3"></v-text-field>
+            <v-btn fab dark color="green" @click="addSubtitle()">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </v-row>
         </v-row>
-        <v-row class="ml-3" v-for="(subtitle, i) in reportFormat.subtitles" :key="i" >
+        <v-row class="ml-3" v-for="(subtitle, i) in reportFormat.subtitles" :key="i">
           <v-text-field solo class="mr-3" :value="subtitle"></v-text-field>
           <v-btn
-          class="mr-5"
+            class="mr-5"
             small
             text
             icon
@@ -68,39 +68,55 @@ export default {
   },
   methods: {
     register () {
-      var config = {
-        headers: {
-          'x-access-token': this.$store.state.token
+      if (this.isFormCompleted()) {
+        var config = {
+          headers: {
+            'x-access-token': this.$store.state.token
+          }
         }
+        var newReportFormat = {
+          name: this.reportFormat.name,
+          version: this.reportFormat.version,
+          creationDate: new Date(Date.now()).toLocaleString(),
+          lastModificationDate: new Date(Date.now()).toLocaleString(),
+          title: this.reportFormat.title,
+          subtitles: this.reportFormat.subtitles
+        }
+        axios
+          .post(backendURL + '/api/report-format', newReportFormat, config)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(e => {
+            console.log('An exception has occurred: ' + e)
+          })
+
+        this.clearFields()
+      } else {
+        alert('Por favor asegurese de completar correctamente los campos')
       }
-      var newReportFormat = {
-        name: this.reportFormat.name,
-        version: this.reportFormat.version,
-        creationDate: new Date(Date.now()).toLocaleString(),
-        lastModificationDate: new Date(Date.now()).toLocaleString(),
-        title: this.reportFormat.title,
-        subtitles: this.reportFormat.subtitles
-      }
-      axios.post(backendURL + '/api/report-format', newReportFormat, config)
-        .then(response => {
-          console.log(response)
-        })
-        .catch(e => {
-          console.log('An exception has occurred: ' + e)
-        })
     },
     addSubtitle () {
       if (this.newSubtitle !== '') {
-        console.log('Entre ' + this.newSubtitle + 'format: ' + this.reportFormat.subtitles)
+        console.log(
+          'Entre ' + this.newSubtitle + 'format: ' + this.reportFormat.subtitles
+        )
         this.reportFormat.subtitles.push(this.newSubtitle)
         this.newSubtitle = ''
       } else {
-
       }
     },
     deleteSubtitle (index) {
       this.reportFormat.subtitles.splice(index, 1)
       console.log(this.reportFormat.subtitles)
+    },
+    isFormCompleted () {
+      return this.reportFormat.name !== '' && this.reportFormat.version !== '' && this.reportFormat.title !== ''
+    },
+    clearFields () {
+      this.reportFormat.name = ''
+      this.reportFormat.version = ''
+      this.reportFormat.title = ''
     }
   }
 }

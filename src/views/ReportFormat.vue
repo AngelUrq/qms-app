@@ -3,39 +3,73 @@
     <v-row justify="center">
       <v-col cols="12">
         <material-card
-          color="indigo darken-3"
+          color="teal darken-2"
           title="Versiones de formato para informe de auditoría"
           buttonActivated
-          buttonColor="blue darken-3"
+          buttonColor="teal lighten-1"
           reportFormatActionsActivated
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
-            <v-text-field append-icon="mdi-magnify" label="Buscar" v-model="search" single-line hide-details></v-text-field>
+            <v-text-field
+              append-icon="mdi-magnify"
+              label="Buscar"
+              v-model="search"
+              single-line
+              hide-details
+            ></v-text-field>
             <v-spacer></v-spacer>
           </v-card-title>
-          <v-data-table :headers="headers" :items="items" item-key="_id" :search="search" show-expand>
+          <v-data-table
+            :headers="headers"
+            :items="items"
+            item-key="_id"
+            :search="search"
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            hide-default-footer
+            @page-count="pageCount = $event"
+            show-expand
+          >
             <template v-slot:expanded-item="{ headers, item }">
-              <td class="pa-4" :colspan="headers.length">
+              <td class="pa-5" :colspan="headers.length">
                 <div>
                   <h4>Titulo:</h4>
-                  <v-text-field solo v-model="item.title"></v-text-field>
+                  <v-text-field
+                    solo
+                    v-model="item.title"
+                    @click="activateSaveButton()"
+                    @keyup.tab="activateSaveButton()"
+                  ></v-text-field>
                   <v-row no-gutters>
                     <h4 class="mb- mr-3">Subtítulos:</h4>
                     <AddSubtitleToReportFormat />
                   </v-row>
                   <draggable>
                     <transition-group>
-                      <v-card class="pb-4" v-for="element in item.subtitles" :key="element">
+                      <v-card class="pb-3" v-for="(subtitle, j) in item.subtitles" :key="subtitle">
                         <v-row no-gutters>
                           <v-col :cols="2">
-                            <v-icon class="pt-3 pl-3">mdi-drag</v-icon>
+                            <v-icon class="pt-4 pl-3">mdi-drag</v-icon>
                           </v-col>
                           <v-col :cols="8">
-                            <v-text-field class="text-field" :value="element"></v-text-field>
+                            <v-text-field
+                              class="text-field"
+                              :value="subtitle"
+                              color="teal lighten-3"
+                              @click="activateSaveButton()"
+                              @keyup.tab="activateSaveButton()"
+                            ></v-text-field>
                           </v-col>
                           <v-col :cols="2" class="d-flex flex-row-reverse">
-                            <v-btn class="mt-3 mr-3" x-small text icon color="blue-grey lighten">
+                            <v-btn
+                              class="mt-4 mr-3"
+                              x-small
+                              text
+                              icon
+                              color="blue-grey lighten"
+                              @click="deleteSubtitle(item._id, j)"
+                            >
                               <v-icon :class="'d-flex justify-end'">mdi-delete</v-icon>
                             </v-btn>
                           </v-col>
@@ -44,7 +78,13 @@
                     </transition-group>
                   </draggable>
                   <v-row no-gutters justify="end">
-                    <v-btn class="mt-4 white--text" color="light-blue darken-4" text>Guardar</v-btn>
+                    <v-btn
+                      class="mt-4 white--text"
+                      color="teal lighten-3"
+                      text
+                      v-if="saveButtonActivated"
+                      @click="updateReportFormat(item)"
+                    >Guardar</v-btn>
                   </v-row>
                 </div>
               </td>
@@ -77,6 +117,9 @@
               </v-btn>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination color="teal darken-2" v-model="page" :length="pageCount"></v-pagination>
+          </div>
         </material-card>
       </v-col>
     </v-row>
@@ -99,6 +142,10 @@ export default {
   data: () => ({
     fab: false,
     search: '',
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
+    saveButtonActivated: false,
     headers: [
       {
         sortable: false,
@@ -158,20 +205,45 @@ export default {
           console.log('An exception has occurred: ' + e)
         })
     },
-    deleteReportFormat (item) {
+    updateReportFormat (reportFormat) {
       var config = {
         headers: {
           'x-access-token': this.$store.state.token
         }
       }
       axios
-        .delete(backendURL + '/api/report-format/' + item._id, config)
+        .put(
+          backendURL + '/api/report-format/' + reportFormat._id,
+          reportFormat,
+          config
+        )
         .then(response => {
-          console.log('Item deleted successfully')
+          console.log('Report updated successfully')
         })
         .catch(e => {
-          console.log('An exception has occurred: ' + e)
+          console.log('An exception has ocurred: ' + e.message)
         })
+    },
+    deleteReportFormat (item) {
+      var ans = confirm('¿Esta seguro que desea eliminar el reporte?')
+
+      if (ans) {
+        var config = {
+          headers: {
+            'x-access-token': this.$store.state.token
+          }
+        }
+        axios
+          .delete(backendURL + '/api/report-format/' + item._id, config)
+          .then(response => {
+            console.log('Item deleted successfully')
+          })
+          .catch(e => {
+            console.log('An exception has occurred: ' + e)
+          })
+
+        this.listReportFormats()
+      }
     },
     createReport: function (item) {
       var structure = {}
@@ -182,9 +254,24 @@ export default {
         params: { structure: structure, create: true }
       })
     },
-    deleteSubtitle (id, index) {
-      // this.items[id] = this.items.filter(item => item._id === id)
-      // this.items[i]subtitles.splice(index, 1)
+    deleteSubtitle (idReportFormat, indexSubtitle) {
+      var index = this.items
+        .map(function (item) {
+          return item._id
+        })
+        .indexOf(idReportFormat)
+      this.items[index].subtitles.splice(indexSubtitle, 1)
+    },
+    activateSaveButton () {
+      if (!this.saveButtonActivated) {
+        this.saveButtonActivated = true
+      }
+    },
+    disableSaveButton () {
+      this.saveButtonActivated = false
+    },
+    openEditReportFormat (item) {
+      this.$emit('editReportInfo', item)
     }
   }
 }
