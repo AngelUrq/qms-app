@@ -6,7 +6,7 @@ import './plugins'
 import vuetify from './plugins/vuetify'
 import { sync } from 'vuex-router-sync'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-const loginVerification = require('../src/utils/isLogged')
+// const loginVerification = require('../src/utils/isLogged')
 
 Vue.use(CKEditor)
 
@@ -16,7 +16,7 @@ export const EventBus = new Vue()
 
 Vue.config.productionTip = false
 
-router.beforeEach(async (to, from, next) => {
+/* router.beforeEach(async (to, from, next) => {
   const isAllowed = await loginVerification.isLogged()
   if (!isAllowed && to.path !== '/') {
     next('/')
@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next()
   }
-})
+}) */
 
 new Vue({
   router,
