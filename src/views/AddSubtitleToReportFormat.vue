@@ -19,7 +19,7 @@
         <v-card>
           <v-card-title>Añadir subtítulo</v-card-title>
           <v-card-text>
-            <v-text-field label="Subtítulo"></v-text-field>
+            <v-text-field label="Subtítulo" v-model="newSubtitle"></v-text-field>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
@@ -41,7 +41,13 @@
 export default {
   data () {
     return {
-      dialog: false
+      dialog: false,
+      newSubtitle: ''
+    }
+  },
+  methods: {
+    addSubtitle () {
+      // send new subtitle to ReportFormat
     }
   }
 }

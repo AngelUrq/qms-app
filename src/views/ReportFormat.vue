@@ -11,10 +11,10 @@
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
-            <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
+            <v-text-field append-icon="mdi-magnify" label="Buscar" v-model="search" single-line hide-details></v-text-field>
             <v-spacer></v-spacer>
           </v-card-title>
-          <v-data-table :headers="headers" :items="items" item-key="_id" show-expand>
+          <v-data-table :headers="headers" :items="items" item-key="_id" :search="search" show-expand>
             <template v-slot:expanded-item="{ headers, item }">
               <td class="pa-4" :colspan="headers.length">
                 <div>
@@ -50,7 +50,14 @@
               </td>
             </template>
             <template v-slot:item.create="{ item }">
-              <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1" @click="createReport(item)">
+              <v-btn
+                x-small
+                text
+                icon
+                color="blue-grey lighten-1"
+                class="mr-1"
+                @click="createReport(item)"
+              >
                 <v-icon>mdi-clipboard-text-outline</v-icon>
               </v-btn>
             </template>
@@ -58,7 +65,14 @@
               <EditReportFormat />
             </template>
             <template v-slot:item.delete="{ item }">
-              <v-btn x-small text icon color="blue-grey lighten-1" @click="deleteReportFormat(item)" class="mr-1">
+              <v-btn
+                x-small
+                text
+                icon
+                color="blue-grey lighten-1"
+                @click="deleteReportFormat(item)"
+                class="mr-1"
+              >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
@@ -84,7 +98,7 @@ export default {
   },
   data: () => ({
     fab: false,
-    dialago: false,
+    search: '',
     headers: [
       {
         sortable: false,
@@ -134,7 +148,8 @@ export default {
           'x-access-token': this.$store.state.token
         }
       }
-      axios.get(backendURL + '/api/report-format', config)
+      axios
+        .get(backendURL + '/api/report-format', config)
         .then(response => {
           this.items = response.data
           console.log(this.items)
@@ -149,7 +164,8 @@ export default {
           'x-access-token': this.$store.state.token
         }
       }
-      axios.delete(backendURL + '/api/report-format/' + item._id, config)
+      axios
+        .delete(backendURL + '/api/report-format/' + item._id, config)
         .then(response => {
           console.log('Item deleted successfully')
         })
@@ -161,15 +177,24 @@ export default {
       var structure = {}
       structure.title = item.title
       structure.subtitles = item.subtitles
-      this.$router.push({ name: 'Editor de informes', params: { structure: structure, create: true } })
+      this.$router.push({
+        name: 'Editor de informes',
+        params: { structure: structure, create: true }
+      })
+    },
+    deleteSubtitle (id, index) {
+      // this.items[id] = this.items.filter(item => item._id === id)
+      // this.items[i]subtitles.splice(index, 1)
     }
   }
 }
 </script>
 
 <style scoped>
+
 .text-field {
   height: 3em;
   font-size: 90%;
 }
+
 </style>

@@ -22,6 +22,7 @@
                 fab
                 dark
                 color="green"
+                @click="addSubtitle()"
               >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
@@ -35,6 +36,7 @@
             text
             icon
             color="blue-grey lighten-1"
+            @click="deleteSubtitle(i)"
           >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
@@ -86,6 +88,19 @@ export default {
         .catch(e => {
           console.log('An exception has occurred: ' + e)
         })
+    },
+    addSubtitle () {
+      if (this.newSubtitle !== '') {
+        console.log('Entre ' + this.newSubtitle + 'format: ' + this.reportFormat.subtitles)
+        this.reportFormat.subtitles.push(this.newSubtitle)
+        this.newSubtitle = ''
+      } else {
+
+      }
+    },
+    deleteSubtitle (index) {
+      this.reportFormat.subtitles.splice(index, 1)
+      console.log(this.reportFormat.subtitles)
     }
   }
 }

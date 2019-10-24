@@ -20,7 +20,7 @@
             <v-text-field label="Versión" v-model="version" required></v-text-field>
           </v-col>
           <v-col cols="12" sm="4">
-            <v-text-field label="Fecha de creación del documento" v-model="creationDate" value="14/06/2016" readonly="true"></v-text-field>
+            <v-text-field label="Fecha de creación del documento" v-model="lastModificationDate" value="14/06/2016" readonly="true"></v-text-field>
           </v-col>
         </v-row>
       </v-container>
