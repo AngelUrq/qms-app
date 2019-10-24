@@ -14,7 +14,7 @@
             <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
             <v-spacer></v-spacer>
           </v-card-title>
-          <v-data-table :headers="headers" :items="items" item-key="name" show-expand>
+          <v-data-table :headers="headers" :items="items" item-key="_id" show-expand>
             <template v-slot:expanded-item="{ headers, item }">
               <td class="pa-4" :colspan="headers.length">
                 <div>
@@ -71,6 +71,8 @@
 
 <script>
 import draggable from 'vuedraggable'
+import axios from 'axios'
+import { backendURL } from '@/data.js'
 import EditReportFormat from './EditReportFormat'
 import AddSubtitleToReportFormat from './AddSubtitleToReportFormat'
 
@@ -120,31 +122,32 @@ export default {
         value: 'delete'
       }
     ],
-    items: [
-      {
-        name: 'Auditoria 2019',
-        version: 'v.0.1',
-        creationDate: '15/10/2019',
-        lastModificationDate: '17/10/2019',
-        title: 'Reporte 1',
-        subtitles: ['Planes de accion', 'Responsables']
-      },
-      {
-        name: 'Auditoria 2018',
-        version: 'v.0.1',
-        creationDate: '15/10/2019',
-        lastModificationDate: '17/10/2019',
-        title: 'Reporte 2',
-        subtitles: ['Planes de accion', 'Responsables']
-      }
-    ]
+    items: []
   }),
+  mounted: function () {
+    this.listReportFormats()
+  },
   methods: {
+    listReportFormats () {
+      var config = {
+        headers: {
+          'x-access-token': this.$store.state.token
+        }
+      }
+
+      axios.get(backendURL + '/api/report-format', config)
+        .then(response => {
+          this.items = response.data
+          console.log(this.items)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
     createReport: function (item) {
       var structure = {}
       structure.title = item.title
       structure.subtitles = item.subtitles
-
       this.$router.push({ name: 'Editor de informes', params: { structure: structure, create: true } })
     }
   }
