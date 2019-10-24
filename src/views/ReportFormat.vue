@@ -5,9 +5,9 @@
         <material-card
           color="indigo darken-3"
           title="Versiones de formato para informe de auditoría"
-          buttonActivated="true"
+          buttonActivated
           buttonColor="blue darken-3"
-          reportFormatActionsActivated="true"
+          reportFormatActionsActivated
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
