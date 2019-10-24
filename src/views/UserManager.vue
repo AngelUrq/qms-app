@@ -20,7 +20,7 @@
           </template>
           <v-data-table
             :headers="headers"
-            :items="Users"
+            :items="users"
             :page.sync="page"
             :items-per-page="10"
             hide-default-footer
@@ -71,7 +71,7 @@ export default {
       page: 1,
       pageCount: 0,
       dialog: '',
-      Users: [],
+      users: [],
       headers: [
         {
           sortable: false,
@@ -147,18 +147,19 @@ export default {
 
       axios.get(backendURL + '/api/users', config)
         .then((response) => {
-          console.log(response.data)
-          this.Users = response.data
+          this.users = response.data
         })
         .catch((error) => {
           console.log(error)
         })
     },
     deleteUser (user) {
-      axios.delete(backendURL + '/api/users/' + user._id)
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.delete(backendURL + '/api/users/' + user._id, config)
         .then((response) => {
           const index = this.Users.indexOf(user)
-          this.Users.splice(index, 1)
+          this.users.splice(index, 1)
         })
         .catch((error) => {
           console.log(error)
