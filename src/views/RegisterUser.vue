@@ -16,7 +16,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="10" md="5">
-                  <v-text-field color="blue" label="Codigo*" v-model="User.code" required></v-text-field>
+                  <v-text-field color="blue" label="Codigo*" v-model="user.code" required></v-text-field>
                 </v-col>
                  <v-col cols="12" sm="6">
                 <v-select
@@ -24,26 +24,26 @@
                   label="Role*"
                   required
                   color="blue"
-                  v-model="User.role"
+                  v-model="user.role"
                 ></v-select>
               </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Nombre*" v-model="User.firstName" required></v-text-field>
+                  <v-text-field color="blue" label="Nombre*" v-model="user.firstName" required></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Apellido Paterno*" v-model="User.paternalLastName"></v-text-field>
+                  <v-text-field color="blue" label="Apellido Paterno*" v-model="user.paternalLastName"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Apellido Materno*" v-model="User.maternalLastName"></v-text-field>
+                  <v-text-field color="blue" label="Apellido Materno*" v-model="user.maternalLastName"></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                <v-text-field color="blue" label="Correo*" v-model="User.email" required></v-text-field>
+                <v-text-field color="blue" label="Correo*" v-model="user.email" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                v-model="User.password"
+                v-model="user.password"
                 valuePass="myPass"
                 label="Contraseña"
                 :append-icon="valuePass ? 'mdi-eye' : 'mdi-eye-off'"
@@ -59,7 +59,7 @@
                   required
                   color="blue"
                   prepend-icon="mdi-map-marker"
-                  v-model="User.city"
+                  v-model="user.city"
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="6">
@@ -67,12 +67,12 @@
                 prepend-icon="mdi-cellphone"
                 color="blue"
                 label="Celular/Telefono*"
-                v-model="User.phone"></v-text-field>
+                v-model="user.phone"></v-text-field>
               </v-col>
               <v-col cols="12" md="12">
                 <v-textarea
                   outlined
-                  v-model="User.notes"
+                  v-model="user.notes"
                   label="Notas"
                   color="blue"
                 ></v-textarea>
@@ -100,7 +100,7 @@ export default {
     return {
       dialog: '',
       valuePass: String,
-      User: {
+      user: {
         code: '',
         role: '',
         firstName: '',
@@ -117,16 +117,16 @@ export default {
   methods: {
     registerUserAPI () {
       let newUser = {
-        code: this.User.code,
-        password: this.User.password,
-        firstNames: this.User.firstName,
-        parentalLastName: this.User.paternalLastName,
-        maternalLastName: this.User.maternalLastName,
-        email: this.User.email,
-        city: this.User.city,
-        phone: this.User.phone,
-        notes: this.User.notes,
-        role: this.User.role
+        code: this.user.code,
+        password: this.user.password,
+        firstNames: this.user.firstName,
+        parentalLastName: this.user.paternalLastName,
+        maternalLastName: this.user.maternalLastName,
+        email: this.user.email,
+        city: this.user.city,
+        phone: this.user.phone,
+        notes: this.user.notes,
+        role: this.user.role
       }
       axios.post(backendURL + '/api/users/signup', newUser)
         .then((response) => {
