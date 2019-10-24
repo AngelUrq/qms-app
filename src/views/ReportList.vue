@@ -28,7 +28,7 @@
               ref="table"
             >
               <template v-slot:item.edit="{ item }">
-                <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+                <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1" @click="loadReport(item)">
                   <v-icon>mdi-file-edit</v-icon>
                 </v-btn>
               </template>
@@ -103,6 +103,9 @@ export default {
     })
   },
   methods: {
+    loadReport: function (report) {
+      this.$router.push({ name: 'Editor de informes', params: { report, load: true } })
+    },
     deleteReport: function (id) {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 

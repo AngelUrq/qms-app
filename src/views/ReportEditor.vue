@@ -111,9 +111,15 @@ export default {
         }
 
         if (this.$route.params.load) {
-          this.id = this.$route.params.id
-          this.filename = this.$route.params.filename
+          let report = this.$route.params.report
+
+          this.id = report._id
+          this.filename = report.filename
+          this.data = report.data
+          this.temporalData = report.data
           this.isFileCreated = true
+
+          this.editor.data.set(report.data)
         }
       })
   },
