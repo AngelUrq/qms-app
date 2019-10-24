@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="show" scrollable>
       <v-card>
-        <v-card-title>Editar Usuario</v-card-title>
+        <v-card-title>Editar usuario</v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     saveUser () {
-      axios.patch(backendURL + 'api/users/signup/' + this.userid, {
+      axios.patch(backendURL + '/api/users/signup/' + this.userid, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
         parentalLastName: this.EditUser.parentalLastName,

@@ -89,7 +89,7 @@ export default {
             text: 'Editor'
           },
           {
-            to: '/load-report-format',
+            to: '/report-list',
             text: 'Cargar'
           }
         ]

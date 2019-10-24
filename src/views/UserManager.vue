@@ -143,7 +143,9 @@ export default {
   },
   methods: {
     getUsers () {
-      axios.get(backendURL + '/api/users/signup')
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.get(backendURL + '/api/users', config)
         .then((response) => {
           console.log(response.data)
           this.Users = response.data
@@ -153,7 +155,7 @@ export default {
         })
     },
     deleteUser (user) {
-      axios.delete(backendURL + '/api/users/signup/' + user._id)
+      axios.delete(backendURL + '/api/users/' + user._id)
         .then((response) => {
           const index = this.Users.indexOf(user)
           this.Users.splice(index, 1)

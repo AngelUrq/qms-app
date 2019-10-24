@@ -30,10 +30,6 @@ export default [
     view: 'Typography'
   },
   {
-    path: '/icons',
-    view: 'Icons'
-  },
-  {
     path: '/maps',
     view: 'Maps'
   },
@@ -61,8 +57,8 @@ export default [
     view: 'ReportEditor'
   },
   {
-    path: '/load-report-format',
-    name: 'Reporte',
-    view: 'LoadReportFormat'
+    path: '/report-list',
+    name: 'Lista de informes',
+    view: 'ReportList'
   }
 ]

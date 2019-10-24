@@ -3,6 +3,7 @@ import { backendURL } from '@/data.js'
 
 export function isLogged () {
   const actualToken = localStorage.getItem('token')
+
   return axios.post(backendURL + '/api/users/isLogged', {}, {
     headers: { 'x-access-token': actualToken.toString() }
   })
