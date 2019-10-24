@@ -16,8 +16,8 @@
             <v-text-field label="Título" v-model="reportFormat.title" required></v-text-field>
           </v-col>
           <v-row class="pa-3" no-gutters>
-            <h3>Subtítulos: </h3>
-            <v-text-field solo v-model="newSubtitle" class="ml-3 mr-3"></v-text-field>
+              <h3>Subtítulos: </h3>
+              <v-text-field solo v-model="newSubtitle" class="ml-3 mr-3"></v-text-field>
               <v-btn
                 fab
                 dark
@@ -74,13 +74,12 @@ export default {
       var newReportFormat = {
         name: this.reportFormat.name,
         version: this.reportFormat.version,
-        creationDate: new Date(),
-        lastModificationDate: new Date(),
+        creationDate: new Date(Date.now()).toLocaleString(),
+        lastModificationDate: new Date(Date.now()).toLocaleString(),
         title: this.reportFormat.title,
         subtitles: this.reportFormat.subtitles
       }
-
-      axios.post(backendURL + '/api/report-format', config, newReportFormat)
+      axios.post(backendURL + '/api/report-format', newReportFormat, config)
         .then(response => {
           console.log(response)
         })
