@@ -60,5 +60,9 @@ export default [
     path: '/report-list',
     name: 'Lista de informes',
     view: 'ReportList'
+  },
+  {
+    path: '/',
+    name: 'Ruta por defecto'
   }
 ]
