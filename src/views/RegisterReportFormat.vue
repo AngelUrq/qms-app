@@ -98,12 +98,10 @@ export default {
     },
     addSubtitle () {
       if (this.newSubtitle !== '') {
-        console.log(
-          'Entre ' + this.newSubtitle + 'format: ' + this.reportFormat.subtitles
-        )
         this.reportFormat.subtitles.push(this.newSubtitle)
         this.newSubtitle = ''
       } else {
+        alert('Debe ingresar datos para añadir un subtítulo')
       }
     },
     deleteSubtitle (index) {
@@ -117,6 +115,8 @@ export default {
       this.reportFormat.name = ''
       this.reportFormat.version = ''
       this.reportFormat.title = ''
+      this.reportFormat.subtitles = []
+      this.newSubtitle = ''
     }
   }
 }

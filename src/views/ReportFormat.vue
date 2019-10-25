@@ -101,7 +101,7 @@
                 <v-icon>mdi-clipboard-text-outline</v-icon>
               </v-btn>
             </template>
-            <template v-slot:item.update="{ item }">
+            <template v-slot:item.update="{ item }" @click="openEditReportFormat(item)">
               <EditReportFormat />
             </template>
             <template v-slot:item.delete="{ item }">
@@ -146,6 +146,7 @@ export default {
     pageCount: 0,
     itemsPerPage: 10,
     saveButtonActivated: false,
+    showEditReportFormat: false,
     headers: [
       {
         sortable: false,
@@ -271,6 +272,7 @@ export default {
       this.saveButtonActivated = false
     },
     openEditReportFormat (item) {
+      this.showEditReportFormat = true
       this.$emit('editReportInfo', item)
     }
   }
@@ -278,10 +280,8 @@ export default {
 </script>
 
 <style scoped>
-
 .text-field {
   height: 3em;
   font-size: 90%;
 }
-
 </style>

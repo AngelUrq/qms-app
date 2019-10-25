@@ -7,30 +7,40 @@
         </v-btn>
       </template>
       <v-card>
-    <v-card-title>
-      <span class="headline">Actualizar datos de formato de reporte</span>
-    </v-card-title>
-    <v-card-text>
-      <v-container>
-        <v-row>
-          <v-col cols="12" sm="4">
-            <v-text-field label="Nombre" v-model="name" prepend-icon="mdi-clipboard-text" required></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-text-field label="Versión" v-model="version" required></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-text-field label="Fecha de creación del documento" v-model="lastModificationDate" value="14/06/2016" readonly="true"></v-text-field>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-text>
-    <v-card-actions>
-      <v-row class="pb-3 pr-3" justify="end" no-gutters>
-        <v-btn color="blue darken-1" @click="updateReportFormat()" text>Actualizar</v-btn>
-      </v-row>
-    </v-card-actions>
-  </v-card>
+        <v-card-title>
+          <span class="headline">Actualizar datos de formato de reporte</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="4">
+                <v-text-field
+                  label="Nombre"
+                  v-model="name"
+                  prepend-icon="mdi-clipboard-text"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-text-field label="Versión" v-model="version" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-text-field
+                  label="Fecha de creación del documento"
+                  v-model="lastModificationDate"
+                  value="14/06/2016"
+                  readonly="true"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-row class="pb-3 pr-3" justify="end" no-gutters>
+            <v-btn color="blue darken-1" text>Actualizar</v-btn>
+          </v-row>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
   </v-row>
 </template>
@@ -48,27 +58,37 @@ export default {
     }
   },
   methods: {
-    updateReportFormat () {
-      var config = {
-        headers: {
-          'x-access-token': this.$store.state.token
+    updateReportFormat (reportFormat) {
+      if (this.isFormCompleted()) {
+        var config = {
+          headers: {
+            'x-access-token': this.$store.state.token
+          }
         }
+        var reportFormatUpdated = {
+          name: this.name,
+          version: this.version,
+          createDate: reportFormat.creationDate,
+          lastModificationDate: new Date(Date.now()).toLocaleString(),
+          title: reportFormat.title,
+          subtitles: reportFormat.subtitles
+        }
+        axios
+          .put(
+            backendURL + '/api/report-format/' + reportFormat._id,
+            reportFormatUpdated,
+            config
+          )
+          .then(response => {
+            console.log('Report format update successfully')
+          })
+          .catch(e => {
+            console.log('An exception has ocurred: ' + e)
+          })
       }
-      var reportFormat = {
-        name: this.name,
-        version: this.version,
-        createDate: '',
-        lastModificationDate: this.lastModificationDate,
-        title: '',
-        subtitles: []
-      }
-      axios.put(backendURL + '/api/report-format/', reportFormat, config)
-        .then(response => {
-          console.log('Report format update successfully')
-        })
-        .catch(e => {
-          console.log('An exception has ocurred: ' + e)
-        })
+    },
+    isFormCompleted () {
+      return this.name !== '' && this.version !== ''
     }
   }
 }
