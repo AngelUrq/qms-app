@@ -15,7 +15,7 @@
             <p class="category font-weight-thin mb-0" v-text="text" />
           </div>
           <v-row class="pr-5" v-if="buttonActivated" justify="end">
-            <v-dialog v-model="dialog" max-width="80%">
+            <v-dialog v-model="dialog" max-width="60%">
               <template v-slot:activator="{ on }">
                 <v-btn class="mx-2" fab dark v-on="on" :color="buttonColor">
                   <v-icon dark>mdi-plus</v-icon>
