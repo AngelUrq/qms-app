@@ -110,7 +110,8 @@ export default {
         password: '',
         city: '',
         phone: '',
-        notes: ''
+        notes: '',
+        lastLogIn: 'now'
       }
     }
   },
@@ -120,13 +121,14 @@ export default {
         code: this.user.code,
         password: this.user.password,
         firstNames: this.user.firstName,
-        parentalLastName: this.user.paternalLastName,
+        paternalLastName: this.user.paternalLastName,
         maternalLastName: this.user.maternalLastName,
         email: this.user.email,
         city: this.user.city,
         phone: this.user.phone,
         notes: this.user.notes,
-        role: this.user.role
+        role: this.user.role,
+        lastLogIn: this.user.lastLogIn
       }
       axios.post(backendURL + '/api/users/signup', newUser)
         .then((response) => {
