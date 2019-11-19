@@ -238,12 +238,11 @@ export default {
           .delete(backendURL + '/api/report-format/' + item._id, config)
           .then(response => {
             console.log('Item deleted successfully')
+            this.listReportFormats()
           })
           .catch(e => {
             console.log('An exception has occurred: ' + e)
           })
-
-        this.listReportFormats()
       }
     },
     createReport: function (item) {
