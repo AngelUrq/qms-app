@@ -6,7 +6,7 @@ import './plugins'
 import vuetify from './plugins/vuetify'
 import { sync } from 'vuex-router-sync'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-import { defaultRoute, pathAccepted } from './data'
+import { defaultRoute } from './data'
 
 const loginVerification = require('../src/utils/isLogged')
 
@@ -20,13 +20,8 @@ Vue.config.productionTip = false
 
 router.beforeEach(async (to, from, next) => {
   const isAllowed = await loginVerification.isLogged()
-  console.log('ruta to : ' + to.path + ' ruta from: ' + from.path)
   if (isAllowed) {
-    if (to.path !== pathAccepted) {
-      next(pathAccepted)
-    } else {
-      next()
-    }
+    next()
   } else {
     if (to.path !== defaultRoute) {
       next(defaultRoute)
