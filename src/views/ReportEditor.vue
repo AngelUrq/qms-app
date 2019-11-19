@@ -268,7 +268,7 @@ export default {
     search: function () {
       const htmlToText = require('html-to-text')
 
-      const text = htmlToText.fromString(this.data, {
+      const text = htmlToText.fromString(this.temporalData, {
         wordwrap: 130,
         uppercaseHeadings: false
       })
@@ -279,6 +279,7 @@ export default {
         const regularExpression = new RegExp(separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1], 'g')
 
         let coincidences = text.match(regularExpression)
+        console.log(coincidences)
 
         this.items = []
 
