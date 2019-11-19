@@ -156,8 +156,7 @@ export default {
       axios
         .delete(backendURL + '/api/users/' + user._id, config)
         .then(response => {
-          const index = this.Users.indexOf(user)
-          this.users.splice(index, 1)
+          this.getUsers()
         })
         .catch(error => {
           console.log(error)
