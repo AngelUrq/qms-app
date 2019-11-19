@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" scrollable>
       <template v-slot:activator="{ on }">
         <v-btn
-        class="orange lighten-1 blue--text text--lighten-1"
+        class="pink lighten-3 lighten-1 white--text text--lighten-1"
         dark
         v-on="on"
         fab
