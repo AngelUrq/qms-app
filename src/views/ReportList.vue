@@ -10,7 +10,7 @@
     <v-container fill-height fluid grid-list-xl>
       <v-row justify="center">
         <v-col cols="12">
-          <material-card color="green " title="Informes" buttonActivated buttonColor="light-green">
+          <material-card color="green " title="Informes" buttonColor="light-green">
             <v-card-title class="mb-5">
               <v-spacer></v-spacer>
               <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
