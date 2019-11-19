@@ -1,83 +1,75 @@
 <template>
-    <v-dialog v-model="show" scrollable>
-      <v-card>
-        <v-card-title>Editar usuario</v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="10" md="5">
-                  <v-text-field  color="blue" label="Codigo*" v-model="EditUser.code" required></v-text-field>
-                </v-col>
-                 <v-col cols="12" sm="6">
-                <v-select
-                  :items="['Admin', 'Usuario']"
-                  label="Role*"
-                  required
-                  color="blue"
-                  v-model="EditUser.role"
-                ></v-select>
-              </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Nombre*" v-model="EditUser.firstNames" required></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Apellido Paterno*" v-model="EditUser.parentalLastName"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Apellido Materno*" v-model="EditUser.maternalLastName"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                <v-text-field color="blue" label="Correo*" v-model="EditUser.email" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  :items="['Cochabamba', 'La Paz']"
-                  label="Ciudad*"
-                  required
-                  color="blue"
-                  prepend-icon="mdi-map-marker"
-                  v-model="EditUser.city"
-                ></v-select>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
+  <v-dialog v-model="show" width="70%">
+    <v-card>
+      <v-card-title>Editar usuario</v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col cols="12" sm="10" md="5">
+              <v-text-field color="blue" label="Codigo*" v-model="EditUser.code" required></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-select
+                :items="['Admin', 'Usuario']"
+                label="Rol*"
+                required
+                color="blue"
+                v-model="EditUser.role"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="6" md="4">
+              <v-text-field color="blue" label="Nombre*" v-model="EditUser.firstNames" required></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <v-text-field
+                color="blue"
+                label="Apellido Paterno*"
+                v-model="EditUser.parentalLastName"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <v-text-field
+                color="blue"
+                label="Apellido Materno*"
+                v-model="EditUser.maternalLastName"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field color="blue" label="Correo*" v-model="EditUser.email" required></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-select
+                :items="['Cochabamba', 'La Paz']"
+                label="Ciudad*"
+                required
+                color="blue"
+                prepend-icon="mdi-map-marker"
+                v-model="EditUser.city"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" sm="6" md="6">
+              <v-text-field
                 prepend-icon="mdi-cellphone"
                 color="blue"
                 label="Celular/Telefono*"
-                v-model="EditUser.phone"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="12">
-                <v-textarea
-                  outlined
-                  v-model="EditUser.notes"
-                  label="Notas"
-                  color="blue"
-                ></v-textarea>
-              </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn
-          color="blue darken-1"
-          small class="blue lighten-1 orange--text text--lighten-2"
-          @click="saveUser()"
-          >Guardar
-            <v-icon small right>mdi-checkbox-marked-circle</v-icon>
-          </v-btn>
-           <v-btn
-          color="blue darken-1"
-          small class="blue lighten-1 orange--text text--lighten-2"
-          @click="closeDialog()"
-          >Cancelar
-            <v-icon small right>mdi-checkbox-marked-circle</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+                v-model="EditUser.phone"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="12">
+              <v-textarea outlined v-model="EditUser.notes" label="Notas" color="blue"></v-textarea>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <div class="flex-grow-1"></div>
+        <v-btn color="pink lighten-3" class="mb-3 mr-3" small text @click="saveUser()">Guardar</v-btn>
+        <v-btn color="pink lighten-3" class="mb-3 mr-3" small @click="closeDialog()" text>Cancelar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -119,7 +111,7 @@ export default {
     }
   },
   created () {
-    EventBus.$on('editUserInfo', (user) => {
+    EventBus.$on('editUserInfo', user => {
       this.EditUser = Object.assign({}, user)
       this.EditUser.password = ''
       this.userid = user._id
@@ -143,7 +135,7 @@ export default {
           EventBus.$emit('refreshTable', 'getUsers')
           this.$emit('input', false)
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error)
         })
     },

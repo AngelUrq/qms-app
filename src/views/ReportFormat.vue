@@ -280,8 +280,10 @@ export default {
 </script>
 
 <style scoped>
+
 .text-field {
   height: 3em;
   font-size: 90%;
 }
+
 </style>
