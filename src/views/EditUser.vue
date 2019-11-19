@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     saveUser () {
-      axios.patch(backendURL + '/api/users/signup/' + this.userid, {
+      axios.put(backendURL + '/api/users/' + this.userid, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
         parentalLastName: this.EditUser.parentalLastName,

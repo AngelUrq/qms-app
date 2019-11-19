@@ -279,7 +279,6 @@ export default {
         const regularExpression = new RegExp(separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1], 'g')
 
         let coincidences = text.match(regularExpression)
-        console.log(coincidences)
 
         this.items = []
 
