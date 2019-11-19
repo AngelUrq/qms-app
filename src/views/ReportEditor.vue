@@ -27,6 +27,7 @@
           :color="isDataSaved"
           @click="saveDataLocally"
         >{{ saveButtonText }}</v-btn>
+        <v-btn class="ma-2" color="warning" @click="dialog=true">Buscar</v-btn>
       </v-col>
     </v-row>
 
@@ -36,6 +37,50 @@
         <div class="document-editor__editable"></div>
       </div>
     </div>
+
+    <v-dialog v-model="dialog" max-width="50vw">
+      <v-card class="pa-5">
+        <v-card-title><strong>Buscador de no conformidades</strong></v-card-title>
+        <v-row class="justify-center mt-5" no-gutters>
+          <v-spacer></v-spacer>
+          <v-col cols="6">
+            <v-text-field solo placeholder="Patrón" class="pa-1" v-model="regex"></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-btn class="ma-2" color="warning" @click="search">Buscar</v-btn>
+          </v-col>
+        </v-row>
+        <v-container fill-height fluid grid-list-xl>
+          <v-row justify="center">
+            <v-col cols="12">
+              <material-card
+                color="green"
+                title="No conformidades"
+              >
+                <v-data-table
+                  :headers="headers"
+                  :items="items"
+                  hide-default-footer
+                  ref="table"
+                >
+                  <template v-slot:item.create="{ item }">
+                    <v-btn
+                      x-small
+                      text
+                      icon
+                      color="blue-grey lighten-1"
+                      class="mr-1"
+                    >
+                      <v-icon>mdi-check</v-icon>
+                    </v-btn>
+                  </template>
+                </v-data-table>
+              </material-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -59,7 +104,21 @@ export default {
       isFileCreated: false,
       notificationText: '',
       notificationColor: '',
-      snackbar: false
+      snackbar: false,
+      dialog: false,
+      headers: [
+        {
+          sortable: false,
+          text: 'Nombre',
+          value: 'text'
+        },
+        {
+          text: 'Crear',
+          value: 'create'
+        }
+      ],
+      items: [],
+      regex: ''
     }
   },
   mounted: function () {
@@ -74,7 +133,7 @@ export default {
             self.temporalData = editor.getData()
 
             self.saveButtonText =
-              (self.temporalData === self.data) && self.isFileCreated
+              self.temporalData === self.data && self.isFileCreated
                 ? 'Guardado'
                 : 'Guardar'
           }
@@ -143,16 +202,24 @@ export default {
       let data = this.data
       let actualDate = new Date()
 
-      let report = { filename, data, 'creationDate': actualDate, 'lastModificationDate': actualDate }
+      let report = {
+        filename,
+        data,
+        creationDate: actualDate,
+        lastModificationDate: actualDate
+      }
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios.post(backendURL + '/api/reports', report, config)
+      axios
+        .post(backendURL + '/api/reports', report, config)
         .then(response => {
           if (response.data.created) {
             this.id = response.data.id
             this.isFileCreated = true
           } else {
-            this.showNotificationError('¡No se pudo crear el archivo en la base de datos!')
+            this.showNotificationError(
+              '¡No se pudo crear el archivo en la base de datos!'
+            )
           }
         })
         .catch(error => {
@@ -165,10 +232,11 @@ export default {
       let data = this.data
       let actualDate = new Date()
 
-      let report = { filename, data, 'lastModificationDate': actualDate }
+      let report = { filename, data, lastModificationDate: actualDate }
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios.patch(backendURL + '/api/reports/' + this.id, report, config)
+      axios
+        .patch(backendURL + '/api/reports/' + this.id, report, config)
         .then(response => {
           if (!response.data.updated) {
             this.showNotificationError('¡No se pudo guardar el archivo!')
@@ -194,6 +262,34 @@ export default {
           this.saveButtonText = 'Guardado'
         } else {
           this.showNotificationError('¡Debes ingresar el nombre del archivo!')
+        }
+      }
+    },
+    search: function () {
+      const htmlToText = require('html-to-text')
+
+      const text = htmlToText.fromString(this.temporalData, {
+        wordwrap: 130,
+        uppercaseHeadings: false
+      })
+
+      let separatedRegex = this.regex.split('*')
+
+      if (separatedRegex.length === 2) {
+        const regularExpression = new RegExp(separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1], 'g')
+
+        let coincidences = text.match(regularExpression)
+
+        this.items = []
+
+        for (let coincidence of coincidences) {
+          coincidence = coincidence.replace(separatedRegex[0], '')
+          coincidence = coincidence.replace(separatedRegex[1], '')
+
+          this.items.push(
+            {
+              'text': coincidence
+            })
         }
       }
     }

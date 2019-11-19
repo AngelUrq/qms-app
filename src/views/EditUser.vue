@@ -119,19 +119,18 @@ export default {
   },
   methods: {
     saveUser () {
-      axios
-        .patch(backendURL + '/api/users/signup/' + this.userid, {
-          code: this.EditUser.code,
-          firstNames: this.EditUser.firstNames,
-          parentalLastName: this.EditUser.parentalLastName,
-          maternalLastName: this.EditUser.maternalLastName,
-          email: this.EditUser.email,
-          city: this.EditUser.city,
-          phone: this.EditUser.phone,
-          notes: this.EditUser.notes,
-          role: this.EditUser.role
-        })
-        .then(response => {
+      axios.put(backendURL + '/api/users/' + this.userid, {
+        code: this.EditUser.code,
+        firstNames: this.EditUser.firstNames,
+        parentalLastName: this.EditUser.parentalLastName,
+        maternalLastName: this.EditUser.maternalLastName,
+        email: this.EditUser.email,
+        city: this.EditUser.city,
+        phone: this.EditUser.phone,
+        notes: this.EditUser.notes,
+        role: this.EditUser.role
+      })
+        .then((response) => {
           console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')
           this.$emit('input', false)

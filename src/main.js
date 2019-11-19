@@ -20,7 +20,6 @@ Vue.config.productionTip = false
 
 router.beforeEach(async (to, from, next) => {
   const isAllowed = await loginVerification.isLogged()
-  console.log('ruta to : ' + to.path + ' ruta from: ' + from.path)
   if (isAllowed) {
     next()
   } else {
