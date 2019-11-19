@@ -13,7 +13,7 @@
           <material-card color="green " title="Informes" buttonColor="light-green">
             <v-card-title class="mb-5">
               <v-spacer></v-spacer>
-              <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
+              <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details v-model="search"></v-text-field>
               <v-spacer></v-spacer>
             </v-card-title>
 
@@ -74,6 +74,7 @@ export default {
       snackbar: false,
       page: 1,
       pageCount: 0,
+      search: '',
       headers: [
         {
           sortable: false,
