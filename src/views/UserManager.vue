@@ -1,59 +1,55 @@
 <template>
-  <material-card
-          class="card-tabs"
-          color="orange"
-        >
-          <template v-slot:header>
-          <span
-                class="subheading font-weight-light mx-5"
-                style="align-self: center; font-size:150%"
+  <v-container>
+    <material-card class="card-tabs" color="pink darken-3">
+      <template v-slot:header>
+        <span
+          class="subheading font-weight-light mx-5"
+          style="align-self: center; font-size:150%"
+        >Usuarios</span>
+        <v-container>
+          <v-row class="mx-5" justify="end">
+            <RegisterUser />
+          </v-row>
+        </v-container>
+      </template>
+      <v-data-table
+        :headers="headers"
+        :items="users"
+        :page.sync="page"
+        :items-per-page="10"
+        hide-default-footer
+        class="elevation-1"
+        @page-count="pageCount = $event"
+        ref="table"
+      >
+        <template slot="item.action" slot-scope="user">
+          <v-btn
+            color="blue-grey lighten-1"
+            @click="openEditUser(user.item)"
+            icon
+            text
+            x-small
           >
-          Usuarios</span>
-            <v-container>
-              <v-row
-              class="mx-5"
-              justify="end"
-              >
-                <RegisterUser/>
-              </v-row>
-            </v-container>
-          </template>
-          <v-data-table
-            :headers="headers"
-            :items="users"
-            :page.sync="page"
-            :items-per-page="10"
-            hide-default-footer
-            class="elevation-1"
-            @page-count="pageCount = $event"
-            ref="table"
+            <v-icon>mdi-account-edit</v-icon>
+          </v-btn>
+          <EditUser v-model="showEditUser" />
+          <v-btn
+            color="blue-grey lighten-1"
+            @click="deleteUser(user.item)"
+            class="mr-1"
+            icon
+            x-small
+            text
           >
-            <template slot="item.action" slot-scope="user">
-              <v-btn
-              class="blue lighten-1 orange--text text--lighten-1; mx-2"
-              depressed
-              fab
-              x-small
-              @click="openEditUser(user.item)"
-              >
-                <v-icon>mdi-account-edit</v-icon>
-              </v-btn>
-              <EditUser v-model="showEditUser"/>
-              <v-btn
-              class="blue lighten-1 orange--text text--lighten-1"
-              depressed
-              fab
-              x-small
-              @click="deleteUser(user.item)"
-              >
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </template>
-          </v-data-table>
-          <div class="text-center pt-2">
-            <v-pagination color="orange lighten-1" v-model="page" :length="pageCount"></v-pagination>
-          </div>
-        </material-card>
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination color="pink lighten-2" v-model="page" :length="pageCount"></v-pagination>
+      </div>
+    </material-card>
+  </v-container>
 </template>
 
 <script>
@@ -74,13 +70,13 @@ export default {
       users: [],
       headers: [
         {
-          sortable: false,
-          text: 'Codigo',
+          sortable: true,
+          text: 'Código',
           value: 'code'
         },
         {
           sortable: false,
-          text: 'Role',
+          text: 'Rol',
           value: 'role'
         },
         {
@@ -145,23 +141,25 @@ export default {
     getUsers () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios.get(backendURL + '/api/users', config)
-        .then((response) => {
+      axios
+        .get(backendURL + '/api/users', config)
+        .then(response => {
           this.users = response.data
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error)
         })
     },
     deleteUser (user) {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios.delete(backendURL + '/api/users/' + user._id, config)
-        .then((response) => {
+      axios
+        .delete(backendURL + '/api/users/' + user._id, config)
+        .then(response => {
           const index = this.Users.indexOf(user)
           this.users.splice(index, 1)
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error)
         })
     },

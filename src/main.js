@@ -19,19 +19,23 @@ export const EventBus = new Vue()
 Vue.config.productionTip = false
 
 router.beforeEach(async (to, from, next) => {
-  const isAllowed = await loginVerification.isLogged()
-  console.log('ruta to : ' + to.path + ' ruta from: ' + from.path)
-  if (isAllowed) {
-    if (to.path !== defaultRoute || to.path !== loginRoute) {
+  var isAllowed = await loginVerification.isLogged()
+  console.log('ruta to : ' + to.path + ' ruta from: ' + from.path + ' isllowed ' + isAllowed)
+  console.log(isAllowed)
+  if (isAllowed === undefined) {
+    isAllowed = false
+    console.log(isAllowed)
+  } if (isAllowed) {
+    if (to.path === defaultRoute || to.path === loginRoute) {
       next(dashboardRoute)
     } else {
       next()
     }
   } else {
-    if (to.path !== defaultRoute || to.path !== loginRoute) {
-      next(defaultRoute)
-    } else {
+    if (to.path === loginRoute) {
       next()
+    } else {
+      next(loginRoute)
     }
   }
 })

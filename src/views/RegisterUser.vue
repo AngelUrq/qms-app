@@ -1,8 +1,8 @@
 <template>
-    <v-dialog v-model="dialog" scrollable>
+    <v-dialog v-model="dialog" scrollable width="70%">
       <template v-slot:activator="{ on }">
         <v-btn
-        class="orange lighten-1 blue--text text--lighten-1"
+        class="pink lighten-3 lighten-1 white--text text--lighten-1"
         dark
         v-on="on"
         fab
@@ -21,7 +21,7 @@
                  <v-col cols="12" sm="6">
                 <v-select
                   :items="['Admin', 'Usuario']"
-                  label="Role*"
+                  label="Rol*"
                   required
                   color="blue"
                   v-model="user.role"
@@ -82,8 +82,7 @@
           </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" small class="blue lighten-1 orange--text text--lighten-2" @click="registerUserAPI()">Registrar
-            <v-icon small right>mdi-checkbox-marked-circle</v-icon>
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registerUserAPI()">Registrar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -110,7 +109,8 @@ export default {
         password: '',
         city: '',
         phone: '',
-        notes: ''
+        notes: '',
+        lastLogIn: 'now'
       }
     }
   },
@@ -120,13 +120,14 @@ export default {
         code: this.user.code,
         password: this.user.password,
         firstNames: this.user.firstName,
-        parentalLastName: this.user.paternalLastName,
+        paternalLastName: this.user.paternalLastName,
         maternalLastName: this.user.maternalLastName,
         email: this.user.email,
         city: this.user.city,
         phone: this.user.phone,
         notes: this.user.notes,
-        role: this.user.role
+        role: this.user.role,
+        lastLogIn: this.user.lastLogIn
       }
       axios.post(backendURL + '/api/users/signup', newUser)
         .then((response) => {
