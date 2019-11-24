@@ -104,8 +104,7 @@ export default {
             text: 'Formatos'
           },
           {
-            // Put route
-            to: '/',
+            to: '/action-plan-manager',
             text: 'Gestor'
           }
         ]
