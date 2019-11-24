@@ -100,8 +100,7 @@ export default {
         containsSubitems: true,
         subitems: [
           {
-            // Put route
-            to: '/',
+            to: '/action-plan-format-manager',
             text: 'Formatos'
           },
           {

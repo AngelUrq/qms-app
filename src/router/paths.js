@@ -62,6 +62,11 @@ export default [
     view: 'ReportList'
   },
   {
+    path: '/action-plan-format-manager',
+    name: 'Gestor de formatos para planes de acción',
+    view: 'action-plan/FormatManager'
+  },
+  {
     path: '/',
     name: 'Ruta por defecto'
   }
