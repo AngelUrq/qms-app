@@ -87,7 +87,7 @@ export default {
         {
           sortable: false,
           text: 'Apellido Paterno',
-          value: 'parentalLastName',
+          value: 'paternalLastName',
           align: 'right'
         },
         {

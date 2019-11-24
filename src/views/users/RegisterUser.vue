@@ -82,7 +82,7 @@
           </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registerUserAPI()">Registrar
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registerUserAPI(),sendMailNotification()">Registrar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -115,6 +115,35 @@ export default {
     }
   },
   methods: {
+    sendMailNotification () {
+      const htmlBody = `
+        <p>Hola ${this.user.firstName}!</p>
+        <p>Tu nueva cuenta a sido creada.</p>
+        <h3>Dastos de Usuarios</h3>
+        <ul>
+          <li>Correro: ${this.user.email}
+          <li>Contraseña: ${this.user.password}
+        </ul>
+        <h3>Ingresa Ahora!</h3>
+        <p>Entra al link http://localhost:8080/login y inicia sesion. </p>
+      `
+      let newMail = {
+        from: '<UPBgestiondecalidad@gmail.com>',
+        to: this.user.email,
+        subject: 'UPB Gestion de Calidad: Nuevo Usuario',
+        text: '',
+        html: htmlBody
+      }
+
+      axios.post(backendURL + '/api/mail/send', newMail)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
     registerUserAPI () {
       let newUser = {
         code: this.user.code,
@@ -138,6 +167,7 @@ export default {
           console.log(error)
         })
     }
+
   }
 }
 </script>

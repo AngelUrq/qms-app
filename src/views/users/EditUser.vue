@@ -90,7 +90,7 @@ export default {
         code: '',
         role: '',
         firstNames: '',
-        parentalLastName: '',
+        paternalLastName: '',
         maternalLastName: '',
         email: '',
         password: '',
@@ -119,7 +119,8 @@ export default {
   },
   methods: {
     saveUser () {
-      axios.put(backendURL + '/api/users/' + this.userid, {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      axios.patch(backendURL + '/api/users/' + this.userid, config, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
         parentalLastName: this.EditUser.parentalLastName,
