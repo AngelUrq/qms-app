@@ -5,8 +5,6 @@
         <material-card
           color="teal darken-2"
           title="Gestor de planes de acción"
-          buttonActivated
-          buttonColor="teal lighten-1"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
