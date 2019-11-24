@@ -75,7 +75,7 @@
 <script>
 import axios from 'axios'
 
-import { backendURL } from '@/data'
+import { backendURL, actionPlanExample } from '@/data'
 
 export default {
   data: function () {
@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     exportToExcel: function (actionPlan) {
-      console.log('Exportando...')
+      actionPlan.structure = actionPlanExample
     }
   }
 }
