@@ -19,7 +19,7 @@
           </v-card-title>
           <v-data-table
             :headers="headers"
-            :items="actionPlanFormats"
+            :items="actionPlans"
             item-key="_id"
             :search="search"
             :page.sync="page"
@@ -28,15 +28,16 @@
             @page-count="pageCount = $event"
             show-expand
           >
-            <template v-slot:item.create="{ item }">
+            <template v-slot:item.export="{ item }">
               <v-btn
                 x-small
                 text
                 icon
                 color="blue-grey lighten-1"
                 class="mr-1"
+                @click="exportToExcel(item)"
               >
-                <v-icon>mdi-clipboard-text-outline</v-icon>
+                <v-icon>mdi-export</v-icon>
               </v-btn>
             </template>
             <template v-slot:item.update="{ item }">
@@ -94,6 +95,10 @@ export default {
           value: 'creationDate'
         },
         {
+          text: 'Exportar',
+          value: 'export'
+        },
+        {
           text: 'Editar',
           value: 'update'
         },
@@ -111,6 +116,11 @@ export default {
     axios.get(backendURL + '/api/action-plans', config).then(response => {
       this.actionPlans = response.data
     })
+  },
+  methods: {
+    exportToExcel: function (actionPlan) {
+      console.log('Exportando...')
+    }
   }
 }
 </script>
