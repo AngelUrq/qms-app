@@ -9,7 +9,7 @@
     floating
     mobile-break-point="991"
     persistent
-    width="260"
+    width="300"
   >
     <template v-slot:img="attrs">
       <v-img v-bind="attrs" gradient="to top, rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)" />
@@ -95,10 +95,21 @@ export default {
         ]
       },
       {
-        to: '/table-list',
         icon: 'mdi-clipboard-outline',
         text: 'Planes de acción',
-        containsSubitems: false
+        containsSubitems: true,
+        subitems: [
+          {
+            // Put route
+            to: '/',
+            text: 'Formatos'
+          },
+          {
+            // Put route
+            to: '/',
+            text: 'Gestor'
+          }
+        ]
       },
       {
         to: '/user-profile',
