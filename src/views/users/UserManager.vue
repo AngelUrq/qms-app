@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { EventBus } from '../main'
+import { EventBus } from '../../main'
 import RegisterUser from './RegisterUser'
 import EditUser from './EditUser'
 import axios from 'axios'

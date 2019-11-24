@@ -40,7 +40,7 @@
     </section>
     <div class="fullscreen-bg" v-if="production">
       <video id="mi-video" loop autoplay muted class="fullscreen">
-        <source src="../assets/timelapse.mp4" type="video/mp4" />
+        <source src="../../assets/timelapse.mp4" type="video/mp4" />
       </video>
     </div>
   </div>

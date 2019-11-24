@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import RegisterReportFormat from '../../views/RegisterReportFormat'
+import RegisterReportFormat from '../../views/reports/RegisterReportFormat'
 
 export default {
   name: 'MaterialCard',

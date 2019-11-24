@@ -54,6 +54,7 @@
 <script>
 import axios from 'axios'
 import { backendURL } from '@/data.js'
+
 export default {
   data () {
     return {

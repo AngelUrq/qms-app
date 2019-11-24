@@ -129,7 +129,9 @@
 <script>
 import draggable from 'vuedraggable'
 import axios from 'axios'
+
 import { backendURL } from '@/data.js'
+
 import EditReportFormat from './EditReportFormat'
 import AddSubtitleToReportFormat from './AddSubtitleToReportFormat'
 

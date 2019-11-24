@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { EventBus } from '../main'
+import { EventBus } from '../../main'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 
