@@ -26,7 +26,7 @@
               <v-text-field
                 color="blue"
                 label="Apellido Paterno*"
-                v-model="EditUser.parentalLastName"
+                v-model="EditUser.paternalLastName"
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="4">
@@ -120,10 +120,11 @@ export default {
   methods: {
     saveUser () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
+
       axios.patch(backendURL + '/api/users/' + this.userid, config, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
-        parentalLastName: this.EditUser.parentalLastName,
+        paternalLastName: this.EditUser.paternalLastName,
         maternalLastName: this.EditUser.maternalLastName,
         email: this.EditUser.email,
         city: this.EditUser.city,
