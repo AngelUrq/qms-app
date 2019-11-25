@@ -42,49 +42,62 @@
             <h4 v-if="column.fieldType === 'title'" class="text-center pb-5">{{ column.name }}</h4>
 
             <div v-if="column.fieldType === 'reponsable'">
-                <v-row justify="center">
-                  <v-col cols="12">
-                    <material-card
-                      color="light-blue darken-4"
-                      title="Responsables del seguimiento"
-                      buttonColor="light-blue darken-2"
-                      buttonActivated
-                    >
-                      <v-data-table :headers="responsibleHeaders" :items="responsible" hide-default-footer></v-data-table>
-                    </material-card>
-                  </v-col>
-                </v-row>
+              <v-card class="pt-5 mb-5 white--text" color="light-blue darken-4">
+                <h4 class="text-center pb-5">RESPONSABLE DE SEGUIMIENTO</h4>
+              </v-card>
+              <v-row>
+                <v-col>
+                  <h4>Nombre</h4></v-col>
+                <v-col><h4>Cargo</h4></v-col>
+                <v-col><h4>Firma</h4></v-col>
+              </v-row>
+              <v-row>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-btn class="mt-4 mr-2" fab small dark color="light-blue darken-2">
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </v-row>
             </div>
 
             <div v-if="column.fieldType === 'corrections'">
-                <v-row justify="center">
-                  <v-col cols="12">
-                    <material-card
-                      color="light-blue darken-4"
-                      title="Corrección inmediata"
-                      buttonColor="light-blue darken-2"
-                      buttonActivated
-                    >
-                      <v-data-table :headers="correctionHeaders" :items="corrections" hide-default-footer></v-data-table>
-                    </material-card>
-                  </v-col>
-                </v-row>
+              <v-card class="pt-5 mb-5 white--text" color="light-blue darken-4">
+              <h4 class="text-center pb-5">CORRECCIÓN INMEDIATA</h4>
+              </v-card>
+             <v-row>
+                <v-col>
+                  <h4>Nombre</h4></v-col>
+                <v-col><h4>Cargo</h4></v-col>
+                <v-col><h4>Firma</h4></v-col>
+              </v-row>
+              <v-row>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-btn class="mt-4 mr-2" fab small dark color="light-blue darken-2">
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </v-row>
             </div>
             <div v-if="column.fieldType === 'activities'">
-              <v-container class="pa-0">
-                <v-row justify="center">
-                  <v-col cols="12">
-                    <material-card
-                      color="light-blue darken-4"
-                      title="Acciones para eliminarla causa raíz"
-                      buttonColor="light-blue darken-2"
-                      buttonActivated
-                    >
-                      <v-data-table :headers="activityHeaders" :items="activities" hide-default-footer></v-data-table>
-                    </material-card>
-                  </v-col>
-                </v-row>
-              </v-container>
+              <v-card class="pt-5 mb-5 white--text" color="light-blue darken-4">
+              <h4 class="text-center pb-5">ACCIONES PARA ELIMINAR LA CAUSA RAÍZ</h4>
+              </v-card>
+             <v-row>
+                <v-col>
+                  <h4>Nombre</h4></v-col>
+                <v-col><h4>Cargo</h4></v-col>
+                <v-col><h4>Firma</h4></v-col>
+              </v-row>
+              <v-row>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
+                <v-btn class="mt-4 mr-2" fab small dark color="light-blue darken-2">
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </v-row>
             </div>
           </v-col>
         </v-row>
@@ -249,7 +262,20 @@ export default {
           value: 'Fecha real'
         }
       ],
-      responsible: [],
+      responsible: [
+        {
+          id: 1,
+          name: 'Adriana Orellana',
+          position: 'Gerente',
+          signature: 'Adri O'
+        },
+        {
+          id: 2,
+          name: 'Jhon',
+          position: 'Angel',
+          signature: 'Carnal'
+        }
+      ],
       corrections: [],
       activities: []
     }
