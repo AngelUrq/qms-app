@@ -13,15 +13,17 @@
       <v-card>
         <v-card-title>Registrar Usuario</v-card-title>
           <v-card-text>
-            <v-container>
+            <v-form ref="form">
+               <v-container>
               <v-row>
                 <v-col cols="12" sm="10" md="5">
-                  <v-text-field color="blue" label="Codigo*" v-model="user.code" required></v-text-field>
+                  <v-text-field color="blue" :rules="codeRules" label="Codigo*" v-model="user.code" required></v-text-field>
                 </v-col>
                  <v-col cols="12" sm="6">
                 <v-select
                   :items="['Admin', 'Usuario']"
                   label="Rol*"
+                  :rules="[v => !!v || 'Se debe escojer un Rol']"
                   required
                   color="blue"
                   v-model="user.role"
@@ -30,22 +32,23 @@
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Nombre*" v-model="user.firstName" required></v-text-field>
+                  <v-text-field color="blue" :rules="[v => !!v || 'Nombre es necesario']" label="Nombre*" v-model="user.firstName" required></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Apellido Paterno*" v-model="user.paternalLastName"></v-text-field>
+                  <v-text-field color="blue" :rules="[v => !!v || 'Apellido Paterno es necesario']" label="Apellido Paterno*" v-model="user.paternalLastName"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" label="Apellido Materno*" v-model="user.maternalLastName"></v-text-field>
+                  <v-text-field color="blue" :rules="[v => !!v || 'Apellido Materno es necesario']" label="Apellido Materno*" v-model="user.maternalLastName"></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                <v-text-field color="blue" label="Correo*" v-model="user.email" required></v-text-field>
+                <v-text-field color="blue" :rules="emailRules" label="Correo*" v-model="user.email" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                 v-model="user.password"
                 valuePass="myPass"
                 label="Contraseña"
+                :rules="passwordRules"
                 :append-icon="valuePass ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="() => (valuePass = !valuePass)"
                 :type="valuePass ? 'password' : 'text'"
@@ -56,6 +59,7 @@
                 <v-select
                   :items="['Cochabamba', 'La Paz']"
                   label="Ciudad*"
+                  :rules="[v => !!v || 'Se debe escojer una Ciudad!']"
                   required
                   color="blue"
                   prepend-icon="mdi-map-marker"
@@ -66,6 +70,7 @@
                 <v-text-field
                 prepend-icon="mdi-cellphone"
                 color="blue"
+                :rules="phoneRules"
                 label="Celular/Telefono*"
                 v-model="user.phone"></v-text-field>
               </v-col>
@@ -79,10 +84,25 @@
               </v-col>
               </v-row>
             </v-container>
+            </v-form>
           </v-card-text>
         <v-card-actions>
+          <v-alert
+            :value="warningAlert"
+            type= "warning"
+          >
+            Algunos campos estan vacios
+          </v-alert>
+          <v-alert
+            :value="successAlert"
+            type="success"
+          >
+            Registrado!
+          </v-alert>
           <div class="flex-grow-1"></div>
-          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registerUserAPI(),sendMailNotification()">Registrar
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registrar">Registrar
+          </v-btn>
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click= "dialog = false,clearFields()" >Salir
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -99,6 +119,25 @@ export default {
     return {
       dialog: '',
       valuePass: String,
+      warningAlert: false,
+      successAlert: false,
+      emailRules: [
+        v => !!v || 'Correo es necesario',
+        v => /.+@.+\..+/.test(v) || 'Correo debe ser valido'
+      ],
+      phoneRules: [
+        v => !!v || 'Numero Celular/Telefono es necesario',
+        v => /^\d+$/.test(v) || 'Numero debe ser valido'
+      ],
+      codeRules: [
+        v => !!v || 'Codigo es necesario',
+        v => /^\d+$/.test(v) || 'Codigo debe ser valido'
+      ],
+      passwordRules: [
+        v => !!v || 'Contraseña es necesario',
+        v => v.length >= 5 || 'Contraseña debe ser mas de 5 caracteres'
+
+      ],
       user: {
         code: '',
         role: '',
@@ -113,6 +152,8 @@ export default {
         lastLogIn: 'now'
       }
     }
+  },
+  created () {
   },
   methods: {
     sendMailNotification () {
@@ -166,8 +207,38 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-    }
+    },
 
+    registrar () {
+      if (this.$refs.form.validate()) {
+        this.registerUserAPI()
+        this.sendMailNotification()
+        this.clearFields()
+        this.successAlert = true
+        setTimeout(() => {
+          this.successAlert = false
+        }, 10000)
+      } else {
+        this.warningAlert = true
+        setTimeout(() => {
+          this.warningAlert = false
+        }, 10000)
+      }
+    },
+
+    clearFields () {
+      this.user.code = ''
+      this.user.role = ''
+      this.user.firstName = ''
+      this.user.paternalLastName = ''
+      this.user.maternalLastName = ''
+      this.user.email = ''
+      this.user.password = ''
+      this.user.city = ''
+      this.user.phone = ''
+      this.user.notes = ''
+      this.$refs.form.resetValidation()
+    }
   }
 }
 </script>
