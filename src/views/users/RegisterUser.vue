@@ -105,8 +105,8 @@
           <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click= "dialog = false,clearFields()" >Salir
           </v-btn>
         </v-card-actions>
-      </v-card>
-    </v-dialog>
+       </v-card>
+     </v-dialog>
 </template>
 
 <script>
