@@ -121,7 +121,7 @@ export default {
     saveUser () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios.patch(backendURL + '/api/users/' + this.userid, config, {
+      axios.patch(backendURL + '/api/users/' + this.userid, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
         paternalLastName: this.EditUser.paternalLastName,
@@ -131,7 +131,7 @@ export default {
         phone: this.EditUser.phone,
         notes: this.EditUser.notes,
         role: this.EditUser.role
-      })
+      }, config)
         .then((response) => {
           console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')
