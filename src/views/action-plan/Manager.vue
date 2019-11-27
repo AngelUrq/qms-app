@@ -26,7 +26,6 @@
             :items-per-page="itemsPerPage"
             hide-default-footer
             @page-count="pageCount = $event"
-            show-expand
           >
             <template v-slot:item.export="{ item }">
               <v-btn
@@ -75,7 +74,7 @@
 <script>
 import axios from 'axios'
 
-import { backendURL, actionPlanExample } from '@/data'
+import { backendURL } from '@/data'
 
 export default {
   data: function () {
@@ -119,7 +118,10 @@ export default {
   },
   methods: {
     exportToExcel: function (actionPlan) {
-      actionPlan.structure = actionPlanExample
+      let link = document.createElement('a')
+      link.href = backendURL + '/api/action-plans/export/' + actionPlan._id
+      link.setAttribute('download', actionPlan.name + '.xlsx')
+      link.click()
     }
   }
 }
