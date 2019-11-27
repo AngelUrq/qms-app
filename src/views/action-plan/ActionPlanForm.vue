@@ -51,11 +51,14 @@
                 <v-col><h4>Cargo</h4></v-col>
                 <v-col><h4>Firma</h4></v-col>
               </v-row>
-              <v-row>
+              <v-row v-for="(res, r) in responsible" :key="r">
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-btn class="mt-4 mr-2" fab small dark color="light-blue darken-2">
+                <v-col><v-text-field color="blue darken-3" label="Puesto" outlined single-line></v-text-field></v-col>
+                <v-col><v-text-field color="blue darken-3" label="Firma" outlined single-line></v-text-field></v-col>
+                <v-btn v-if="!verifyLastRow(r, responsible.length)" class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="removeResponsible(r)">
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+                <v-btn v-else class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="addResponsible">
                   <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
               </v-row>
@@ -71,11 +74,14 @@
                 <v-col><h4>Cargo</h4></v-col>
                 <v-col><h4>Firma</h4></v-col>
               </v-row>
-              <v-row>
+              <v-row v-for="(correction, index) in corrections" :key="index">
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-btn class="mt-4 mr-2" fab small dark color="light-blue darken-2">
+                <v-btn v-if="!verifyLastRow(index, corrections.length)" class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="removeCorrection(index)">
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+                <v-btn v-else class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="addCorrection">
                   <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
               </v-row>
@@ -90,11 +96,14 @@
                 <v-col><h4>Cargo</h4></v-col>
                 <v-col><h4>Firma</h4></v-col>
               </v-row>
-              <v-row>
+              <v-row v-for="(activity, index) in activities" :key="index">
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
                 <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-btn class="mt-4 mr-2" fab small dark color="light-blue darken-2">
+                <v-btn v-if="!verifyLastRow(index, activities.length)" class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="removeActivity(index)">
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+                <v-btn v-else class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="addActivity">
                   <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
               </v-row>
@@ -227,12 +236,12 @@ export default {
         {
           sortable: false,
           text: 'Fecha propuesta',
-          value: 'Fecha real'
+          value: 'proposedDate'
         },
         {
           sortable: false,
           text: 'Fecha propuesta',
-          value: 'Fecha real'
+          value: 'realDate'
         }
       ],
       activityHeaders: [
@@ -254,12 +263,12 @@ export default {
         {
           sortable: false,
           text: 'Fecha propuesta',
-          value: 'Fecha real'
+          value: 'proposedDate'
         },
         {
           sortable: false,
-          text: 'Fecha propuesta',
-          value: 'Fecha real'
+          text: 'Fecha real',
+          value: 'realDate'
         }
       ],
       responsible: [
@@ -276,13 +285,73 @@ export default {
           signature: 'Carnal'
         }
       ],
-      corrections: [],
-      activities: []
+      corrections: [
+        {
+          name: '',
+          position: '',
+          signature: '',
+          proposedDate: '',
+          realDate: ''
+        }
+      ],
+      activities: [
+        {
+          name: '',
+          position: '',
+          signature: '',
+          proposedDate: '',
+          realDate: ''
+        }
+      ]
     }
   },
   methods: {
     getWidthColumns (numberColumns) {
       return 12 / numberColumns
+    },
+    addActivity () {
+      let activity = {
+        name: '',
+        position: '',
+        signature: '',
+        proposedDate: '',
+        realDate: ''
+      }
+
+      this.activities.push(activity)
+    },
+    addResponsible () {
+      let responsible = {
+        name: '',
+        position: '',
+        signature: ''
+      }
+
+      this.responsible.push(responsible)
+    },
+    addCorrection () {
+      let correction = {
+        name: '',
+        position: '',
+        signature: '',
+        proposedDate: '',
+        realDate: ''
+      }
+
+      this.corrections.push(correction)
+    },
+    removeResponsible (index) {
+      this.responsible.splice(index, 1)
+    },
+    removeCorrection (index) {
+      this.corrections.splice(index, 1)
+    },
+    removeActivity (index) {
+      this.activities.splice(index, 1)
+    },
+    verifyLastRow (rowIndex, rowsLength) {
+      let isTheLast = rowIndex + 1 === rowsLength
+      return isTheLast
     }
   }
 }
