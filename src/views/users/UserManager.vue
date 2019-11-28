@@ -33,16 +33,31 @@
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
           <EditUser v-model="showEditUser" />
-          <v-btn
-            color="blue-grey lighten-1"
-            @click="deleteUser(user.item)"
-            class="mr-1"
-            icon
-            x-small
-            text
-          >
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
+          <template>
+            <v-dialog v-model="ConfirmDialog" persistent max-width="400">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                color="blue-grey lighten-1"
+                v-on="on"
+                class="mr-1"
+                icon
+                x-small
+                text
+              >
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline">Estas por eliminar un usuario</v-card-title>
+                  <v-card-text>Estas seguro de que quieres eliminar este usuario?</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="pink lighten-3" text @click="deleteUser(user.item)">Eliminar</v-btn>
+                    <v-btn color="pink lighten-3" text @click="ConfirmDialog = false">Cancelar</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            </template>
         </template>
       </v-data-table>
       <div class="text-center pt-2">
@@ -64,6 +79,7 @@ export default {
   data () {
     return {
       showEditUser: false,
+      ConfirmDialog: '',
       page: 1,
       pageCount: 0,
       dialog: '',
@@ -87,7 +103,7 @@ export default {
         {
           sortable: false,
           text: 'Apellido Paterno',
-          value: 'parentalLastName',
+          value: 'paternalLastName',
           align: 'right'
         },
         {

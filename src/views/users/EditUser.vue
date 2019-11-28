@@ -26,7 +26,7 @@
               <v-text-field
                 color="blue"
                 label="Apellido Paterno*"
-                v-model="EditUser.parentalLastName"
+                v-model="EditUser.paternalLastName"
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="4">
@@ -90,7 +90,7 @@ export default {
         code: '',
         role: '',
         firstNames: '',
-        parentalLastName: '',
+        paternalLastName: '',
         maternalLastName: '',
         email: '',
         password: '',
@@ -119,17 +119,19 @@ export default {
   },
   methods: {
     saveUser () {
-      axios.put(backendURL + '/api/users/' + this.userid, {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.patch(backendURL + '/api/users/' + this.userid, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
-        parentalLastName: this.EditUser.parentalLastName,
+        paternalLastName: this.EditUser.paternalLastName,
         maternalLastName: this.EditUser.maternalLastName,
         email: this.EditUser.email,
         city: this.EditUser.city,
         phone: this.EditUser.phone,
         notes: this.EditUser.notes,
         role: this.EditUser.role
-      })
+      }, config)
         .then((response) => {
           console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')
