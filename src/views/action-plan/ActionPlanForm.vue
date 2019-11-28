@@ -42,71 +42,15 @@
             <h4 v-if="column.fieldType === 'title'" class="text-center pb-5">{{ column.name }}</h4>
 
             <div v-if="column.fieldType === 'reponsable'">
-              <v-card class="pt-5 mb-5 white--text" color="light-blue darken-4">
-                <h4 class="text-center pb-5">RESPONSABLE DE SEGUIMIENTO</h4>
-              </v-card>
-              <v-row>
-                <v-col>
-                  <h4>Nombre</h4></v-col>
-                <v-col><h4>Cargo</h4></v-col>
-                <v-col><h4>Firma</h4></v-col>
-              </v-row>
-              <v-row v-for="(res, r) in responsible" :key="r">
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Puesto" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Firma" outlined single-line></v-text-field></v-col>
-                <v-btn v-if="!verifyLastRow(r, responsible.length)" class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="removeResponsible(r)">
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
-                <v-btn v-else class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="addResponsible">
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-              </v-row>
+              <ReponsibleTable />
             </div>
 
             <div v-if="column.fieldType === 'corrections'">
-              <v-card class="pt-5 mb-5 white--text" color="light-blue darken-4">
-              <h4 class="text-center pb-5">CORRECCIÓN INMEDIATA</h4>
-              </v-card>
-             <v-row>
-                <v-col>
-                  <h4>Nombre</h4></v-col>
-                <v-col><h4>Cargo</h4></v-col>
-                <v-col><h4>Firma</h4></v-col>
-              </v-row>
-              <v-row v-for="(correction, index) in corrections" :key="index">
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-btn v-if="!verifyLastRow(index, corrections.length)" class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="removeCorrection(index)">
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
-                <v-btn v-else class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="addCorrection">
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-              </v-row>
+              <CorrectionTable />
             </div>
+
             <div v-if="column.fieldType === 'activities'">
-              <v-card class="pt-5 mb-5 white--text" color="light-blue darken-4">
-              <h4 class="text-center pb-5">ACCIONES PARA ELIMINAR LA CAUSA RAÍZ</h4>
-              </v-card>
-             <v-row>
-                <v-col>
-                  <h4>Nombre</h4></v-col>
-                <v-col><h4>Cargo</h4></v-col>
-                <v-col><h4>Firma</h4></v-col>
-              </v-row>
-              <v-row v-for="(activity, index) in activities" :key="index">
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-col><v-text-field color="blue darken-3" label="Nombre" outlined single-line></v-text-field></v-col>
-                <v-btn v-if="!verifyLastRow(index, activities.length)" class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="removeActivity(index)">
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
-                <v-btn v-else class="mt-4 mr-2" fab small dark color="light-blue darken-2" @click="addActivity">
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-              </v-row>
+              <ActivitiesTable />
             </div>
           </v-col>
         </v-row>
@@ -116,7 +60,16 @@
 </template>
 
 <script>
+import ReponsibleTable from './ResponsibleTable'
+import CorrectionTable from './CorrectionsTable'
+import ActivitiesTable from './ActivitiesTable'
+
 export default {
+  components: {
+    ReponsibleTable,
+    CorrectionTable,
+    ActivitiesTable
+  },
   data () {
     return {
       version: 'V.1.2',
@@ -199,159 +152,12 @@ export default {
             fieldType: 'horizontal'
           }
         ]
-      ],
-      responsibleHeaders: [
-        {
-          sortable: false,
-          text: 'Nombre',
-          value: 'name'
-        },
-        {
-          sortable: false,
-          text: 'Puesto',
-          value: 'position'
-        },
-        {
-          sortable: false,
-          text: 'Firma',
-          value: 'signature'
-        }
-      ],
-      correctionHeaders: [
-        {
-          sortable: false,
-          text: 'Actividad',
-          value: 'name'
-        },
-        {
-          sortable: false,
-          text: 'Responsable',
-          value: 'position'
-        },
-        {
-          sortable: false,
-          text: 'VoBo responsable',
-          value: 'signature'
-        },
-        {
-          sortable: false,
-          text: 'Fecha propuesta',
-          value: 'proposedDate'
-        },
-        {
-          sortable: false,
-          text: 'Fecha propuesta',
-          value: 'realDate'
-        }
-      ],
-      activityHeaders: [
-        {
-          sortable: false,
-          text: 'Actividad',
-          value: 'name'
-        },
-        {
-          sortable: false,
-          text: 'Responsable',
-          value: 'position'
-        },
-        {
-          sortable: false,
-          text: 'VoBo responsable',
-          value: 'signature'
-        },
-        {
-          sortable: false,
-          text: 'Fecha propuesta',
-          value: 'proposedDate'
-        },
-        {
-          sortable: false,
-          text: 'Fecha real',
-          value: 'realDate'
-        }
-      ],
-      responsible: [
-        {
-          id: 1,
-          name: 'Adriana Orellana',
-          position: 'Gerente',
-          signature: 'Adri O'
-        },
-        {
-          id: 2,
-          name: 'Jhon',
-          position: 'Angel',
-          signature: 'Carnal'
-        }
-      ],
-      corrections: [
-        {
-          name: '',
-          position: '',
-          signature: '',
-          proposedDate: '',
-          realDate: ''
-        }
-      ],
-      activities: [
-        {
-          name: '',
-          position: '',
-          signature: '',
-          proposedDate: '',
-          realDate: ''
-        }
       ]
     }
   },
   methods: {
     getWidthColumns (numberColumns) {
       return 12 / numberColumns
-    },
-    addActivity () {
-      let activity = {
-        name: '',
-        position: '',
-        signature: '',
-        proposedDate: '',
-        realDate: ''
-      }
-
-      this.activities.push(activity)
-    },
-    addResponsible () {
-      let responsible = {
-        name: '',
-        position: '',
-        signature: ''
-      }
-
-      this.responsible.push(responsible)
-    },
-    addCorrection () {
-      let correction = {
-        name: '',
-        position: '',
-        signature: '',
-        proposedDate: '',
-        realDate: ''
-      }
-
-      this.corrections.push(correction)
-    },
-    removeResponsible (index) {
-      this.responsible.splice(index, 1)
-    },
-    removeCorrection (index) {
-      this.corrections.splice(index, 1)
-    },
-    removeActivity (index) {
-      this.activities.splice(index, 1)
-    },
-    verifyLastRow (rowIndex, rowsLength) {
-      let isTheLast = rowIndex + 1 === rowsLength
-      return isTheLast
     }
   }
 }
