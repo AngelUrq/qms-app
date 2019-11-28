@@ -19,24 +19,24 @@
           </v-card-title>
           <v-data-table
             :headers="headers"
-            :items="actionPlanFormats"
+            :items="actionPlans"
             item-key="_id"
             :search="search"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             hide-default-footer
             @page-count="pageCount = $event"
-            show-expand
           >
-            <template v-slot:item.create="{ item }">
+            <template v-slot:item.export="{ item }">
               <v-btn
                 x-small
                 text
                 icon
                 color="blue-grey lighten-1"
                 class="mr-1"
+                @click="exportToWord(item)"
               >
-                <v-icon>mdi-clipboard-text-outline</v-icon>
+                <v-icon>mdi-export</v-icon>
               </v-btn>
             </template>
             <template v-slot:item.update="{ item }">
@@ -76,6 +76,8 @@ import axios from 'axios'
 
 import { backendURL } from '@/data'
 
+import { WordParser } from '@/utils/wordParser'
+
 export default {
   data: function () {
     return {
@@ -92,6 +94,10 @@ export default {
           sortable: false,
           text: 'Fecha de creación',
           value: 'creationDate'
+        },
+        {
+          text: 'Exportar',
+          value: 'export'
         },
         {
           text: 'Editar',
@@ -111,6 +117,12 @@ export default {
     axios.get(backendURL + '/api/action-plans', config).then(response => {
       this.actionPlans = response.data
     })
+  },
+  methods: {
+    exportToWord: function (actionPlan) {
+      let wordParser = new WordParser(actionPlan)
+      wordParser.parse()
+    }
   }
 }
 </script>
