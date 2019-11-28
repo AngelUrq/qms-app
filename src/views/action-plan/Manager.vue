@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12">
         <material-card
-          color="teal darken-2"
+          color="brown darken-2"
           title="Gestor de planes de acción"
         >
           <v-card-title class="mb-5">
@@ -32,7 +32,7 @@
                 x-small
                 text
                 icon
-                color="blue-grey lighten-1"
+                color="brown darken-1"
                 class="mr-1"
                 @click="exportToWord(item)"
               >

@@ -3,10 +3,10 @@
     <v-row justify="center">
       <v-col cols="12">
         <material-card
-          color="teal darken-2"
+          color="lime darken-2"
           title="Gestor de formatos para planes de acción"
           buttonActivated
-          buttonColor="teal lighten-1"
+          buttonColor="lime darken-1"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
