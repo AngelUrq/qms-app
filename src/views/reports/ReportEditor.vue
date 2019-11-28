@@ -182,6 +182,15 @@ export default {
         }
       })
   },
+  beforeRouteLeave (to, from, next) {
+    if (this.temporalData === this.data) {
+      next(vm => {
+        next(from)
+      })
+    } else {
+      alert('¡No guardaste el documento!')
+    }
+  },
   methods: {
     startLoadingAnimation: function () {
       this.loader = 'loading'
