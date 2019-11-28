@@ -34,7 +34,7 @@
                 icon
                 color="blue-grey lighten-1"
                 class="mr-1"
-                @click="exportToExcel(item)"
+                @click="exportToWord(item)"
               >
                 <v-icon>mdi-export</v-icon>
               </v-btn>
@@ -75,6 +75,8 @@
 import axios from 'axios'
 
 import { backendURL } from '@/data'
+
+import { WordParser } from '@/utils/wordParser'
 
 export default {
   data: function () {
@@ -117,11 +119,9 @@ export default {
     })
   },
   methods: {
-    exportToExcel: function (actionPlan) {
-      let link = document.createElement('a')
-      link.href = backendURL + '/api/action-plans/export/' + actionPlan._id
-      link.setAttribute('download', actionPlan.name + '.xlsx')
-      link.click()
+    exportToWord: function (actionPlan) {
+      let wordParser = new WordParser(actionPlan)
+      wordParser.parse()
     }
   }
 }
