@@ -37,6 +37,7 @@
                 icon
                 color="blue-grey lighten-1"
                 class="mr-1"
+                to="/action-plan-format-editor"
               >
                 <v-icon>mdi-clipboard-text-outline</v-icon>
               </v-btn>

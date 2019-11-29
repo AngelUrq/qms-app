@@ -14,7 +14,7 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span>Seleccione el formto de tabla que desea añadir</span>
+          <span>Seleccione el formato de tabla que desea añadir</span>
           <v-spacer></v-spacer>
         </v-card-title>
         <v-card-actions justify="center">

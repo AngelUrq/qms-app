@@ -1,13 +1,12 @@
 <template>
-  <v-container class="grey lighten-5">
+  <v-container>
     <v-row no-gutters>
       <v-col>
        <v-text-field label="Titulo" :placeholder="title" v-model="title"></v-text-field>
       </v-col>
-      <v-col>
-
-       <div class="text-left ml-2">{{ body }}</div>
-    </v-col>
+      <v-col class="ml-1">
+       <v-text-field :placeholder="body" v-model="body" readonly></v-text-field>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -15,8 +14,8 @@
 export default {
   data () {
     return {
-      title: 'Title',
-      body: 'Description'
+      title: 'Título',
+      body: 'Valor'
     }
   }
 }

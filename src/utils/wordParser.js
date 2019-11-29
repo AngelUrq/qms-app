@@ -29,7 +29,7 @@ export class WordParser {
 
     let rowIndex = 0
 
-    let maxRowSize = Math.max.apply(Math, rowsSize) + 1
+    let maxRowSize = Math.max.apply(Math, rowsSize)
 
     for (let row of this.actionPlan.structure.rows) {
       let cells = []

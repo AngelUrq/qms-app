@@ -27,6 +27,17 @@
             hide-default-footer
             @page-count="pageCount = $event"
           >
+            <template v-slot:item.toForm="{ item }">
+              <v-btn
+                x-small
+                text
+                icon
+                class="mr-1"
+                to="/action-plan-form"
+              >
+                <v-icon>mdi-format-list-bulleted</v-icon>
+              </v-btn>
+            </template>
             <template v-slot:item.export="{ item }">
               <v-btn
                 x-small
@@ -97,6 +108,10 @@ export default {
           sortable: true,
           text: 'Fecha de creación',
           value: 'creationDate'
+        },
+        {
+          text: 'Formulario',
+          value: 'toForm'
         },
         {
           text: 'Exportar',

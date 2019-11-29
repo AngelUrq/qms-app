@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     isVisible () {
-      return this.$route.path !== '/login' && !production
+      return this.$route.path !== '/login' && production
     }
   }
 }
