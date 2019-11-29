@@ -67,6 +67,11 @@ export default [
     view: 'action-plan/FormatManager'
   },
   {
+    path: '/action-plan-form',
+    name: 'Formulario de plan de accion',
+    view: 'action-plan/ActionPlanForm'
+  },
+  {
     path: '/',
     name: 'Ruta por defecto'
   }
