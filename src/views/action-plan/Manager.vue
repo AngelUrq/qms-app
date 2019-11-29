@@ -32,7 +32,6 @@
                 x-small
                 text
                 icon
-                color="brown darken-1"
                 class="mr-1"
                 @click="exportToWord(item)"
               >
@@ -44,7 +43,6 @@
                 x-small
                 text
                 icon
-                color="blue-grey lighten-1"
                 class="mr-1"
               >
                 <v-icon>mdi-border-color</v-icon>

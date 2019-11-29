@@ -40,37 +40,26 @@
 
     <v-dialog v-model="dialog" max-width="50vw">
       <v-card class="pa-5">
-        <v-card-title><strong>Buscador de no conformidades</strong></v-card-title>
-        <v-row class="justify-center mt-5" no-gutters>
+        <v-card-title>
+          <strong>Buscador de no conformidades</strong>
+        </v-card-title>
+        <v-row class no-gutters>
           <v-spacer></v-spacer>
-          <v-col cols="6">
+          <v-col>
             <v-text-field solo placeholder="Patrón" class="pa-1" v-model="regex"></v-text-field>
           </v-col>
-          <v-col cols="4">
+          <v-col>
             <v-btn class="ma-2" color="warning" @click="search">Buscar</v-btn>
           </v-col>
         </v-row>
+        <v-checkbox class="ml-5" v-model="replace" label="Reemplazar el patrón"></v-checkbox>
         <v-container fill-height fluid grid-list-xl>
           <v-row justify="center">
             <v-col cols="12">
-              <material-card
-                color="green"
-                title="No conformidades"
-              >
-                <v-data-table
-                  :headers="headers"
-                  :items="items"
-                  hide-default-footer
-                  ref="table"
-                >
+              <material-card color="green" title="No conformidades">
+                <v-data-table :headers="headers" :items="items" hide-default-footer ref="table">
                   <template v-slot:item.create="{ item }">
-                    <v-btn
-                      x-small
-                      text
-                      icon
-                      color="blue-grey lighten-1"
-                      class="mr-1"
-                    >
+                    <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
                       <v-icon>mdi-check</v-icon>
                     </v-btn>
                   </template>
@@ -106,6 +95,7 @@ export default {
       notificationColor: '',
       snackbar: false,
       dialog: false,
+      replace: false,
       headers: [
         {
           sortable: false,
@@ -285,20 +275,24 @@ export default {
       let separatedRegex = this.regex.split('*')
 
       if (separatedRegex.length === 2) {
-        const regularExpression = new RegExp(separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1], 'g')
+        const regularExpression = new RegExp(
+          separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1],
+          'g'
+        )
 
         let coincidences = text.match(regularExpression)
 
         this.items = []
 
         for (let coincidence of coincidences) {
-          coincidence = coincidence.replace(separatedRegex[0], '')
-          coincidence = coincidence.replace(separatedRegex[1], '')
+          if (this.replace) {
+            coincidence = coincidence.replace(separatedRegex[0], '')
+            coincidence = coincidence.replace(separatedRegex[1], '')
+          }
 
-          this.items.push(
-            {
-              'text': coincidence
-            })
+          this.items.push({
+            text: coincidence
+          })
         }
       }
     }
