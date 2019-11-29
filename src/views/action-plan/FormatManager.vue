@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-container fill-height fluid grid-list-xl>
     <v-row justify="center">
       <v-col cols="12">
@@ -7,6 +8,8 @@
           title="Gestor de formatos para planes de acción"
           buttonActivated
           buttonColor="lime darken-1"
+                @click.stop="dialog = true"
+
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
@@ -72,6 +75,57 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-dialog
+      v-model="dialog"
+    >
+      <v-card>
+        <v-card-title class="headline">Crear nuevo formato </v-card-title>
+
+        <v-container>
+    <v-row
+
+      justify="space-between"
+    >
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-form ref="form">
+          <v-text-field
+            v-model="model"
+            :counter="max"
+            :rules="rules"
+            label="First name"
+          ></v-text-field>
+        </v-form>
+      </v-col>
+
+    </v-row>
+  </v-container>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            v-on:click="createNewFormat()"
+
+          >
+            Guardar
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Cancelar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    </div>
 </template>
 
 <script>
@@ -85,6 +139,7 @@ export default {
       page: 1,
       pageCount: 0,
       search: '',
+      dialog: false,
       headers: [
         {
           sortable: false,
@@ -123,6 +178,11 @@ export default {
     axios.get(backendURL + '/api/action-plan-formats', config).then(response => {
       this.actionPlanFormats = response.data
     })
+  },
+  methods: {
+    createNewFormat () {
+      this.dialog = false
+    }
   }
 }
 </script>
