@@ -58,7 +58,7 @@ export default {
 
   props: {
     idRow: {
-      type: String
+      type: Number
     },
     availableTable: {}
   },

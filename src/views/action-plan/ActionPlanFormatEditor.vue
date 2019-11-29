@@ -6,7 +6,7 @@
           <v-card extended color="light-blue darken-4" class="white--text">
             <v-row class="pa-5">
               <v-col>
-              <h2>Editor de formatos</h2>
+                <h2>Editor de formatos</h2>
               </v-col>
               <v-col md="1">
                 <v-btn
@@ -16,12 +16,11 @@
                   fab
                   color="white"
                   v-on:click="createNewRow()"
-
                 >
                   <v-icon>mdi-table-row-plus-after</v-icon>
                 </v-btn>
               </v-col>
-               <v-col md="1">
+              <v-col md="1">
                 <v-btn
                   class="ma-2 blue lighten-1"
                   outlined
@@ -29,7 +28,6 @@
                   fab
                   color="white"
                   v-on:click="createNewRow()"
-
                 >
                   <v-icon>mdi-content-save</v-icon>
                 </v-btn>
@@ -38,7 +36,7 @@
           </v-card>
         </v-col>
       </div>
-      <v-row v-for="(row, rowId) in rows" :key="rowId">
+      <v-row v-for="(row, rowId) in actionPlanFormat.structure.rows" :key="rowId">
         <v-col v-for="(col,colId) in row" :key="colId">
           <v-row>
             <v-col>
@@ -106,6 +104,9 @@ import SimpleRow from './SimpleRow'
 import Label from './Label'
 import Table5Rows from './Table5Rows'
 import Table3Rows from './Table3Rows'
+import { backendURL } from '@/data.js'
+import axios from 'axios'
+
 export default {
   components: {
     FormatOptions,
@@ -118,82 +119,83 @@ export default {
   data () {
     return {
       largeTables: ['Label', 'Table3Rows', 'Table5Rows', 'Table1Row'],
-      actionPlanFormat: {},
-      rows: [
-        [
-          {
-            id: 'col 1',
-            type: 'Table1Row',
-            permission: 'admin'
-          },
-          {
-            id: 'col 2',
-            type: 'Table1Row',
-            permission: 'admin'
-          }
-        ],
-        []
-      ]
+      actionPlanFormat: {
+        id: 1,
+        name: 'test',
+        creationDate: 2018 / 10 / 10,
+        lastModificationDate: 2015 / 20 / 10,
+        structure: {
+          rows: [
+            []
+          ]
+        }
+      }
     }
   },
   methods: {
     createNewRow: function () {
-      this.rows.push([])
+      this.actionPlanFormat.structure.rows.push([])
       console.log(this.rows)
     },
     createTableId: function (tableId, rowId) {
       console.log(tableId)
       switch (tableId) {
         case 1:
-          this.rows[rowId].push({
-            id: 'test',
+          this.actionPlanFormat.structure.rows[rowId].push({
+            name: 'Observación',
+            fieldType: 'vertical',
             type: 'Table1Row',
             permission: 'test'
           })
-          console.log(this.rows)
+          console.log(this.actionPlanFormat.structure.rows)
           break
         case 2:
-          this.rows[rowId].push({
-            id: 'test',
+          this.actionPlanFormat.structure.rows[rowId].push({
+            name: 'Observación',
+            fieldType: 'horizontal',
             type: 'SimpleRow',
             permission: 'test'
           })
-          console.log(this.rows)
+          console.log(this.actionPlanFormat.structure.rows)
           break
         case 3:
-          this.rows[rowId].push({
-            id: 'test',
+          this.actionPlanFormat.structure.rows[rowId].push({
+            name: 'Observación',
+            fieldType: 'responsable',
             type: 'Table3Rows',
             permission: 'test'
           })
-          console.log(this.rows)
+          console.log(this.actionPlanFormat.structure.rows)
           break
         case 4:
-          this.rows[rowId].push({
-            id: 'test',
+          this.actionPlanFormat.structure.rows[rowId].push({
+            name: 'Observación',
+            fieldType: 'title',
             type: 'Label',
             permission: 'test'
           })
-          console.log(this.rows)
+          console.log(this.actionPlanFormat.structure.rows)
           break
         case 5:
-          this.rows[rowId].push({
-            id: 'test',
+          this.actionPlanFormat.structure.rows[rowId].push({
+            name: 'Observación',
+            fieldType: 'corrections',
             type: 'Table5Rows',
             permission: 'test',
             mainTitle: 'Corrección inmediata'
           })
-          console.log(this.rows)
+          console.log(this.actionPlanFormat.structure.rows)
           break
 
         case 6:
-          this.rows[rowId].push({
-            id: 'test',
+          this.actionPlanFormat.structure.rows[rowId].push({
+            name: 'Observación',
+            fieldType: 'activities',
             type: 'Table5Rows',
             permission: 'test',
             mainTitle: 'Acciones para eliminar la causa raiz'
           })
-          console.log(this.rows)
+          console.log(this.actionPlanFormat.structure.rows)
           break
 
         default:
@@ -202,13 +204,13 @@ export default {
     },
     deleteTable: function (tableId, rowId) {
       console.log(tableId + ' ' + rowId)
-      this.$delete(this.rows[rowId], tableId)
+      this.$delete(this.actionPlanFormat.structure.rows[rowId], tableId)
     },
     deleteRow: function (rowId) {
-      this.$delete(this.rows, rowId)
+      this.$delete(this.actionPlanFormat.structure.rows, rowId)
     },
     createInnerRow: function (rowId) {
-      this.rows.splice(rowId + 1, 0, [])
+      this.actionPlanFormat.structure.rows.splice(rowId + 1, 0, [])
     },
     IsFreeForTable (row) {
       // console.log('numero es '+ rowId);
@@ -226,7 +228,7 @@ export default {
         table5RowsRoot: true,
         table5RowsCorrection: true
       }
-      this.rows.forEach(row => {
+      this.actionPlanFormat.structure.rows.forEach(row => {
         row.forEach(col => {
           if (col.type === 'Table3Rows') {
             availablesTable.table3Row = false
@@ -244,6 +246,18 @@ export default {
         })
       })
       return availablesTable
+    },
+    saveFormat () {
+      const headers = {
+        'x-access-token': this.$store.state.token
+      }
+      axios.put(
+        backendURL + '/api/action-plan-formats/' + this.actionPlanFormat.id,
+        this.actionPlanFormat,
+        {
+          headers: headers
+        }
+      )
     }
   }
 }
