@@ -18,61 +18,19 @@
           <v-spacer></v-spacer>
         </v-card-title>
         <v-card-actions justify="center">
-          <v-btn
-            id="1"
-            class="mr-4 mb-2 ml-7"
-            outlined
-            fab
-            x-small
-            color="light-blue darken-4"
-            @click.stop="sendTableId($event)"
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-          <v-btn
-            id="2"
-            class="mr-4 mb-2 ml-7"
-            outlined
-            fab
-            x-small
-            color="light-blue darken-4"
-            @click.stop="sendTableId($event)"
-          >
-            <v-icon>mdi-credit-card-outline</v-icon>
-          </v-btn>
-          <v-btn
-            id="3"
-            class="mr-4 mb-2 ml-7"
-            outlined
-            fab
-            x-small
-            color="light-blue darken-4"
-            @click.stop="sendTableId($event)"
-          >
-            <v-icon>mdi-table-row</v-icon>
-          </v-btn>
-          <v-btn
-            id="4"
-            class="mr-4 mb-2 ml-7"
-            outlined
-            fab
-            x-small
-            color="light-blue darken-4"
-            @click.stop="sendTableId($event)"
-          >
-            <v-icon>mdi-crop-landscape</v-icon>
-          </v-btn>
-          <v-btn
-            id="5"
-            class="mr-4 mb-2 ml-7"
-            outlined
-            fab
-            x-small
-            color="light-blue darken-4"
-            @click.stop="sendTableId($event)"
-          >
-            <v-icon>mdi-table-settings</v-icon>
-          </v-btn>
+          <div v-for="button in newButtons" :key="button.id">
+            <v-btn
+              class="mr-4 mb-2 ml-7"
+              outlined
+              fab
+              x-small
+              color="light-blue darken-4"
+              v-if="button.isVisible"
+              @click.stop="sendTableId(button.id)"
+            >
+              <v-icon>{{button.type}}</v-icon>
+            </v-btn>
+          </div>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -81,16 +39,61 @@
 
 <script>
 export default {
+  mounted () {
+    this.updateButtons()
+  },
   data () {
     return {
-      dialog: false
+      dialog: false,
+      buttonsIncons: [
+        { type: 'mdi-plus', id: 1, isVisible: true },
+        { type: 'mdi-credit-card-outline', id: 2, isVisible: true },
+        { type: 'mdi-table-row', id: 3, isVisible: true },
+        { type: 'mdi-crop-landscape', id: 4, isVisible: true },
+        { type: 'mdi-table-settings', id: 5, isVisible: true },
+        { type: 'mdi-table-settings', id: 6, isVisible: true }
+      ]
     }
   },
-  props: ['idRow'],
+
+  props: {
+    idRow: {
+      type: String
+    },
+    availableTable: {}
+  },
   methods: {
-    sendTableId (event) {
-      this.$emit('createTableId', event.currentTarget.id, this.idRow)
+    sendTableId (id) {
+      this.$emit('createTableId', id, this.idRow)
       this.dialog = false
+    },
+    updateButtons () {
+      console.log(this.availableTable)
+
+      for (var i = 0; i < this.buttonsIncons.length; i++) {
+        if (this.buttonsIncons[i].id === 3 && !this.availableTable.table3Row) {
+          this.buttonsIncons[i].isVisible = false
+        }
+        if (
+          this.buttonsIncons[i].id === 6 &&
+          !this.availableTable.table5RowsRoot
+        ) {
+          this.buttonsIncons[i].isVisible = false
+        }
+        if (
+          this.buttonsIncons[i].id === 5 &&
+          !this.availableTable.table5RowsCorrection
+        ) {
+          this.buttonsIncons[i].isVisible = false
+        }
+      }
+      console.log(this.buttonsIncons)
+    }
+  },
+  computed: {
+    newButtons () {
+      this.updateButtons()
+      return this.buttonsIncons
     }
   }
 }
