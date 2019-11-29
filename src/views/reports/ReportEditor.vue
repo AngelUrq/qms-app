@@ -44,7 +44,7 @@
 
         <v-container class="pa-5">
           <v-text-field label="Nombre" v-model="actionPlanName"></v-text-field>
-          <v-text-field label="Descripción" v-model="actionPlanDescription"></v-text-field>
+          <v-textarea label="Descripción" v-model="actionPlanDescription" rows="3"></v-textarea>
           <v-combobox
             color="blue darken-3"
             item-color="blue"
@@ -303,6 +303,8 @@ export default {
         uppercaseHeadings: false
       })
 
+      console.log(text)
+
       let separatedRegex = this.regex.split('*')
 
       if (separatedRegex.length === 2) {
@@ -315,15 +317,17 @@ export default {
 
         this.items = []
 
-        for (let coincidence of coincidences) {
-          if (this.replace) {
-            coincidence = coincidence.replace(separatedRegex[0], '')
-            coincidence = coincidence.replace(separatedRegex[1], '')
-          }
+        if (coincidences) {
+          for (let coincidence of coincidences) {
+            if (this.replace) {
+              coincidence = coincidence.replace(separatedRegex[0], '')
+              coincidence = coincidence.replace(separatedRegex[1], '')
+            }
 
-          this.items.push({
-            text: coincidence
-          })
+            this.items.push({
+              text: coincidence
+            })
+          }
         }
       }
     },
