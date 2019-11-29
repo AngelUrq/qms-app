@@ -11,14 +11,9 @@ export default [
     view: 'Dashboard'
   },
   {
-    path: '/reports',
-    name: 'Informes',
-    view: 'Reports'
-  },
-  {
     path: '/user-profile',
     name: 'User Profile',
-    view: 'UserProfile'
+    view: 'users/UserProfile'
   },
   {
     path: '/table-list',
@@ -40,26 +35,36 @@ export default [
   {
     path: '/user-manager',
     name: 'Gestor de usuarios',
-    view: 'UserManager'
+    view: 'users/UserManager'
   },
   {
     path: '/login',
-    view: 'Login'
+    view: 'users/Login'
   },
   {
     path: '/report-format',
     name: 'Formatos de informe',
-    view: 'ReportFormat'
+    view: 'reports/ReportFormat'
   },
   {
     path: '/report-editor',
     name: 'Editor de informes',
-    view: 'ReportEditor'
+    view: 'reports/ReportEditor'
   },
   {
     path: '/report-list',
     name: 'Lista de informes',
-    view: 'ReportList'
+    view: 'reports/ReportList'
+  },
+  {
+    path: '/action-plan-manager',
+    name: 'Gestor de planes de acción',
+    view: 'action-plan/Manager'
+  },
+  {
+    path: '/action-plan-format-manager',
+    name: 'Gestor de formatos para planes de acción',
+    view: 'action-plan/FormatManager'
   },
   {
     path: '/',
