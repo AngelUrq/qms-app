@@ -122,7 +122,7 @@ export default {
         text: 'Gestor de usuarios'
       },
       {
-        to: '/notifications',
+        to: '/action-plan-form',
         icon: 'mdi-bell',
         text: 'Notificaciones',
         containsSubitems: false
