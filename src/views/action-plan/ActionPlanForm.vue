@@ -15,7 +15,7 @@
         </v-row>
       </header>
       <form>
-        <v-row no-gutters v-for="(row, i) in rows" :key="i">
+        <v-row no-gutters v-for="(row, i) in structure" :key="i">
           <v-col
             v-for="(column, j) in row"
             :key="j"
@@ -56,6 +56,12 @@
         </v-row>
       </form>
     </v-card>
+    <v-card-actions class="mt-5 d-flex flex-row-reverse">
+      <v-btn x-large color="light-blue darken-3" width="20%" class="white--text" @click="activateProgressCircular">
+        {{ text }}
+        <v-progress-circular v-if="activateLoading" indeterminate color="white"></v-progress-circular>
+      </v-btn>
+    </v-card-actions>
   </v-container>
 </template>
 
@@ -73,15 +79,19 @@ export default {
   data () {
     return {
       version: 'V.1.2',
-      rows: [
+      activateLoading: false,
+      text: 'GUARDAR',
+      structure: [
         [
           {
             name: 'Fecha de observación',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           },
           {
             name: 'N° de formulario',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           }
         ],
         [
@@ -93,63 +103,75 @@ export default {
         [
           {
             name: 'No conformidad',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           },
           {
             name: 'Observación',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           },
           {
             name: 'Recomendación',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           }
         ],
         [
           {
             name: 'Descripción de la observación',
-            fieldType: 'horizontalTextArea'
+            fieldType: 'horizontalTextArea',
+            value: ''
           }
         ],
         [
           {
             name: 'Responsables',
-            fieldType: 'reponsable'
+            fieldType: 'reponsable',
+            value: ''
           }
         ],
         [
           {
             name: 'Correcciones',
-            fieldType: 'corrections'
+            fieldType: 'corrections',
+            value: ''
           }
         ],
         [
           {
             name: 'Actividades',
-            fieldType: 'activities'
+            fieldType: 'activities',
+            value: ''
           }
         ],
         [
           {
             name: 'Verificación de la eficacia',
-            fieldType: 'horizontalTextArea'
+            fieldType: 'horizontalTextArea',
+            value: ''
           }
         ],
         [
           {
             name: 'Nombre',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           },
           {
             name: 'Puesto',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           },
           {
             name: 'Firma',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           },
           {
             name: 'Fecha',
-            fieldType: 'horizontal'
+            fieldType: 'horizontal',
+            value: ''
           }
         ]
       ]
@@ -158,6 +180,15 @@ export default {
   methods: {
     getWidthColumns (numberColumns) {
       return 12 / numberColumns
+    },
+    activateProgressCircular () {
+      this.activateLoading = true
+      this.text = ''
+      setTimeout(this.disableProgressCircular, 1500)
+    },
+    disableProgressCircular () {
+      this.text = 'GUARDAR'
+      this.activateLoading = false
     }
   }
 }

@@ -10,13 +10,13 @@
     </v-row>
     <v-row v-for="(correction, index) in corrections" :key="index">
       <v-col>
-        <v-textarea auto-grow rows="1" color="blue darken-3" class="mt-4" label="Actividad" outlined single-line></v-textarea>
+        <v-textarea auto-grow rows="1" color="blue darken-3" class="mt-3" label="Actividad" outlined single-line></v-textarea>
       </v-col>
       <v-col>
-        <ResponsibleTextbox />
+        <ResponsibleTextbox multiple/>
       </v-col>
       <v-col>
-        <v-textarea auto-grow rows="1" color="blue darken-3" class="mt-4" label="VoBo responsable" outlined single-line></v-textarea>
+        <v-textarea auto-grow rows="1" color="blue darken-3" class="mt-3" label="VoBo responsable" outlined single-line></v-textarea>
       </v-col>
 
       <v-col>
