@@ -57,7 +57,7 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
-                  :items="['Cochabamba', 'La Paz']"
+                  :items="['Cochabamba', 'La Paz', 'Santa Cruz']"
                   label="Ciudad*"
                   :rules="[v => !!v || 'Se debe escojer una Ciudad!']"
                   required
@@ -158,20 +158,15 @@ export default {
   methods: {
     sendMailNotification () {
       const htmlBody = `
-        <p>Hola ${this.user.firstName}!</p>
-        <p>Tu nueva cuenta a sido creada.</p>
-        <h3>Dastos de Usuarios</h3>
-        <ul>
-          <li>Correro: ${this.user.email}
-          <li>Contraseña: ${this.user.password}
-        </ul>
-        <h3>Ingresa Ahora!</h3>
-        <p>Entra al link http://localhost:8080/login y inicia sesion. </p>
+        <p>¡Hola ${this.user.firstName}!</p>
+        <p>Tu nueva cuenta ha sido creada.</p>
+        <h3>¡Ingresa ahora!</h3>
+        <p>Entra al siguiente enlace http://localhost:8080/login e inicia sesión. </p>
       `
       let newMail = {
         from: '<UPBgestiondecalidad@gmail.com>',
         to: this.user.email,
-        subject: 'UPB Gestion de Calidad: Nuevo Usuario',
+        subject: 'UPB Gestion de Calidad: Nuevo usuario',
         text: '',
         html: htmlBody
       }
