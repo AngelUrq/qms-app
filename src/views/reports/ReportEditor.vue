@@ -38,6 +38,32 @@
       </div>
     </div>
 
+    <v-dialog v-model="dialogCreate" max-width="40vw">
+      <v-card>
+        <v-card-title class="headline">Crear nuevo plan de acción</v-card-title>
+
+        <v-container class="pa-5">
+          <v-text-field label="Nombre" v-model="actionPlanName"></v-text-field>
+          <v-text-field label="Descripción" v-model="actionPlanDescription"></v-text-field>
+          <v-combobox
+            color="blue darken-3"
+            item-color="blue"
+            v-model="format"
+            :items="formats"
+            label="Formato"
+            :autocomplete="false"
+            outlined
+            dense
+          ></v-combobox>
+        </v-container>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success" @click="createActionPlan()">Guardar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="dialog" max-width="50vw">
       <v-card class="pa-5">
         <v-card-title>
@@ -59,7 +85,7 @@
               <material-card color="green" title="No conformidades">
                 <v-data-table :headers="headers" :items="items" hide-default-footer ref="table">
                   <template v-slot:item.create="{ item }">
-                    <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+                    <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1" @click="openCreateDialog(item.text)">
                       <v-icon>mdi-check</v-icon>
                     </v-btn>
                   </template>
@@ -95,7 +121,12 @@ export default {
       notificationColor: '',
       snackbar: false,
       dialog: false,
+      dialogCreate: false,
+      actionPlanName: '',
+      actionPlanDescription: '',
       replace: false,
+      format: null,
+      formats: [],
       headers: [
         {
           sortable: false,
@@ -294,6 +325,56 @@ export default {
             text: coincidence
           })
         }
+      }
+    },
+    openCreateDialog: function (item) {
+      this.actionPlanDescription = item
+      this.dialogCreate = true
+
+      let config = {
+        headers: {
+          'x-access-token': this.$store.state.token
+        }
+      }
+      axios
+        .get(backendURL + '/api/action-plan-formats', config)
+        .then(response => {
+          let formatsList = response.data
+
+          for (let format of formatsList) {
+            let comboboxItem = {}
+
+            comboboxItem.text = format.name
+            comboboxItem.value = format._id
+
+            this.formats.push(comboboxItem)
+          }
+        })
+        .catch(e => {
+          console.log('An exception has occurred: ' + e)
+        })
+    },
+    createActionPlan: function () {
+      if (this.format) {
+        let actionPlan = {}
+        actionPlan.name = this.actionPlanName
+        actionPlan.description = this.actionPlanDescription
+        actionPlan.creationDate = new Date()
+        actionPlan.formatID = this.format.value
+        actionPlan.structure = {}
+
+        let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+        axios
+          .post(backendURL + '/api/action-plans', actionPlan, config)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+        this.dialogCreate = false
       }
     }
   },

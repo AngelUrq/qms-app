@@ -84,12 +84,17 @@ export default {
       search: '',
       headers: [
         {
-          sortable: false,
+          sortable: true,
           text: 'Nombre del plan de acción',
           value: 'name'
         },
         {
           sortable: false,
+          text: 'Descripción',
+          value: 'description'
+        },
+        {
+          sortable: true,
           text: 'Fecha de creación',
           value: 'creationDate'
         },
