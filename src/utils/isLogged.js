@@ -11,5 +11,5 @@ export function isLogged () {
     headers: { 'x-access-token': actualToken.toString() }
   })
     .then(response => response.data.auth)
-    .catch(error => error.response.data.auth)
+    .catch(error => error.data)
 }
