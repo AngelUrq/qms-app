@@ -64,7 +64,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialog" max-width="50vw">
+    <v-dialog v-model="dialog" max-width="60vw">
       <v-card class="pa-5">
         <v-card-title>
           <strong>Buscador de no conformidades</strong>
