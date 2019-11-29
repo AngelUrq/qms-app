@@ -100,13 +100,11 @@ export default {
         containsSubitems: true,
         subitems: [
           {
-            // Put route
-            to: '/',
+            to: '/action-plan-format-manager',
             text: 'Formatos'
           },
           {
-            // Put route
-            to: '/',
+            to: '/action-plan-manager',
             text: 'Gestor'
           }
         ]
