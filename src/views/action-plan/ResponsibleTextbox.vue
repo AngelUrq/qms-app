@@ -5,10 +5,8 @@
       item-color="blue"
       v-model="select"
       :items="items"
-      :multiple="multiple"
       label="Responsable"
       :autocomplete="false"
-      :outlined="multiple"
       dense
     ></v-combobox>
   </v-col>
@@ -19,15 +17,9 @@ import axios from 'axios'
 import { backendURL } from '@/data.js'
 
 export default {
-  props: {
-    multiple: {
-      type: Boolean,
-      default: false
-    }
-  },
   data () {
     return {
-      select: [],
+      select: '',
       users: [],
       items: []
     }

@@ -13,7 +13,7 @@
         <v-textarea auto-grow rows="1" color="blue darken-3" class="mt-3" label="Actividad" outlined></v-textarea>
       </v-col>
       <v-col>
-        <ResponsibleTextbox multiple/>
+        <ResponsibleTextbox />
       </v-col>
       <v-col>
         <v-textarea auto-grow rows="1" color="blue darken-3" class="mt-3" label="VoBo responsable" outlined></v-textarea>
@@ -21,7 +21,7 @@
 
       <v-col>
         <v-menu
-          close-on-content-click
+          :close-on-content-click="false"
           transition="scale-transition"
           offset-y
           color="light-blue darken-4"
@@ -49,7 +49,7 @@
 
       <v-col>
         <v-menu
-          close-on-content-click
+          :close-on-content-click="false"
           transition="scale-transition"
           offset-y
           color="light-blue darken-4"
