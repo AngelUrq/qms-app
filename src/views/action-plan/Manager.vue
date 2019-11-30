@@ -33,7 +33,7 @@
                 text
                 icon
                 class="mr-1"
-                to="/action-plan-form"
+                :to="'/action-plan-form?id=' + item._id"
               >
                 <v-icon>mdi-format-list-bulleted</v-icon>
               </v-btn>
