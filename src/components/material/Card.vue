@@ -9,23 +9,25 @@
         dark
         min-height="80"
       >
-          <slot v-if="!title && !text" name="header" />
-          <div v-else class="px-3">
-            <h4 class="title font-weight-light mb-2" v-text="title" />
-            <p class="category font-weight-thin mb-0" v-text="text" />
-          </div>
-          <v-row class="pr-5" v-if="buttonActivated" justify="end">
-            <v-dialog v-model="dialog" max-width="60%">
-              <template v-slot:activator="{ on }">
-                <v-btn class="mx-2" fab dark v-on="on" :color="buttonColor">
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-              </template>
-              <RegisterReportFormat v-if="reportFormatActionsActivated" />
-              <RegisterActionPlanFormat v-if="formatManagerActived"/>
-             </v-dialog>
-          </v-row>
-
+        <slot v-if="!title && !text" name="header" />
+        <div v-else class="px-3">
+          <h4 class="title font-weight-light mb-2" v-text="title" />
+          <p class="category font-weight-thin mb-0" v-text="text" />
+        </div>
+        <v-row class="pr-5" v-if="buttonActivated" justify="end">
+          <v-dialog v-model="dialog" max-width="60%">
+            <template v-slot:activator="{ on }">
+              <v-btn class="mx-2" fab dark v-on="on" :color="buttonColor">
+                <v-icon dark>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <RegisterReportFormat v-if="reportFormatActionsActivated" />
+            <RegisterActionPlanFormat
+              @saveActionPlanFormat="saveActionPlanFormat"
+              v-if="formatManagerActived"
+            />
+          </v-dialog>
+        </v-row>
       </v-card>
 
       <slot v-else name="offset" />
@@ -103,6 +105,11 @@ export default {
   data () {
     return {
       dialog: false
+    }
+  },
+  methods: {
+    saveActionPlanFormat (name) {
+      this.$emit('saveActionPlanFormat', name)
     }
   },
   computed: {
