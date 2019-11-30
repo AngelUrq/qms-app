@@ -11,26 +11,32 @@
       <v-icon>mdi-plus</v-icon>
     </v-btn>
 
-    <v-dialog v-model="dialog" max-width="500px">
+    <v-dialog v-model="dialog" max-width="50%">
       <v-card>
         <v-card-title>
           <span>Seleccione el formato de tabla que desea añadir</span>
-          <v-spacer></v-spacer>
         </v-card-title>
-        <v-card-actions justify="center">
-          <div v-for="button in newButtons" :key="button.id">
-            <v-btn
-              class="mr-4 mb-2 ml-7"
-              outlined
-              fab
-              x-small
-              color="light-blue darken-4"
-              v-if="button.isVisible"
-              @click.stop="sendTableId(button.id)"
-            >
-              <v-icon>{{button.type}}</v-icon>
-            </v-btn>
-          </div>
+
+        <v-card-actions>
+          <v-row no-gutters align="center" justify="center">
+            <v-tooltip top v-for="button in newButtons" :key="button.id">
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="mr-4 mb-2 ml-7"
+                  outlined
+                  fab
+                  x-small
+                  color="light-blue darken-4"
+                  v-on="on"
+                  v-if="button.isVisible"
+                  @click.stop="sendTableId(button.id)"
+                >
+                  <v-icon>{{ button.type }}</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ button.span }}</span>
+            </v-tooltip>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -46,12 +52,32 @@ export default {
     return {
       dialog: false,
       buttonsIncons: [
-        { type: 'mdi-plus', id: 1, isVisible: true },
-        { type: 'mdi-credit-card-outline', id: 2, isVisible: true },
-        { type: 'mdi-table-row', id: 3, isVisible: true },
-        { type: 'mdi-crop-landscape', id: 4, isVisible: true },
-        { type: 'mdi-table-settings', id: 5, isVisible: true },
-        { type: 'mdi-table-settings', id: 6, isVisible: true }
+        { type: 'mdi-plus', id: 1, isVisible: true, span: 'Campo vertical' },
+        {
+          type: 'mdi-credit-card-outline',
+          id: 2,
+          isVisible: true,
+          span: 'Campo horizontal'
+        },
+        {
+          type: 'mdi-table-row',
+          id: 3,
+          isVisible: true,
+          span: 'Tabla de responsables'
+        },
+        { type: 'mdi-crop-landscape', id: 4, isVisible: true, span: 'Titulo' },
+        {
+          type: 'mdi-table-settings',
+          id: 5,
+          isVisible: true,
+          span: 'Tabla de correcciones'
+        },
+        {
+          type: 'mdi-table-settings',
+          id: 6,
+          isVisible: true,
+          span: 'Tabla de actividades'
+        }
       ]
     }
   },
