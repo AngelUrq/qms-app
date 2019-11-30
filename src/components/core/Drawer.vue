@@ -100,12 +100,12 @@ export default {
         containsSubitems: true,
         subitems: [
           {
-            to: '/action-plan-format-manager',
-            text: 'Formatos'
-          },
-          {
             to: '/action-plan-manager',
             text: 'Gestor'
+          },
+          {
+            to: '/action-plan-format-manager',
+            text: 'Formatos'
           }
         ]
       },
@@ -122,7 +122,7 @@ export default {
         text: 'Gestor de usuarios'
       },
       {
-        to: '/action-plan-form',
+        to: '/notifications',
         icon: 'mdi-bell',
         text: 'Notificaciones',
         containsSubitems: false

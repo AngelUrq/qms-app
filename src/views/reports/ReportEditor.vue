@@ -38,39 +38,54 @@
       </div>
     </div>
 
-    <v-dialog v-model="dialog" max-width="50vw">
-      <v-card class="pa-5">
-        <v-card-title><strong>Buscador de no conformidades</strong></v-card-title>
-        <v-row class="justify-center mt-5" no-gutters>
+    <v-dialog v-model="dialogCreate" max-width="40vw">
+      <v-card>
+        <v-card-title class="headline">Crear nuevo plan de acción</v-card-title>
+
+        <v-container class="pa-5">
+          <v-text-field label="Nombre" v-model="actionPlanName"></v-text-field>
+          <v-textarea label="Descripción" v-model="actionPlanDescription" rows="3"></v-textarea>
+          <v-combobox
+            color="blue darken-3"
+            item-color="blue"
+            v-model="format"
+            :items="formats"
+            label="Formato"
+            :autocomplete="false"
+            outlined
+            dense
+          ></v-combobox>
+        </v-container>
+
+        <v-card-actions>
           <v-spacer></v-spacer>
-          <v-col cols="6">
+          <v-btn color="success" @click="createActionPlan()">Guardar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog" max-width="60vw">
+      <v-card class="pa-5">
+        <v-card-title>
+          <strong>Buscador de no conformidades</strong>
+        </v-card-title>
+        <v-row class no-gutters>
+          <v-spacer></v-spacer>
+          <v-col>
             <v-text-field solo placeholder="Patrón" class="pa-1" v-model="regex"></v-text-field>
           </v-col>
-          <v-col cols="4">
+          <v-col>
             <v-btn class="ma-2" color="warning" @click="search">Buscar</v-btn>
           </v-col>
         </v-row>
+        <v-checkbox class="ml-5" v-model="replace" label="Reemplazar el patrón"></v-checkbox>
         <v-container fill-height fluid grid-list-xl>
           <v-row justify="center">
             <v-col cols="12">
-              <material-card
-                color="green"
-                title="No conformidades"
-              >
-                <v-data-table
-                  :headers="headers"
-                  :items="items"
-                  hide-default-footer
-                  ref="table"
-                >
+              <material-card color="green" title="No conformidades">
+                <v-data-table :headers="headers" :items="items" hide-default-footer ref="table">
                   <template v-slot:item.create="{ item }">
-                    <v-btn
-                      x-small
-                      text
-                      icon
-                      color="blue-grey lighten-1"
-                      class="mr-1"
-                    >
+                    <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1" @click="openCreateDialog(item.text)">
                       <v-icon>mdi-check</v-icon>
                     </v-btn>
                   </template>
@@ -106,6 +121,12 @@ export default {
       notificationColor: '',
       snackbar: false,
       dialog: false,
+      dialogCreate: false,
+      actionPlanName: '',
+      actionPlanDescription: '',
+      replace: false,
+      format: null,
+      formats: [],
       headers: [
         {
           sortable: false,
@@ -282,24 +303,82 @@ export default {
         uppercaseHeadings: false
       })
 
+      console.log(text)
+
       let separatedRegex = this.regex.split('*')
 
       if (separatedRegex.length === 2) {
-        const regularExpression = new RegExp(separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1], 'g')
+        const regularExpression = new RegExp(
+          separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1],
+          'g'
+        )
 
         let coincidences = text.match(regularExpression)
 
         this.items = []
 
-        for (let coincidence of coincidences) {
-          coincidence = coincidence.replace(separatedRegex[0], '')
-          coincidence = coincidence.replace(separatedRegex[1], '')
+        if (coincidences) {
+          for (let coincidence of coincidences) {
+            if (this.replace) {
+              coincidence = coincidence.replace(separatedRegex[0], '')
+              coincidence = coincidence.replace(separatedRegex[1], '')
+            }
 
-          this.items.push(
-            {
-              'text': coincidence
+            this.items.push({
+              text: coincidence
             })
+          }
         }
+      }
+    },
+    openCreateDialog: function (item) {
+      this.actionPlanDescription = item
+      this.dialogCreate = true
+
+      let config = {
+        headers: {
+          'x-access-token': this.$store.state.token
+        }
+      }
+      axios
+        .get(backendURL + '/api/action-plan-formats', config)
+        .then(response => {
+          let formatsList = response.data
+
+          for (let format of formatsList) {
+            let comboboxItem = {}
+
+            comboboxItem.text = format.name
+            comboboxItem.value = format._id
+
+            this.formats.push(comboboxItem)
+          }
+        })
+        .catch(e => {
+          console.log('An exception has occurred: ' + e)
+        })
+    },
+    createActionPlan: function () {
+      if (this.format) {
+        let actionPlan = {}
+        actionPlan.name = this.actionPlanName
+        actionPlan.description = this.actionPlanDescription
+        actionPlan.creationDate = new Date()
+        actionPlan.formatID = this.format.value
+        actionPlan.structure = {}
+
+        let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+        axios
+          .post(backendURL + '/api/action-plans', actionPlan, config)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+        this.dialogCreate = false
       }
     }
   },

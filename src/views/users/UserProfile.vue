@@ -49,7 +49,7 @@
       <v-col cols="12" md="4">
         <material-card class="v-card-profile">
           <v-avatar slot="offset" class="mx-auto d-block elevation-6" size="130">
-            <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png" />
+            <img src="@/assets/user-icon.png" />
           </v-avatar>
           <v-card-text class="text-center">
             <h6 class="overline mb-3">{{ user.role }}</h6>

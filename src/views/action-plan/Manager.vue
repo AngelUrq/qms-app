@@ -27,12 +27,22 @@
             hide-default-footer
             @page-count="pageCount = $event"
           >
+            <template v-slot:item.toForm="{ item }">
+              <v-btn
+                x-small
+                text
+                icon
+                class="mr-1"
+                to="/action-plan-form"
+              >
+                <v-icon>mdi-format-list-bulleted</v-icon>
+              </v-btn>
+            </template>
             <template v-slot:item.export="{ item }">
               <v-btn
                 x-small
                 text
                 icon
-                color="brown darken-1"
                 class="mr-1"
                 @click="exportToWord(item)"
               >
@@ -44,7 +54,6 @@
                 x-small
                 text
                 icon
-                color="blue-grey lighten-1"
                 class="mr-1"
               >
                 <v-icon>mdi-border-color</v-icon>
@@ -86,14 +95,23 @@ export default {
       search: '',
       headers: [
         {
-          sortable: false,
+          sortable: true,
           text: 'Nombre del plan de acción',
           value: 'name'
         },
         {
           sortable: false,
+          text: 'Descripción',
+          value: 'description'
+        },
+        {
+          sortable: true,
           text: 'Fecha de creación',
           value: 'creationDate'
+        },
+        {
+          text: 'Formulario',
+          value: 'toForm'
         },
         {
           text: 'Exportar',

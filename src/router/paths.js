@@ -74,5 +74,10 @@ export default [
   {
     path: '/',
     name: 'Ruta por defecto'
+  },
+  {
+    path: '/action-plan-format-editor',
+    name: 'Editor de formatos para planes de acción',
+    view: 'action-plan/ActionPlanFormatEditor'
   }
 ]
