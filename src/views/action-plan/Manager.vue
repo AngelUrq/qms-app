@@ -51,6 +51,7 @@
             </template>
             <template v-slot:item.update="{ item }">
               <v-btn
+                @click="showEditActionPlan(item)"
                 x-small
                 text
                 icon
@@ -58,6 +59,7 @@
               >
                 <v-icon>mdi-border-color</v-icon>
               </v-btn>
+              <EditActionPlan v-model="showEditActionPlanForm"/>
             </template>
             <template v-slot:item.delete="{ item }">
               <v-btn
@@ -81,16 +83,25 @@
 </template>
 
 <script>
+import { EventBus } from '../../main'
+
 import axios from 'axios'
 import { backendURL } from '@/data'
 import { WordParser } from '@/utils/wordParser'
 
+import EditActionPlan from './EditActionPlanForm'
+
 export default {
+  components: {
+    EditActionPlan
+  },
   data: function () {
     return {
       search: '',
       page: 1,
       pageCount: 0,
+      search: '',
+      showEditActionPlanForm: false,
       headers: [
         {
           sortable: true,
@@ -138,6 +149,11 @@ export default {
     exportToWord: function (actionPlan) {
       let wordParser = new WordParser(actionPlan)
       wordParser.parse()
+    },
+    showEditActionPlan (actionPlan) {
+      this.showEditActionPlanForm = true
+      EventBus.$emit('redoActionPlan', actionPlan)
+      console.log(actionPlan)
     }
   }
 }
