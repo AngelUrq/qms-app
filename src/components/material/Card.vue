@@ -22,6 +22,7 @@
                 </v-btn>
               </template>
               <RegisterReportFormat v-if="reportFormatActionsActivated" />
+              <RegisterActionPlanFormat v-if="formatManagerActived"/>
              </v-dialog>
           </v-row>
 
@@ -43,12 +44,14 @@
 </template>
 
 <script>
-import RegisterReportFormat from '../../views/reports/RegisterReportFormat'
+import RegisterReportFormat from '@/views/reports/RegisterReportFormat'
+import RegisterActionPlanFormat from '@/views/action-plan/RegisterActionPlanFormat'
 
 export default {
   name: 'MaterialCard',
   components: {
-    RegisterReportFormat
+    RegisterReportFormat,
+    RegisterActionPlanFormat
   },
   inheritAttrs: false,
   props: {
@@ -89,6 +92,10 @@ export default {
       default: undefined
     },
     reportFormatActionsActivated: {
+      type: Boolean,
+      default: false
+    },
+    formatManagerActived: {
       type: Boolean,
       default: false
     }

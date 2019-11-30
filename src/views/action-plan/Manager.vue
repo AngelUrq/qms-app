@@ -27,6 +27,17 @@
             hide-default-footer
             @page-count="pageCount = $event"
           >
+            <template v-slot:item.toForm="{ item }">
+              <v-btn
+                x-small
+                text
+                icon
+                class="mr-1"
+                :to="'/action-plan-form?id=' + item._id"
+              >
+                <v-icon>mdi-format-list-bulleted</v-icon>
+              </v-btn>
+            </template>
             <template v-slot:item.export="{ item }">
               <v-btn
                 x-small
@@ -75,9 +86,7 @@
 import { EventBus } from '../../main'
 
 import axios from 'axios'
-
 import { backendURL } from '@/data'
-
 import { WordParser } from '@/utils/wordParser'
 
 import EditActionPlan from './EditActionPlanForm'
@@ -88,6 +97,7 @@ export default {
   },
   data: function () {
     return {
+      search: '',
       page: 1,
       pageCount: 0,
       search: '',
@@ -107,6 +117,10 @@ export default {
           sortable: true,
           text: 'Fecha de creación',
           value: 'creationDate'
+        },
+        {
+          text: 'Formulario',
+          value: 'toForm'
         },
         {
           text: 'Exportar',
