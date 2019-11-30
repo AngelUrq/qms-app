@@ -15,7 +15,7 @@
         </v-row>
       </header>
       <form>
-        <v-row no-gutters v-for="(row, i) in structure" :key="i">
+        <v-row no-gutters v-for="(row, i) in rows" :key="i">
           <v-col
             v-for="(column, j) in row"
             :key="j"
@@ -69,6 +69,8 @@
 import ReponsibleTable from './ResponsibleTable'
 import CorrectionTable from './CorrectionsTable'
 import ActivitiesTable from './ActivitiesTable'
+import axios from 'axios'
+import { backendURL } from '@/data.js'
 
 export default {
   components: {
@@ -78,10 +80,12 @@ export default {
   },
   data () {
     return {
+      idActionPlan: '',
       version: 'V.1.2',
       activateLoading: false,
       text: 'GUARDAR',
-      structure: [
+      actionPlanFormat: {},
+      rows: [
         [
           {
             name: 'Fecha de observación',
@@ -177,6 +181,9 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.id = this.$route.params.idActionPlan
+  },
   methods: {
     getWidthColumns (numberColumns) {
       return 12 / numberColumns
@@ -189,6 +196,18 @@ export default {
     disableProgressCircular () {
       this.text = 'GUARDAR'
       this.activateLoading = false
+    },
+    getActionPlanFormat () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios
+        .get(backendURL + '/api/action-plan-formats', config)
+        .then(response => {
+          this.actionPlanFormat = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
