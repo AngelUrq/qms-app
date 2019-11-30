@@ -21,6 +21,7 @@
               :headers="headers"
               :items="reports"
               :page.sync="page"
+              :search="search"
               :items-per-page="10"
               hide-default-footer
               class="elevation-1"

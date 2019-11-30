@@ -82,17 +82,15 @@
 
 <script>
 import axios from 'axios'
-
 import { backendURL } from '@/data'
-
 import { WordParser } from '@/utils/wordParser'
 
 export default {
   data: function () {
     return {
+      search: '',
       page: 1,
       pageCount: 0,
-      search: '',
       headers: [
         {
           sortable: true,
