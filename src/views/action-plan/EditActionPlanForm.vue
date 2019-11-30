@@ -1,10 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on }">
-        <v-btn x-small text icon color="blue-grey lighten-1" v-on="on" fab>
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-      </template>
+  <v-dialog v-model="show" width="60%">
     <v-card>
       <v-card-title>
         <span class="headline">Editar Plan de Acción</span>
@@ -13,10 +8,10 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-text-field label="Nombre*" required></v-text-field>
+              <v-text-field label="Nombre*" v-model="actionPlanData.name" required></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Descripción*" required></v-text-field>
+              <v-text-field label="Descripción*" v-model="actionPlanData.description" required></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -24,20 +19,67 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="closeDialog()">Cancel</v-btn>
+        <v-btn color="blue darken-1" text @click="saveActionPlan()">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-// import { backendURL } from '@/data.js'
+import { EventBus } from '../../main'
+import { backendURL } from '@/data.js'
+import axios from 'axios'
 
 export default {
-  data: () => ({
-    dialog: false
-  })
+  props: {
+    value: Boolean
+  },
+  data () {
+    return {
+      actionPlanID: '',
+      actionPlanData: {
+        description: '',
+        name: ''
+      }
+    }
+  },
+  computed: {
+    show: {
+      get () {
+        return this.value
+      },
+      set () {
+        this.$emit('input', false)
+      }
+    }
+  },
+  created () {
+    EventBus.$on('redoActionPlan', actionPlan => {
+      this.actionPlanData = Object.assign({}, actionPlan)
+      this.actionPlanID = actionPlan._id
+      console.log('Datos a cambiar' + this.actionPlanData)
+    })
+  },
+  methods: {
+    saveActionPlan () {
+      axios
+        .put(backendURL + '/api/action-plans/' + this.actionPlanID, {
+          name: this.actionPlanData.name,
+          description: this.actionPlanData.description
+        })
+        .then(response => {
+          console.log('Action plan has been modified!')
+          this.$emit('input', false)
+        })
+        .catch(error => {
+          console.log('An error has occurred: ' + error)
+        })
+    },
+    closeDialog () {
+      this.$emit('input', false)
+    }
+  }
 }
 </script>
 

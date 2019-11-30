@@ -40,17 +40,15 @@
             </template>
             <template v-slot:item.update="{ item }">
               <v-btn
+                @click="showEditActionPlan(item)"
                 x-small
                 text
                 icon
                 class="mr-1"
-                @click="showEditActionPlan(item)"
               >
                 <v-icon>mdi-border-color</v-icon>
               </v-btn>
-            </template>
-            <template v-slot:item.update="{ item }" @click="showEditActionPlan(item)">
-              <EditActionPlan />
+              <EditActionPlan v-model="showEditActionPlanForm"/>
             </template>
             <template v-slot:item.delete="{ item }">
               <v-btn
@@ -74,13 +72,15 @@
 </template>
 
 <script>
+import { EventBus } from '../../main'
+
 import axios from 'axios'
 
 import { backendURL } from '@/data'
 
 import { WordParser } from '@/utils/wordParser'
 
-import EditActionPlan from '@/views/action-plan/EditActionPlanForm'
+import EditActionPlan from './EditActionPlanForm'
 
 export default {
   components: {
@@ -138,7 +138,8 @@ export default {
     },
     showEditActionPlan (actionPlan) {
       this.showEditActionPlanForm = true
-      this.$emit('editActionPlanInfo', actionPlan)
+      EventBus.$emit('redoActionPlan', actionPlan)
+      console.log(actionPlan)
     }
   }
 }
