@@ -44,9 +44,13 @@
                 text
                 icon
                 class="mr-1"
+                @click="showEditActionPlan(item)"
               >
                 <v-icon>mdi-border-color</v-icon>
               </v-btn>
+            </template>
+            <template v-slot:item.update="{ item }" @click="showEditActionPlan(item)">
+              <EditActionPlan />
             </template>
             <template v-slot:item.delete="{ item }">
               <v-btn
@@ -76,12 +80,18 @@ import { backendURL } from '@/data'
 
 import { WordParser } from '@/utils/wordParser'
 
+import EditActionPlan from '@/views/action-plan/EditActionPlanForm'
+
 export default {
+  components: {
+    EditActionPlan
+  },
   data: function () {
     return {
       page: 1,
       pageCount: 0,
       search: '',
+      showEditActionPlanForm: false,
       headers: [
         {
           sortable: true,
@@ -125,6 +135,10 @@ export default {
     exportToWord: function (actionPlan) {
       let wordParser = new WordParser(actionPlan)
       wordParser.parse()
+    },
+    showEditActionPlan (actionPlan) {
+      this.showEditActionPlanForm = true
+      this.$emit('editActionPlanInfo', actionPlan)
     }
   }
 }
