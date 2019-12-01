@@ -4,10 +4,10 @@
       <v-row justify="center">
         <v-col cols="12">
           <material-card
-            color="lime darken-2"
+            color="orange darken-1"
             title="Gestor de formatos para planes de acción"
             buttonActivated
-            buttonColor="lime darken-1"
+            buttonColor="orange lighten-2"
             formatManagerActived
             @saveActionPlanFormat="saveActionPlanFormat"
 
@@ -28,10 +28,7 @@
               :items="actionPlanFormats"
               item-key="_id"
               :search="search"
-              :page.sync="page"
-              :items-per-page="itemsPerPage"
               hide-default-footer
-              @page-count="pageCount = $event"
               show-expand
             >
               <template v-slot:item.create="{ item }">
@@ -57,9 +54,6 @@
                 </v-btn>
               </template>
             </v-data-table>
-            <div class="text-center pt-2">
-              <v-pagination color="teal darken-2" v-model="page" :length="pageCount"></v-pagination>
-            </div>
           </material-card>
         </v-col>
       </v-row>
@@ -75,8 +69,6 @@ import { backendURL } from '@/data'
 export default {
   data: function () {
     return {
-      page: 1,
-      pageCount: 0,
       search: '',
       headers: [
         {
