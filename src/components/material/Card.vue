@@ -22,7 +22,11 @@
                 </v-btn>
               </template>
               <RegisterReportFormat v-if="reportFormatActionsActivated" />
-              <RegisterActionPlanFormat v-if="formatManagerActived"/>
+              <NonconformityEditor v-if="nonconformityEditorActivated" />
+              <RegisterActionPlanFormat
+                @saveActionPlanFormat="saveActionPlanFormat"
+                v-if="formatManagerActived"
+              />
              </v-dialog>
           </v-row>
 
@@ -44,13 +48,15 @@
 </template>
 
 <script>
-import RegisterReportFormat from '@/views/reports/RegisterReportFormat'
+import RegisterReportFormat from '../../views/reports/RegisterReportFormat'
+import NonconformityEditor from '../../views/reports/nonconformities/NonconformityEditor'
 import RegisterActionPlanFormat from '@/views/action-plan/RegisterActionPlanFormat'
 
 export default {
   name: 'MaterialCard',
   components: {
     RegisterReportFormat,
+    NonconformityEditor,
     RegisterActionPlanFormat
   },
   inheritAttrs: false,
@@ -95,6 +101,10 @@ export default {
       type: Boolean,
       default: false
     },
+    nonconformityEditorActivated: {
+      type: Boolean,
+      default: false
+    },
     formatManagerActived: {
       type: Boolean,
       default: false
@@ -103,6 +113,11 @@ export default {
   data () {
     return {
       dialog: false
+    }
+  },
+  methods: {
+    saveActionPlanFormat (name) {
+      this.$emit('saveActionPlanFormat', name)
     }
   },
   computed: {

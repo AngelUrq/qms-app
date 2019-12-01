@@ -81,6 +81,10 @@ export default {
         containsSubitems: true,
         subitems: [
           {
+            to: '/nonconformities',
+            text: 'No conformidades'
+          },
+          {
             to: '/report-format',
             text: 'Formatos'
           },

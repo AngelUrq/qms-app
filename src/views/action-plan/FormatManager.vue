@@ -9,6 +9,8 @@
             buttonActivated
             buttonColor="lime darken-1"
             formatManagerActived
+            @saveActionPlanFormat="saveActionPlanFormat"
+
           >
             <v-card-title class="mb-5">
               <v-spacer></v-spacer>
@@ -121,23 +123,42 @@ export default {
           value: 'delete'
         }
       ],
-      actionPlanFormats: []
+      actionPlanFormats: [],
+      actionPlan: {
+        name: 'default',
+        creationDate: null,
+        lastModificationDate: null,
+        structure: []
+      }
     }
   },
   mounted: function () {
-    let config = { headers: { 'x-access-token': this.$store.state.token } }
-
-    axios
-      .get(backendURL + '/api/action-plan-formats', config)
-      .then(response => {
-        this.actionPlanFormats = response.data
-      })
+    this.getActionPlanFormats()
   },
   methods: {
+    getActionPlanFormats () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios
+        .get(backendURL + '/api/action-plan-formats', config)
+        .then(response => {
+          this.actionPlanFormats = response.data
+        })
+    },
+    saveActionPlanFormat (nameformat) {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      this.actionPlan.name = nameformat
+      this.actionPlan.creationDate = new Date()
+      this.actionPlan.lastModificationDate = new Date()
+
+      axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config).then(response => {
+        console.log(response.data)
+      })
+      console.log('se guardo co nombre ' + nameformat)
+    },
     showEditActionPlanFormat (actionPlanFormat) {
       this.showEditActionPlanFormatForm = true
       EventBus.$emit('editActionPlanFormat', actionPlanFormat)
-    }
   }
 }
 </script>
