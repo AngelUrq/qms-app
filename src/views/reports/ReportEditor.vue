@@ -303,8 +303,6 @@ export default {
         uppercaseHeadings: false
       })
 
-      console.log(text)
-
       let separatedRegex = this.regex.split('*')
 
       if (separatedRegex.length === 2) {
@@ -434,7 +432,7 @@ export default {
 
 .document-editor__editable-container .ck-editor__editable {
   /* Set the dimensions of the "page". */
-  width: 75%;
+  width: 85%;
   min-height: 21cm;
 
   /* Keep the "page" off the boundaries of the container. */
@@ -492,7 +490,7 @@ Preserve the relative scale, though. */
 /* Set the styles for "Heading 2". */
 .document-editor .ck-content h3,
 .document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
-  font-size: 1.5em;
+  font-size: 1.20em;
   font-weight: normal;
 }
 
@@ -505,7 +503,7 @@ Preserve the relative scale, though. */
 
 /* Set the styles for "Heading 2". */
 .document-editor .ck-content h3 {
-  line-height: 1.7em;
+  line-height: 1.10em;
   padding-top: 0.171em;
   margin-bottom: 0.357em;
 }
@@ -518,7 +516,7 @@ Preserve the relative scale, though. */
 }
 
 .document-editor .ck-content h4 {
-  line-height: 1.24em;
+  line-height: 1.05em;
   padding-top: 0.286em;
   margin-bottom: 0.952em;
 }

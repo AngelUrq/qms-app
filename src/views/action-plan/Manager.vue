@@ -100,7 +100,6 @@ export default {
       search: '',
       page: 1,
       pageCount: 0,
-      search: '',
       showEditActionPlanForm: false,
       headers: [
         {

@@ -133,7 +133,6 @@ export default {
         role: this.EditUser.role
       }, config)
         .then((response) => {
-          console.log(response)
           EventBus.$emit('refreshTable', 'getUsers')
           this.$emit('input', false)
         })
