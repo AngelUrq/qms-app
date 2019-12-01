@@ -33,6 +33,10 @@
               <v-card-actions class="justify-center">
                 <v-btn class="mb-3" dark color="indigo darken-1" @click="loginUser">Ingresar</v-btn>
               </v-card-actions>
+              <v-card-text>
+                Olvidaste tu contraseña? Haz click en
+                <ChangePassword />
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
@@ -48,10 +52,12 @@
 
 <script>
 import axios from 'axios'
+import ChangePassword from './ChangePassword'
 
 import { backendURL, production } from '@/data.js'
 
 export default {
+  components: { ChangePassword },
   data () {
     return {
       User: {

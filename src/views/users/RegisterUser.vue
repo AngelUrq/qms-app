@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" scrollable width="70%">
+    <v-dialog v-model="dialogRegister" scrollable width="70%">
       <template v-slot:activator="{ on }">
         <v-btn
         class="pink lighten-3 lighten-1 white--text text--lighten-1"
@@ -100,9 +100,9 @@
             Registrado!
           </v-alert>
           <div class="flex-grow-1"></div>
-          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registrar">Registrar
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click.stop="register">Registrar
           </v-btn>
-          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click= "dialog = false,clearFields()" >Salir
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click= "dialogRegister = false,clearFields()" >Salir
           </v-btn>
         </v-card-actions>
        </v-card>
@@ -117,7 +117,7 @@ import { backendURL } from '@/data.js'
 export default {
   data () {
     return {
-      dialog: '',
+      dialogRegister: '',
       valuePass: String,
       warningAlert: false,
       successAlert: false,
@@ -204,7 +204,7 @@ export default {
         })
     },
 
-    registrar () {
+    register () {
       if (this.$refs.form.validate()) {
         this.registerUserAPI()
         this.sendMailNotification()
@@ -220,7 +220,6 @@ export default {
         }, 10000)
       }
     },
-
     clearFields () {
       this.user.code = ''
       this.user.role = ''
