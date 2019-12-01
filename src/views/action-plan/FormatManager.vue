@@ -44,9 +44,17 @@
                 </v-btn>
               </template>
               <template v-slot:item.update="{ item }">
-                <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+                <v-btn
+                  x-small
+                  text
+                  icon
+                  color="blue-grey lighten-1"
+                  @click="showEditActionPlanFormat(item)"
+                  class="mr-1"
+                >
                   <v-icon>mdi-border-color</v-icon>
                 </v-btn>
+                <EditActionPlanFormat v-model="showEditActionPlanFormatForm"/>
               </template>
               <template v-slot:item.delete="{ item }">
                 <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
@@ -62,14 +70,22 @@
 </template>
 
 <script>
+import { EventBus } from '../../main'
+
 import axios from 'axios'
 
 import { backendURL } from '@/data'
 
+import EditActionPlanFormat from './EditActionPlanFormatForm'
+
 export default {
+  components: {
+    EditActionPlanFormat
+  },
   data: function () {
     return {
       search: '',
+      showEditActionPlanFormatForm: false,
       headers: [
         {
           sortable: false,
@@ -130,9 +146,11 @@ export default {
       axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config).then(response => {
         console.log(response.data)
       })
-
       console.log('se guardo co nombre ' + nameformat)
-    }
+    },
+    showEditActionPlanFormat (actionPlanFormat) {
+      this.showEditActionPlanFormatForm = true
+      EventBus.$emit('editActionPlanFormat', actionPlanFormat)
   }
 }
 </script>

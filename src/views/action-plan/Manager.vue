@@ -144,7 +144,6 @@ export default {
     showEditActionPlan (actionPlan) {
       this.showEditActionPlanForm = true
       EventBus.$emit('redoActionPlan', actionPlan)
-      console.log(actionPlan)
     }
   }
 }
