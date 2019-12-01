@@ -22,6 +22,7 @@
                 </v-btn>
               </template>
               <RegisterReportFormat v-if="reportFormatActionsActivated" />
+              <NonconformityEditor v-if="nonconformityEditorActivated" />
              </v-dialog>
           </v-row>
 
@@ -44,11 +45,13 @@
 
 <script>
 import RegisterReportFormat from '../../views/reports/RegisterReportFormat'
+import NonconformityEditor from '../../views/reports/nonconformities/NonconformityEditor'
 
 export default {
   name: 'MaterialCard',
   components: {
-    RegisterReportFormat
+    RegisterReportFormat,
+    NonconformityEditor
   },
   inheritAttrs: false,
   props: {
@@ -89,6 +92,10 @@ export default {
       default: undefined
     },
     reportFormatActionsActivated: {
+      type: Boolean,
+      default: false
+    },
+    nonconformityEditorActivated: {
       type: Boolean,
       default: false
     }
