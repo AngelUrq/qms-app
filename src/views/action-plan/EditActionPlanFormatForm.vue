@@ -1,17 +1,14 @@
 <template>
-  <v-dialog v-model="show" width="60%">
+   <v-dialog v-model="show" width="60%">
     <v-card>
       <v-card-title>
-        <span class="headline">Editar Plan de Acción</span>
+        <span class="headline">Editar Formato de Plan de Acción</span>
       </v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-text-field label="Nombre*" v-model="actionPlanData.name" required></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field label="Descripción*" v-model="actionPlanData.description" required></v-text-field>
+              <v-text-field label="Nombre*" v-model="actionPlanFormatData.name" required></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -20,7 +17,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog()">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="saveActionPlan()">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="saveActionPlanFormat()">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -35,14 +32,14 @@ export default {
   props: {
     value: Boolean
   },
-  data: () => ({
-    valuePass: String,
-    actionPlanID: '',
-    actionPlanData: {
-      description: '',
-      name: ''
+  data () {
+    return {
+      actionPlanFormatID: '',
+      actionPlanFormatData: {
+        name: ''
+      }
     }
-  }),
+  },
   computed: {
     show: {
       get () {
@@ -54,22 +51,21 @@ export default {
     }
   },
   created () {
-    EventBus.$on('editActionPlanData', actionPlan => {
-      this.actionPlanData.description = actionPlan.description
-      this.actionPlanData.name = actionPlan.name
-      this.actionPlanID = actionPlan._id
+    EventBus.$on('editActionPlanFormat', actionPlanFormat => {
+      this.actionPlanFormatData.name = actionPlanFormat.name
+      this.actionPlanFormatID = actionPlanFormat._id
     })
   },
   methods: {
-    saveActionPlan () {
+    saveActionPlanFormat () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
       axios
-        .put(backendURL + '/api/action-plans/' + this.actionPlanID, {
-          name: this.actionPlanData.name,
-          description: this.actionPlanData.description
-        })
+        .put(backendURL + '/api/action-plan-formats/' + this.actionPlanFormatID, {
+          name: this.actionPlanFormatData.name,
+          lastModificationDate: new Date().toISOString()
+        }, config)
         .then(response => {
-          EventBus.$emit('refreshTable', 'Action Plan edited')
-          console.log('Action plan has been modified!')
+          console.log('Action plan format has been modified!')
           this.$emit('input', false)
         })
         .catch(error => {
@@ -84,4 +80,5 @@ export default {
 </script>
 
 <style>
+
 </style>
