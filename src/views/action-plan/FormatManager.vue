@@ -143,14 +143,15 @@ export default {
       this.actionPlan.creationDate = new Date()
       this.actionPlan.lastModificationDate = new Date()
 
-      axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config).then(response => {
-        console.log(response.data)
-      })
-      console.log('se guardo co nombre ' + nameformat)
+      axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config)
+        .then(response => {
+          console.log(response.data)
+        })
     },
     showEditActionPlanFormat (actionPlanFormat) {
       this.showEditActionPlanFormatForm = true
       EventBus.$emit('editActionPlanFormat', actionPlanFormat)
+    }
   }
 }
 </script>
