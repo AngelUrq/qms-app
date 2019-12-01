@@ -100,7 +100,6 @@ export default {
       search: '',
       page: 1,
       pageCount: 0,
-      search: '',
       showEditActionPlanForm: false,
       headers: [
         {
@@ -153,7 +152,6 @@ export default {
     showEditActionPlan (actionPlan) {
       this.showEditActionPlanForm = true
       EventBus.$emit('redoActionPlan', actionPlan)
-      console.log(actionPlan)
     }
   }
 }
