@@ -258,6 +258,18 @@ export default {
           headers: headers
         }
       )
+    },
+    getFormatData () {
+      const headers = {
+        'x-access-token': this.$store.state.token
+      }
+      axios.get(
+        backendURL + '/api/action-plan-formats/' + this.$route.params.id,
+        {
+          headers: headers
+        }
+
+      ).then(actionPlanFormat => (this.actionPlanFormat = actionPlanFormat))
     }
   }
 }
