@@ -4,10 +4,10 @@
       <v-row justify="center">
         <v-col cols="12">
           <material-card
-            color="lime darken-2"
+            color="orange darken-1"
             title="Gestor de formatos para planes de acción"
             buttonActivated
-            buttonColor="lime darken-1"
+            buttonColor="orange lighten-2"
             formatManagerActived
             @saveActionPlanFormat="saveActionPlanFormat"
 
@@ -28,10 +28,7 @@
               :items="actionPlanFormats"
               item-key="_id"
               :search="search"
-              :page.sync="page"
-              :items-per-page="itemsPerPage"
               hide-default-footer
-              @page-count="pageCount = $event"
               show-expand
             >
               <template v-slot:item.create="{ item }">
@@ -47,9 +44,17 @@
                 </v-btn>
               </template>
               <template v-slot:item.update="{ item }">
-                <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
+                <v-btn
+                  x-small
+                  text
+                  icon
+                  color="blue-grey lighten-1"
+                  @click="showEditActionPlanFormat(item)"
+                  class="mr-1"
+                >
                   <v-icon>mdi-border-color</v-icon>
                 </v-btn>
+                <EditActionPlanFormat v-model="showEditActionPlanFormatForm"/>
               </template>
               <template v-slot:item.delete="{ item }">
                 <v-btn x-small text icon color="blue-grey lighten-1" class="mr-1">
@@ -57,9 +62,6 @@
                 </v-btn>
               </template>
             </v-data-table>
-            <div class="text-center pt-2">
-              <v-pagination color="teal darken-2" v-model="page" :length="pageCount"></v-pagination>
-            </div>
           </material-card>
         </v-col>
       </v-row>
@@ -68,16 +70,22 @@
 </template>
 
 <script>
+import { EventBus } from '../../main'
+
 import axios from 'axios'
 
 import { backendURL } from '@/data'
 
+import EditActionPlanFormat from './EditActionPlanFormatForm'
+
 export default {
+  components: {
+    EditActionPlanFormat
+  },
   data: function () {
     return {
-      page: 1,
-      pageCount: 0,
       search: '',
+      showEditActionPlanFormatForm: false,
       headers: [
         {
           sortable: false,
@@ -135,11 +143,14 @@ export default {
       this.actionPlan.creationDate = new Date()
       this.actionPlan.lastModificationDate = new Date()
 
-      axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config).then(response => {
-        console.log(response.data)
-      })
-
-      console.log('se guardo co nombre ' + nameformat)
+      axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config)
+        .then(response => {
+          console.log(response.data)
+        })
+    },
+    showEditActionPlanFormat (actionPlanFormat) {
+      this.showEditActionPlanFormatForm = true
+      EventBus.$emit('editActionPlanFormat', actionPlanFormat)
     }
   }
 }

@@ -18,7 +18,7 @@
     <v-list-item two-line>
       <v-list-item-avatar color="white">
         <v-img
-          src="https://our.umbraco.com/media/wiki/140890/635578860265270330_appsjpg.jpg"
+          src="@/assets/app-logo.jpg"
           height="34"
           contain
         />
@@ -38,14 +38,14 @@
             <v-list-item-title>{{ item.text }}</v-list-item-title>
           </template>
 
-          <v-list-item v-for="(subitem, j) in item.subitems" :key="j" :to="subitem.to" active-class="light-blue darken-4 white--text">
+          <v-list-item v-for="(subitem, j) in item.subitems" :key="j" :to="subitem.to" active-class="green darken-2 white--text">
             <v-list-item-content>
               <v-list-item-title v-text="subitem.text"/>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
 
-        <v-list-item v-else :to="item.to" active-class="light-blue darken-4 white--text">
+        <v-list-item v-else :to="item.to" active-class="green darken-2 white--text">
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -80,6 +80,10 @@ export default {
         text: 'Informes',
         containsSubitems: true,
         subitems: [
+          {
+            to: '/nonconformities',
+            text: 'No conformidades'
+          },
           {
             to: '/report-format',
             text: 'Formatos'
