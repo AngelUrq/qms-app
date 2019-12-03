@@ -94,8 +94,6 @@ export default {
       this.dialog = false
     },
     updateButtons () {
-      console.log(this.availableTable)
-
       for (var i = 0; i < this.buttonsIncons.length; i++) {
         if (this.buttonsIncons[i].id === 3 && !this.availableTable.table3Row) {
           this.buttonsIncons[i].isVisible = false
@@ -113,7 +111,6 @@ export default {
           this.buttonsIncons[i].isVisible = false
         }
       }
-      console.log(this.buttonsIncons)
     }
   },
   computed: {
