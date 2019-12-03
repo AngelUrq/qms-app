@@ -5,3 +5,4 @@ export const production = false
 export const dashboardRoute = '/dashboard'
 export const loginRoute = '/login'
 export const defaultRoute = '/'
+export const defaultHTML = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>'
