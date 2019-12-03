@@ -311,7 +311,7 @@ export default {
 
       if (separatedRegex.length === 2) {
         const regularExpression = new RegExp(
-          separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1],
+          separatedRegex[0] + '[^' + separatedRegex[1] + ']+' + separatedRegex[1],
           'g'
         )
 
@@ -407,10 +407,6 @@ export default {
 </script>
 
 <style>
-.word-button {
-  color: white;
-}
-
 .document-editor {
   border: 1px solid var(--ck-color-base-border);
   border-radius: var(--ck-border-radius);
