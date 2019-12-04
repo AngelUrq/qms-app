@@ -27,7 +27,7 @@
                   large
                   fab
                   color="white"
-                  v-on:click="createNewRow()"
+                  v-on:click="saveFormat()"
                 >
                   <v-icon>mdi-content-save</v-icon>
                 </v-btn>
@@ -36,7 +36,7 @@
           </v-card>
         </v-col>
       </div>
-      <v-row v-for="(row, rowId) in actionPlanFormat.structure.rows" :key="rowId">
+      <v-row v-for="(row, rowId) in this.actionPlanFormat.structure.rows" :key="rowId">
         <v-col v-for="(col,colId) in row" :key="colId">
           <v-row>
             <v-col>
@@ -125,9 +125,7 @@ export default {
         creationDate: 2018 / 10 / 10,
         lastModificationDate: 2015 / 20 / 10,
         structure: {
-          rows: [
-            []
-          ]
+
         }
       }
     }
@@ -135,10 +133,10 @@ export default {
   methods: {
     createNewRow: function () {
       this.actionPlanFormat.structure.rows.push([])
-      console.log(this.rows)
     },
     createTableId: function (tableId, rowId) {
-      console.log(tableId)
+      console.log(this.actionPlanFormat)
+
       switch (tableId) {
         case 1:
           this.actionPlanFormat.structure.rows[rowId].push({
@@ -226,7 +224,8 @@ export default {
       let availablesTable = {
         table3Row: true,
         table5RowsRoot: true,
-        table5RowsCorrection: true
+        table5RowsCorrection: true,
+        table1Row: true
       }
       this.actionPlanFormat.structure.rows.forEach(row => {
         row.forEach(col => {
@@ -242,9 +241,12 @@ export default {
             col.mainTitle === 'Acciones para eliminar la causa raiz'
           ) {
             availablesTable.table5RowsRoot = false
+          } else if (col.type === 'SimpleRow' && row.length === 1) {
+            availablesTable.table1Row = false
           }
         })
       })
+      console.log(availablesTable)
       return availablesTable
     },
     saveFormat () {
@@ -252,13 +254,37 @@ export default {
         'x-access-token': this.$store.state.token
       }
       axios.put(
-        backendURL + '/api/action-plan-formats/' + this.actionPlanFormat.id,
+        backendURL + '/api/action-plan-formats/' + this.$router.currentRoute.query.id,
         this.actionPlanFormat,
         {
           headers: headers
         }
       )
+    },
+    getFormatData () {
+      console.log(this.$router.currentRoute.query.id)
+      const headers = {
+        'x-access-token': this.$store.state.token
+      }
+      axios.get(
+        backendURL + '/api/action-plan-formats/' + this.$router.currentRoute.query.id,
+        {
+          headers: headers
+        }
+
+      ).then(response => {
+        this.actionPlanFormat = response.data
+        this.actionPlanFormat.structure = {
+          rows: [[]]
+        }
+      })
     }
+  },
+
+  beforeMount () {
+    this.getFormatData()
+
+    console.log(this.actionPlanFormat)
   }
 }
 </script>
