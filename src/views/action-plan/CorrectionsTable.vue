@@ -18,6 +18,7 @@
           label="Actividad"
           outlined
           single-line
+          :readonly="!isUserAdmin()"
         ></v-textarea>
       </v-col>
       <v-col>
@@ -30,6 +31,7 @@
             label="Responsable"
             :autocomplete="false"
             dense
+            :readonly="!isUserAdmin()"
           ></v-combobox>
         </v-col>
       </v-col>
@@ -42,9 +44,9 @@
           label="VoBo responsable"
           outlined
           single-line
+          :readonly="!verifyAuthorizedUser(correction.responsable)"
         ></v-textarea>
       </v-col>
-
       <v-col>
         <v-menu
           :close-on-content-click="false"
@@ -52,6 +54,7 @@
           offset-y
           max-width="290px"
           min-width="290px"
+
         >
           <template v-slot:activator="{ on }">
             <v-text-field
@@ -67,6 +70,7 @@
             locale="es-419"
             min="2017/01"
             no-title
+            :disabled="!verifyAuthorizedUser(correction.responsable)"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -93,29 +97,30 @@
             locale="es-419"
             min="2017/01"
             no-title
+            :disabled="!verifyAuthorizedUser(correction.responsable)"
           ></v-date-picker>
         </v-menu>
       </v-col>
 
       <v-btn
         v-if="!verifyLastRow(index, correctionsData.length)"
-        class="mt-4 mr-2"
+        class="mt-4 mr-2 white--text"
         fab
         small
-        dark
         color="light-blue darken-2"
         @click="removeCorrection(index)"
+        :disabled="!isUserAdmin()"
       >
         <v-icon dark>mdi-minus</v-icon>
       </v-btn>
       <v-btn
         v-else
-        class="mt-4 mr-2"
+        class="mt-4 mr-2 white--text"
         fab
         small
-        dark
         color="light-blue darken-2"
         @click="addCorrection"
+        :disabled="!isUserAdmin()"
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
@@ -131,6 +136,18 @@ import { backendURL } from '@/data.js'
 export default {
   props: {
     correctionsData: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    actualUser: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    },
+    responsible: {
       type: Array,
       default: function () {
         return []
@@ -217,6 +234,16 @@ export default {
       if (this.correctionsData.length < 1) {
         this.addCorrection()
       }
+    },
+    isUserAdmin () {
+      return this.actualUser.role === 'Admin'
+    },
+    isGeneralResponsable () {
+      let responsable = this.responsible.find(r => r.name.value === this.actualUser._id)
+      return responsable !== undefined
+    },
+    verifyAuthorizedUser (responsable) {
+      return this.isUserAdmin() || this.isGeneralResponsable() || responsable.value === this.actualUser._id
     }
   }
 }
