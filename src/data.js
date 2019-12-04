@@ -5,3 +5,6 @@ export const production = true
 export const dashboardRoute = '/dashboard'
 export const loginRoute = '/login'
 export const defaultRoute = '/'
+
+export const adminRole = 'admin'
+export const userRole = 'user'

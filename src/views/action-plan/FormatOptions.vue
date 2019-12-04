@@ -110,6 +110,9 @@ export default {
         ) {
           this.buttonsIncons[i].isVisible = false
         }
+        if (!this.availableTable.table1Row && this.buttonsIncons[i].id !== 2) {
+          this.buttonsIncons[i].isVisible = false
+        }
       }
     }
   },
