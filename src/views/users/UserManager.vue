@@ -47,8 +47,8 @@
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title class="headline">Estas por eliminar un usuario</v-card-title>
-                <v-card-text>Estas seguro de que quieres eliminar este usuario?</v-card-text>
+                <v-card-title class="headline">Eliminar</v-card-title>
+                <v-card-text>¿Estás seguro de que quieres eliminar este usuario?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="pink lighten-3" text @click="deleteUser(user.item)">Eliminar</v-btn>

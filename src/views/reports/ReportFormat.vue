@@ -202,7 +202,6 @@ export default {
         .get(backendURL + '/api/report-format', config)
         .then(response => {
           this.items = response.data
-          console.log(this.items)
         })
         .catch(e => {
           console.log('An exception has occurred: ' + e)

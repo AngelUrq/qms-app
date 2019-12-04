@@ -3,8 +3,13 @@
     <v-row justify="center">
       <v-col cols="12">
         <material-card
-          color="brown darken-2"
+          color="blue"
           title="Gestor de planes de acción"
+          buttonActivated
+          buttonColor="blue lighten-2"
+          actionPlanMakerActived
+              @updateList="updateList"
+
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
@@ -48,6 +53,7 @@
             </template>
             <template v-slot:item.update="{ item }">
               <v-btn
+                @click="showEditActionPlan(item)"
                 x-small
                 text
                 icon
@@ -55,6 +61,7 @@
               >
                 <v-icon>mdi-border-color</v-icon>
               </v-btn>
+              <EditActionPlan v-model="showEditActionPlanForm"/>
             </template>
             <template v-slot:item.delete="{ item }">
               <v-btn
@@ -75,14 +82,22 @@
 </template>
 
 <script>
+import { EventBus } from '../../main'
+
 import axios from 'axios'
 import { backendURL } from '@/data'
 import { WordParser } from '@/utils/wordParser'
 
+import EditActionPlan from './EditActionPlanForm'
+
 export default {
+  components: {
+    EditActionPlan
+  },
   data: function () {
     return {
       search: '',
+      showEditActionPlanForm: false,
       headers: [
         {
           sortable: true,
@@ -120,16 +135,23 @@ export default {
     }
   },
   mounted: function () {
-    let config = { headers: { 'x-access-token': this.$store.state.token } }
-
-    axios.get(backendURL + '/api/action-plans', config).then(response => {
-      this.actionPlans = response.data
-    })
+    this.updateList()
   },
   methods: {
     exportToWord: function (actionPlan) {
       let wordParser = new WordParser(actionPlan)
       wordParser.parse()
+    },
+    showEditActionPlan (actionPlan) {
+      this.showEditActionPlanForm = true
+      EventBus.$emit('redoActionPlan', actionPlan)
+    },
+    updateList () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.get(backendURL + '/api/action-plans', config).then(response => {
+        this.actionPlans = response.data
+      })
     }
   }
 }

@@ -28,6 +28,7 @@
           @click="saveDataLocally"
         >{{ saveButtonText }}</v-btn>
         <v-btn class="ma-2" color="warning" @click="dialog=true">Buscar</v-btn>
+        <v-btn class="ma-2 white--text" color="blue" @click="exportToWord">Exportar</v-btn>
       </v-col>
     </v-row>
 
@@ -103,7 +104,10 @@
 import DecoupledEditor from 'ckeditor5-build-decoupled-document-qms-version/build/ckeditor'
 import axios from 'axios'
 
-import { backendURL } from '@/data.js'
+import { saveAs } from 'file-saver'
+import htmlDocx from 'html-docx-js/dist/html-docx'
+
+import { defaultHTML, backendURL } from '@/data.js'
 
 export default {
   data: function () {
@@ -303,13 +307,11 @@ export default {
         uppercaseHeadings: false
       })
 
-      console.log(text)
-
       let separatedRegex = this.regex.split('*')
 
       if (separatedRegex.length === 2) {
         const regularExpression = new RegExp(
-          separatedRegex[0] + '(\\w|\\s)+' + separatedRegex[1],
+          separatedRegex[0] + '[^' + separatedRegex[1] + ']+' + separatedRegex[1],
           'g'
         )
 
@@ -340,6 +342,7 @@ export default {
           'x-access-token': this.$store.state.token
         }
       }
+
       axios
         .get(backendURL + '/api/action-plan-formats', config)
         .then(response => {
@@ -380,6 +383,13 @@ export default {
 
         this.dialogCreate = false
       }
+    },
+    exportToWord: function () {
+      let html = defaultHTML + '<body>' + this.temporalData + '</body></html>'
+
+      let converted = htmlDocx.asBlob(html)
+
+      saveAs(converted, this.filename + '.docx')
     }
   },
   computed: {
@@ -401,13 +411,11 @@ export default {
   border: 1px solid var(--ck-color-base-border);
   border-radius: var(--ck-border-radius);
 
-  /* This element is a flex container for easier rendering. */
   display: flex;
   flex-flow: column nowrap;
 }
 
 .document-editor__toolbar {
-  /* Make sure the toolbar container is always above the editable. */
   z-index: 1;
 
   /* Create the illusion of the toolbar floating over the editable. */
@@ -434,7 +442,7 @@ export default {
 
 .document-editor__editable-container .ck-editor__editable {
   /* Set the dimensions of the "page". */
-  width: 75%;
+  width: 85%;
   min-height: 21cm;
 
   /* Keep the "page" off the boundaries of the container. */
@@ -492,7 +500,7 @@ Preserve the relative scale, though. */
 /* Set the styles for "Heading 2". */
 .document-editor .ck-content h3,
 .document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
-  font-size: 1.5em;
+  font-size: 1.20em;
   font-weight: normal;
 }
 
@@ -505,7 +513,7 @@ Preserve the relative scale, though. */
 
 /* Set the styles for "Heading 2". */
 .document-editor .ck-content h3 {
-  line-height: 1.7em;
+  line-height: 1.10em;
   padding-top: 0.171em;
   margin-bottom: 0.357em;
 }
@@ -518,7 +526,7 @@ Preserve the relative scale, though. */
 }
 
 .document-editor .ck-content h4 {
-  line-height: 1.24em;
+  line-height: 1.05em;
   padding-top: 0.286em;
   margin-bottom: 0.952em;
 }

@@ -79,5 +79,10 @@ export default [
     path: '/action-plan-format-editor',
     name: 'Editor de formatos para planes de acción',
     view: 'action-plan/ActionPlanFormatEditor'
+  },
+  {
+    path: '/nonconformities',
+    name: 'No conformidades',
+    view: 'reports/nonconformities/NonconformityManager'
   }
 ]
