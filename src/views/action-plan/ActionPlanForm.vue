@@ -25,7 +25,7 @@
               rows="2"
               color="blue darken-3"
               class="mr-3"
-              label="Actividad"
+              :label="column.name"
               outlined
               v-if="column.fieldType === 'horizontal' || column.fieldType === 'vertical'"
               v-model="column.value"
@@ -85,7 +85,11 @@ export default {
       structure: {},
       select: '',
       users: [],
-      items: []
+      items: [],
+      description: {
+        rowIndex: 0,
+        columnIndex: 0
+      }
     }
   },
   mounted () {
@@ -119,20 +123,32 @@ export default {
         })
         .then(() => {
           this.structure = this.actionPlanFormat.structure
+          this.getDescriptionFile()
         })
     },
     saveActionPlan () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
+      this.actionPlanFormat.description = this.actionPlanFormat.structure.rows[this.description.rowIndex][this.description.columnIndex].value
 
       axios
         .put(backendURL + '/api/action-plans/' + this.idActionPlan, this.actionPlanFormat, config)
         .then(response => {
           console.log(response)
-          console.log(this.actionPlanFormat.structure)
         })
         .catch(error => {
           console.log(error)
         })
+    },
+    getDescriptionFile () {
+      for (let i = 0; i < this.structure.rows.length; i++) {
+        for (let j = 0; j < this.structure.rows[i].length; j++) {
+          if (this.structure.rows[i][j].name === 'Descripción') {
+            this.description.rowIndex = i
+            this.description.columnIndex = j
+            this.structure.rows[i][j].value = this.actionPlanFormat.description
+          }
+        }
+      }
     }
   }
 }

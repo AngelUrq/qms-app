@@ -30,7 +30,7 @@ export default [
   },
   {
     path: '/notifications',
-    view: 'action-plan/ActionPlanForm'
+    view: 'Notifications'
   },
   {
     path: '/user-manager',
