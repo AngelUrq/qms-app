@@ -17,6 +17,7 @@
           class="mt-3"
           label="Actividad"
           outlined
+          :readonly="!verifyAuthorizedUser(activity.responsable)"
         ></v-textarea>
       </v-col>
       <v-col>
@@ -28,6 +29,7 @@
           label="Responsable"
           :autocomplete="false"
           dense
+          :readonly="!isUserAdmin()"
         ></v-combobox>
       </v-col>
       <v-col>
@@ -38,6 +40,7 @@
           class="mt-3"
           label="VoBo responsable"
           outlined
+          :readonly="!verifyAuthorizedUser(activity.responsable)"
         ></v-textarea>
       </v-col>
 
@@ -65,6 +68,7 @@
             locale="es-419"
             min="2017/01"
             no-title
+            :disabled="!verifyAuthorizedUser(activity.responsable)"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -93,29 +97,30 @@
             locale="es-419"
             min="2017/01"
             no-title
+            :disabled="!verifyAuthorizedUser(activity.responsable)"
           ></v-date-picker>
         </v-menu>
       </v-col>
 
       <v-btn
         v-if="!verifyLastRow(index, activitiesData.length)"
-        class="mt-4 mr-2"
-        fab
-        small
-        dark
+        class="mt-4 mr-2 white--text"
         color="light-blue darken-2"
         @click="removeActivity(index)"
+        :disabled="!isUserAdmin()"
+        fab
+        small
       >
         <v-icon dark>mdi-minus</v-icon>
       </v-btn>
       <v-btn
         v-else
-        class="mt-4 mr-2"
-        fab
-        small
-        dark
+        class="mt-4 mr-2 white--text"
         color="light-blue darken-2"
         @click="addActivity"
+        :disabled="!isUserAdmin()"
+        fab
+        small
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
@@ -131,6 +136,18 @@ import { backendURL } from '@/data.js'
 export default {
   props: {
     activitiesData: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    actualUser: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    },
+    responsible: {
       type: Array,
       default: function () {
         return []
@@ -217,6 +234,12 @@ export default {
       if (this.activitiesData.length < 1) {
         this.addActivity()
       }
+    },
+    isUserAdmin () {
+      return this.actualUser.role === 'Admin'
+    },
+    verifyAuthorizedUser (responsable) {
+      return this.isUserAdmin() || responsable.value === this.actualUser._id
     }
   }
 }
