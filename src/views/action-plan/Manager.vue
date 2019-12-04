@@ -22,10 +22,7 @@
             :items="actionPlans"
             item-key="_id"
             :search="search"
-            :page.sync="page"
-            :items-per-page="itemsPerPage"
             hide-default-footer
-            @page-count="pageCount = $event"
           >
             <template v-slot:item.toForm="{ item }">
               <v-btn
@@ -71,9 +68,6 @@
               </v-btn>
             </template>
           </v-data-table>
-          <div class="text-center pt-2">
-            <v-pagination color="teal darken-2" v-model="page" :length="pageCount"></v-pagination>
-          </div>
         </material-card>
       </v-col>
     </v-row>
@@ -89,8 +83,6 @@ export default {
   data: function () {
     return {
       search: '',
-      page: 1,
-      pageCount: 0,
       headers: [
         {
           sortable: true,
