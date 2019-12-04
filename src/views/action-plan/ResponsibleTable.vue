@@ -19,6 +19,7 @@
             label="Responsable"
             :autocomplete="false"
             dense
+            :readonly="actualUser.role !== 'Admin'"
           ></v-combobox>
         </v-col>
       </v-col>
@@ -37,23 +38,23 @@
       </v-col>
       <v-btn
         v-if="!verifyLastRow(r, responsibleData.length)"
-        class="mt-4 mr-2"
+        class="mt-4 mr-2 white--text"
         fab
         small
-        dark
         color="light-blue darken-2"
         @click="removeResponsible(r)"
+        :disabled="actualUser.role !== 'Admin'"
       >
         <v-icon dark>mdi-minus</v-icon>
       </v-btn>
       <v-btn
         v-else
-        class="mt-4 mr-2"
+        class="mt-4 mr-2 white--text"
         fab
         small
-        dark
         color="light-blue darken-2"
         @click="addResponsible"
+        :disabled="actualUser.role !== 'Admin'"
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
@@ -72,6 +73,12 @@ export default {
       type: Array,
       default: function () {
         return []
+      }
+    },
+    actualUser: {
+      type: Object,
+      default: function () {
+        return {}
       }
     }
   },
@@ -136,9 +143,6 @@ export default {
     },
     removeResponsible (index) {
       this.responsibleData.splice(index, 1)
-    },
-    saveResponsible () {
-
     }
   }
 }

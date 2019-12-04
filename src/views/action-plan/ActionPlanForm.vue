@@ -29,20 +29,21 @@
               outlined
               v-if="column.fieldType === 'horizontal' || column.fieldType === 'vertical'"
               v-model="column.value"
+              :readonly="!isUserAuthorized"
             ></v-textarea>
 
-            <h4 v-if="column.fieldType === 'title'" class="text-center pb-5">{{ column.name }}</h4>
+            <h4 v-if="column.fieldType === 'title'" class="text-center pb-5" :readonly="!isUserAuthorized">{{ column.name }}</h4>
 
             <div v-if="column.fieldType === 'reponsable'">
-              <ReponsibleTable v-bind:responsibleData="column.value"/>
+              <ReponsibleTable v-bind:responsibleData="column.value" v-bind:actualUser="user"/>
             </div>
 
             <div v-if="column.fieldType === 'corrections'">
-              <CorrectionTable v-bind:correctionsData="column.value"/>
+              <CorrectionTable v-bind:correctionsData="column.value" v-bind:actualUser="user" v-bind:responsible="structure.rows[responsibleIndex.row][responsibleIndex.column].value"/>
             </div>
 
             <div v-if="column.fieldType === 'activities'">
-              <ActivitiesTable v-bind:activitiesData="column.value"/>
+              <ActivitiesTable v-bind:activitiesData="column.value" v-bind:actualUser="user" v-bind:responsible="structure.rows[responsibleIndex.row][responsibleIndex.column].value"/>
             </div>
           </v-col>
         </v-row>
@@ -83,14 +84,20 @@ export default {
       text: 'GUARDAR',
       actionPlanFormat: {},
       structure: {},
-      select: '',
-      users: [],
-      items: [],
-      description: {
-        rowIndex: -1,
-        columnIndex: -1
-      }
+      descriptionIndex: {
+        row: -1,
+        column: -1
+      },
+      responsibleIndex: {
+        row: -1,
+        column: -1
+      },
+      user: {},
+      isUserAuthorized: false
     }
+  },
+  beforeMount () {
+    this.getActualUser()
   },
   mounted () {
     this.idActionPlan = this.$route.query.id
@@ -123,14 +130,15 @@ export default {
         })
         .then(() => {
           this.structure = this.actionPlanFormat.structure
-          this.setDescriptionFile()
+          this.getFieldIndexes()
+          this.setDescription()
         })
     },
     saveActionPlan () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      if (this.description.rowIndex > -1 && this.description.columnIndex > -1) {
-        this.actionPlanFormat.description = this.actionPlanFormat.structure.rows[this.description.rowIndex][this.description.columnIndex].value
+      if (this.descriptionIndex.row > -1 && this.descriptionIndex.column > -1) {
+        this.actionPlanFormat.description = this.actionPlanFormat.structure.rows[this.descriptionIndex.row][this.descriptionIndex.column].value
       }
 
       axios
@@ -142,17 +150,39 @@ export default {
           console.log(error)
         })
     },
-    setDescriptionFile () {
+    getFieldIndexes () {
       for (let i = 0; i < this.structure.rows.length; i++) {
         for (let j = 0; j < this.structure.rows[i].length; j++) {
           if (this.structure.rows[i][j].name === 'Descripción') {
-            this.description.rowIndex = i
-            this.description.columnIndex = j
-            this.structure.rows[i][j].value = this.actionPlanFormat.description
-            return
+            this.descriptionIndex.row = i
+            this.descriptionIndex.column = j
+          }
+
+          if (this.structure.rows[i][j].fieldType === 'reponsable') {
+            this.responsibleIndex.row = i
+            this.responsibleIndex.column = j
           }
         }
       }
+    },
+    setDescription () {
+      this.structure.rows[this.descriptionIndex.row][this.descriptionIndex.column].value = this.actionPlanFormat.description
+    },
+    getActualUser () {
+      let token = this.$store.state.token
+      let config = { headers: { 'x-access-token': token } }
+      axios
+        .get(backendURL + '/api/users/' + token, config)
+        .then(response => {
+          this.user = response.data
+          this.isUserAuthorized = this.verifyAuthorizedUser()
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    verifyAuthorizedUser () {
+      return this.user.role === 'Admin'
     }
   }
 }
