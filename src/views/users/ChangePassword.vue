@@ -104,18 +104,25 @@
             <v-form ref="form2">
                 <v-card-text class="text--primary">Ingrese su nueva contraseña</v-card-text>
                <v-container>
-                    <v-text-field color="amber accent-4"  label="Nueva Contraseña" required></v-text-field>
-                    <v-text-field color="amber accent-4"  label="Confrimar Contraseña" required></v-text-field>
+                    <v-text-field color="amber accent-4" :rules="passwordRules" v-model="newPass" label="Nueva Contraseña" required></v-text-field>
+                    <v-text-field color="amber accent-4" v-model="confirmPass" label="Confrimar Contraseña" required></v-text-field>
                 </v-container>
             </v-form>
           </v-card-text>
             <v-card-actions>
           <v-alert
-            :value="warningAlert3"
+            :value="warningAlert3_samePass"
             type= "warning"
             dense
           >
             La contraseña no coincide
+          </v-alert>
+          <v-alert
+            :value="warningAlert3_passRules"
+            type= "warning"
+            dense
+          >
+            La contraseña no es valida
           </v-alert>
           <v-alert
             :value="successAlert3"
@@ -125,9 +132,9 @@
             Se actualizo la contraseña
           </v-alert>
           <div class="flex-grow-1"></div>
-          <v-btn color="indigo darken-4 lighten-1" class="mb-3 mr-3" text>Actualizar
+          <v-btn color="indigo darken-4 lighten-1" :disabled='isDisabled' class="mb-3 mr-3" @click="updatePassword" text>Actualizar
           </v-btn>
-          <v-btn color="indigo darken-4 lighten-1" class="mb-3 mr-3" text @click= "dialogUpdatePass = false,clearFields()" >Salir
+          <v-btn color="indigo darken-4 lighten-1" class="mb-3 mr-3" text @click= "dialogUpdatePass = false" >Regresar
           </v-btn>
         </v-card-actions>
         </v-card>
@@ -146,15 +153,23 @@ export default {
       dialogConfirmCode: '',
       dialogUpdatePass: '',
       xsdaCodeGenerated: '',
+      newPass: '',
+      confirmPass: '',
       warningAlert: false,
       warningAlert2: false,
-      warningAlert3: false,
+      warningAlert3_samePass: false,
+      warningAlert3_passRules: false,
       successAlert: false,
       successAlert2: false,
       successAlert3: false,
+      isDisabled: false,
       emailRules: [
         v => !!v || 'Correo es necesario',
         v => /.+@.+\..+/.test(v) || 'Correo debe ser valido'
+      ],
+      passwordRules: [
+        v => !!v || 'Contraseña es necesario',
+        v => v.length >= 5 || 'Contraseña debe ser mas de 5 caracteres'
       ],
       user: {
         email: ''
@@ -199,7 +214,6 @@ export default {
       return text
     },
     clearFields () {
-      this.user.email = ''
       this.$refs.form.resetValidation()
     },
     send () {
@@ -208,6 +222,7 @@ export default {
         this.clearFields()
         this.successAlert = true
         this.dialogConfirmCode = true
+        this.dialogChangePass = false
         setTimeout(() => {
           this.successAlert = false
         }, 10000)
@@ -224,6 +239,7 @@ export default {
         this.successAlert2 = true
         this.xsdaCodeGenerated = ''
         this.dialogUpdatePass = true
+        this.dialogConfirmCode = false
         setTimeout(() => {
           this.successAlert2 = false
         }, 10000)
@@ -232,6 +248,47 @@ export default {
         this.warningAlert2 = true
         setTimeout(() => {
           this.warningAlert2 = false
+        }, 10000)
+      }
+    },
+    updatePassword () {
+      if (this.$refs.form2.validate()) {
+        if (this.newPass === this.confirmPass) {
+          this.warningAlert3_samePass = false
+          this.warningAlert3_passRules = false
+          axios.patch(backendURL + '/api/password-reset/' + this.user.email, {
+            password: this.confirmPass
+          })
+            .then((response) => {
+              console.log(response)
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+          this.$refs.form2.resetValidation()
+          this.warningAlert3_passRules = false
+          this.warningAlert3_samePass = false
+          this.successAlert3 = true
+          this.isDisabled = true
+          setTimeout(() => {
+            this.successAlert3 = false
+          }, 10000)
+          this.user.email = ''
+          this.newPass = ''
+          this.confirmPass = ''
+        } else {
+          this.successAlert3 = false
+          this.warningAlert3_samePass = true
+          setTimeout(() => {
+            this.warningAlert3_samePass = false
+          }, 10000)
+        }
+      } else {
+        this.successAlert3 = false
+        this.warningAlert3_samePass = false
+        this.warningAlert3_passRules = true
+        setTimeout(() => {
+          this.warningAlert3_passRules = false
         }, 10000)
       }
     }
