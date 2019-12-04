@@ -87,8 +87,8 @@ export default {
       users: [],
       items: [],
       description: {
-        rowIndex: 0,
-        columnIndex: 0
+        rowIndex: -1,
+        columnIndex: -1
       }
     }
   },
@@ -104,7 +104,7 @@ export default {
       this.activateLoading = true
       this.text = ''
       this.saveActionPlan()
-      setTimeout(this.disableProgressCircular, 1500)
+      setTimeout(this.disableProgressCircular, 1000)
     },
     disableProgressCircular () {
       this.text = 'GUARDAR'
@@ -123,12 +123,15 @@ export default {
         })
         .then(() => {
           this.structure = this.actionPlanFormat.structure
-          this.getDescriptionFile()
+          this.setDescriptionFile()
         })
     },
     saveActionPlan () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
-      this.actionPlanFormat.description = this.actionPlanFormat.structure.rows[this.description.rowIndex][this.description.columnIndex].value
+
+      if (this.description.rowIndex > -1 && this.description.columnIndex > -1) {
+        this.actionPlanFormat.description = this.actionPlanFormat.structure.rows[this.description.rowIndex][this.description.columnIndex].value
+      }
 
       axios
         .put(backendURL + '/api/action-plans/' + this.idActionPlan, this.actionPlanFormat, config)
@@ -139,13 +142,14 @@ export default {
           console.log(error)
         })
     },
-    getDescriptionFile () {
+    setDescriptionFile () {
       for (let i = 0; i < this.structure.rows.length; i++) {
         for (let j = 0; j < this.structure.rows[i].length; j++) {
           if (this.structure.rows[i][j].name === 'Descripción') {
             this.description.rowIndex = i
             this.description.columnIndex = j
             this.structure.rows[i][j].value = this.actionPlanFormat.description
+            return
           }
         }
       }
