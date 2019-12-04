@@ -146,7 +146,6 @@ export default {
 </script>
 
 <style>
-  /* Fix coming in v2.0.8 */
   #core-app-bar {
     width: auto;
   }
