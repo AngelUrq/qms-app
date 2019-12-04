@@ -27,12 +27,13 @@
           color="blue darken-3"
           label="Puesto"
           v-model="res.position"
-          outlined
           single-line
+          outlined
+          readonly
         ></v-text-field>
       </v-col>
       <v-col>
-        <v-text-field color="blue darken-3" v-model="res.signature"  disabled single-line></v-text-field>
+        <v-text-field color="blue darken-3" v-model="res.signature" placeholder="Firma" readonly single-line outlined></v-text-field>
       </v-col>
       <v-btn
         v-if="!verifyLastRow(r, responsibleData.length)"
