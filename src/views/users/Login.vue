@@ -79,6 +79,7 @@ export default {
           const role = response.data.role
           if (response.status === 200) {
             localStorage.setItem('token', authToken)
+            localStorage.setItem('role', role)
             this.$router.push('/dashboard')
             this.$store.commit('saveToken', authToken)
             this.$store.commit('saveRole', role)
