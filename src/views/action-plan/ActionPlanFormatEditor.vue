@@ -224,7 +224,8 @@ export default {
       let availablesTable = {
         table3Row: true,
         table5RowsRoot: true,
-        table5RowsCorrection: true
+        table5RowsCorrection: true,
+        table1Row: true
       }
       this.actionPlanFormat.structure.rows.forEach(row => {
         row.forEach(col => {
@@ -240,9 +241,12 @@ export default {
             col.mainTitle === 'Acciones para eliminar la causa raiz'
           ) {
             availablesTable.table5RowsRoot = false
+          } else if (col.type === 'SimpleRow' && row.length === 1) {
+            availablesTable.table1Row = false
           }
         })
       })
+      console.log(availablesTable)
       return availablesTable
     },
     saveFormat () {

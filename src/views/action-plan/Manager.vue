@@ -5,6 +5,11 @@
         <material-card
           color="blue"
           title="Gestor de planes de acción"
+          buttonActivated
+          buttonColor="blue lighten-2"
+          actionPlanMakerActived
+              @updateList="updateList"
+
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
@@ -130,11 +135,7 @@ export default {
     }
   },
   mounted: function () {
-    let config = { headers: { 'x-access-token': this.$store.state.token } }
-
-    axios.get(backendURL + '/api/action-plans', config).then(response => {
-      this.actionPlans = response.data
-    })
+    this.updateList()
   },
   methods: {
     exportToWord: function (actionPlan) {
@@ -144,6 +145,13 @@ export default {
     showEditActionPlan (actionPlan) {
       this.showEditActionPlanForm = true
       EventBus.$emit('redoActionPlan', actionPlan)
+    },
+    updateList () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.get(backendURL + '/api/action-plans', config).then(response => {
+        this.actionPlans = response.data
+      })
     }
   }
 }
