@@ -24,13 +24,12 @@
         />
       </v-list-item-avatar>
 
-      <v-list-item-title class="title">QMS</v-list-item-title>
+      <v-list-item-title class="title">QMS APP</v-list-item-title>
     </v-list-item>
 
     <v-divider class="mx-3 mb-3" />
 
     <v-list nav>
-      <!-- Bug in Vuetify for first child of v-list not receiving proper border-radius -->
       <div />
       <div v-for="(item, i) in items" :key="i">
         <v-list-group v-if="item.containsSubitems" :prepend-icon="item.icon" color="transparent" active-class="white--text">

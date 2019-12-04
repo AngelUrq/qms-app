@@ -121,7 +121,7 @@ export default {
     saveUser () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios.patch(backendURL + '/api/users/' + this.userid, {
+      axios.put(backendURL + '/api/users/' + this.userid, {
         code: this.EditUser.code,
         firstNames: this.EditUser.firstNames,
         paternalLastName: this.EditUser.paternalLastName,

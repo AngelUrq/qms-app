@@ -11,7 +11,7 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title>Registrar Usuario</v-card-title>
+        <v-card-title>Registrar usuario</v-card-title>
           <v-card-text>
             <v-form ref="form">
                <v-container>
@@ -32,13 +32,13 @@
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" :rules="[v => !!v || 'Nombre es necesario']" label="Nombre*" v-model="user.firstName" required></v-text-field>
+                  <v-text-field color="blue" :rules="[v => !!v || 'El nombre es necesario']" label="Nombre*" v-model="user.firstName" required></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" :rules="[v => !!v || 'Apellido Paterno es necesario']" label="Apellido Paterno*" v-model="user.paternalLastName"></v-text-field>
+                  <v-text-field color="blue" :rules="[v => !!v || 'El apellido paterno es necesario']" label="Apellido paterno*" v-model="user.paternalLastName"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field color="blue" :rules="[v => !!v || 'Apellido Materno es necesario']" label="Apellido Materno*" v-model="user.maternalLastName"></v-text-field>
+                  <v-text-field color="blue" :rules="[v => !!v || 'El apellido materno es necesario']" label="Apellido materno*" v-model="user.maternalLastName"></v-text-field>
                 </v-col>
                 <v-col cols="12">
                 <v-text-field color="blue" :rules="emailRules" label="Correo*" v-model="user.email" required></v-text-field>
@@ -59,7 +59,7 @@
                 <v-select
                   :items="['Cochabamba', 'La Paz', 'Santa Cruz']"
                   label="Ciudad*"
-                  :rules="[v => !!v || 'Se debe escojer una Ciudad!']"
+                  :rules="[v => !!v || 'Se debe escoger una ciudad']"
                   required
                   color="blue"
                   prepend-icon="mdi-map-marker"
@@ -91,18 +91,18 @@
             :value="warningAlert"
             type= "warning"
           >
-            Algunos campos estan vacios
+            Algunos campos están vacios
           </v-alert>
           <v-alert
             :value="successAlert"
             type="success"
           >
-            Registrado!
+            ¡Registrado!
           </v-alert>
           <div class="flex-grow-1"></div>
-          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="registrar">Registrar
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click="register">Registrar
           </v-btn>
-          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click= "dialog = false,clearFields()" >Salir
+          <v-btn color="pink lighten-3" class="mb-3 mr-3" text @click= "dialog = false,clearFields()">Salir
           </v-btn>
         </v-card-actions>
        </v-card>
@@ -153,8 +153,6 @@ export default {
       }
     }
   },
-  created () {
-  },
   methods: {
     sendMailNotification () {
       const htmlBody = `
@@ -171,7 +169,9 @@ export default {
         html: htmlBody
       }
 
-      axios.post(backendURL + '/api/mail/send', newMail)
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.post(backendURL + '/api/mail/send', newMail, config)
         .then((response) => {
           console.log(response)
         })
@@ -204,7 +204,7 @@ export default {
         })
     },
 
-    registrar () {
+    register () {
       if (this.$refs.form.validate()) {
         this.registerUserAPI()
         this.sendMailNotification()

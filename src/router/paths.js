@@ -12,7 +12,7 @@ export default [
   },
   {
     path: '/user-profile',
-    name: 'User Profile',
+    name: 'Perfil de usuario',
     view: 'users/UserProfile'
   },
   {
@@ -30,6 +30,7 @@ export default [
   },
   {
     path: '/notifications',
+    name: 'Notificaciones',
     view: 'Notifications'
   },
   {
@@ -84,5 +85,10 @@ export default [
     path: '/nonconformities',
     name: 'No conformidades',
     view: 'reports/nonconformities/NonconformityManager'
+  },
+  {
+    path: '/attachments',
+    name: 'Archivos adjuntos',
+    view: 'attachments/Attachments'
   }
 ]

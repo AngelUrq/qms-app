@@ -8,41 +8,53 @@
         <h4>{{ header.name }}</h4>
       </v-col>
     </v-row>
-    <v-row v-for="(res, r) in responsible" :key="r">
+    <v-row v-for="(res, r) in responsibleData" :key="r">
       <v-col>
-        <ResponsibleTextbox />
+        <v-col>
+          <v-combobox
+            color="blue darken-3"
+            item-color="blue"
+            v-model="res.name"
+            :items="items"
+            label="Responsable"
+            :autocomplete="false"
+            dense
+            :readonly="actualUser.role !== 'Admin'"
+          ></v-combobox>
+        </v-col>
       </v-col>
       <v-col>
         <v-text-field
           color="blue darken-3"
           label="Puesto"
           v-model="res.position"
-          outlined
           single-line
+          outlined
+          readonly
         ></v-text-field>
       </v-col>
       <v-col>
-        <v-text-field color="blue darken-3" v-model="res.signature" disabled single-line></v-text-field>
+        <v-text-field color="blue darken-3" v-model="res.signature" placeholder="Firma" readonly single-line outlined></v-text-field>
       </v-col>
       <v-btn
-        v-if="!verifyLastRow(r, responsible.length)"
-        class="mt-4 mr-2"
+        v-if="!verifyLastRow(r, responsibleData.length)"
+        class="mt-4 mr-2 white--text"
         fab
         small
-        dark
         color="light-blue darken-2"
         @click="removeResponsible(r)"
+        :disabled="actualUser.role !== 'Admin'"
       >
         <v-icon dark>mdi-minus</v-icon>
       </v-btn>
       <v-btn
         v-else
-        class="mt-4 mr-2"
+        class="mt-4 mr-2 white--text"
         fab
         small
-        dark
         color="light-blue darken-2"
         @click="addResponsible"
+        :disabled="actualUser.role !== 'Admin'"
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
@@ -51,44 +63,75 @@
 </template>
 
 <script>
-import ResponsibleTextbox from './ResponsibleTextbox'
 import verifyLastRow from '@/utils/rows.js'
+import axios from 'axios'
+import { backendURL } from '@/data.js'
 
 export default {
-  components: {
-    ResponsibleTextbox
+  props: {
+    responsibleData: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    actualUser: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
+  },
+  mounted () {
+    this.getUsers()
+    this.checkResponsibleData()
   },
   data () {
     return {
       responsibleHeaders: [
-        {
-          name: 'Nombre'
-        },
-        {
-          name: 'Puesto'
-        },
-        {
-          name: 'Firma'
-        }
+        { name: 'Nombre' },
+        { name: 'Puesto' },
+        { name: 'Firma' }
       ],
-      responsible: [
-        {
-          id: 1,
-          name: 'Adriana Orellana',
-          position: 'Gerente',
-          signature: 'Adri O'
-        },
-        {
-          id: 2,
-          name: 'Jhon',
-          position: 'Angel',
-          signature: 'Carnal'
-        }
-      ],
-      verifyLastRow: verifyLastRow
+      verifyLastRow: verifyLastRow,
+      users: [],
+      items: []
     }
   },
   methods: {
+    getUsers () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios
+        .get(backendURL + '/api/users', config)
+        .then(response => {
+          this.users = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        }).then(() => {
+          this.formatUsers()
+        })
+    },
+    formatUsers () {
+      this.users.forEach(user => {
+        let fullname = this.getNameWithFormat(user.firstNames, user.paternalLastName, user.maternalLastName)
+        if (fullname !== '  ') {
+          this.items.push({
+            text: fullname,
+            value: user._id
+          })
+        }
+      })
+    },
+    getNameWithFormat (name, paternalLastName, maternalLastName) {
+      return name + ' ' + paternalLastName + ' ' + maternalLastName
+    },
+    checkResponsibleData () {
+      if (this.responsibleData.length < 1) {
+        this.addResponsible()
+      }
+    },
     addResponsible () {
       let responsible = {
         name: '',
@@ -96,10 +139,10 @@ export default {
         signature: ''
       }
 
-      this.responsible.push(responsible)
+      this.responsibleData.push(responsible)
     },
     removeResponsible (index) {
-      this.responsible.splice(index, 1)
+      this.responsibleData.splice(index, 1)
     }
   }
 }
