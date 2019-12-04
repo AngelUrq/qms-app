@@ -274,7 +274,7 @@ export default {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
       axios
-        .patch(backendURL + '/api/reports/' + this.id, report, config)
+        .put(backendURL + '/api/reports/' + this.id, report, config)
         .then(response => {
           if (!response.data.updated) {
             this.showNotificationError('¡No se pudo guardar el archivo!')

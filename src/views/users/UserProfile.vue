@@ -82,7 +82,7 @@ export default {
     let config = { headers: { 'x-access-token': this.$store.state.token } }
 
     axios
-      .get(backendURL + '/api/users/' + this.$store.state.token, config)
+      .get(backendURL + '/api/users/token/' + this.$store.state.token, config)
       .then(response => {
         this.user = response.data
       })
