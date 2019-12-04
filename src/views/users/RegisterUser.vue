@@ -153,8 +153,6 @@ export default {
       }
     }
   },
-  created () {
-  },
   methods: {
     sendMailNotification () {
       const htmlBody = `
@@ -171,7 +169,9 @@ export default {
         html: htmlBody
       }
 
-      axios.post(backendURL + '/api/mail/send', newMail)
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.post(backendURL + '/api/mail/send', newMail, config)
         .then((response) => {
           console.log(response)
         })
