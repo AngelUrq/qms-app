@@ -59,7 +59,8 @@
 <script>
 // Utilities
 import { mapMutations, mapState } from 'vuex'
-
+import { adminView, userView } from '../../viewRoutes'
+import { adminRole, userRole } from '../../data'
 export default {
   props: {
     opened: {
@@ -68,70 +69,7 @@ export default {
     }
   },
   data: () => ({
-    items: [
-      {
-        to: '/dashboard',
-        icon: 'mdi-view-dashboard',
-        text: 'Panel de administración',
-        containsSubitems: false
-      },
-      {
-        icon: 'mdi-clipboard-text-outline',
-        text: 'Informes',
-        containsSubitems: true,
-        subitems: [
-          {
-            to: '/nonconformities',
-            text: 'No conformidades'
-          },
-          {
-            to: '/report-format',
-            text: 'Formatos'
-          },
-          {
-            to: '/report-editor',
-            text: 'Editor'
-          },
-          {
-            to: '/report-list',
-            text: 'Cargar'
-          }
-        ]
-      },
-      {
-        icon: 'mdi-clipboard-outline',
-        text: 'Planes de acción',
-        containsSubitems: true,
-        subitems: [
-          {
-            to: '/action-plan-manager',
-            text: 'Gestor'
-          },
-          {
-            to: '/action-plan-format-manager',
-            text: 'Formatos'
-          }
-        ]
-      },
-      {
-        to: '/user-profile',
-        icon: 'mdi-account',
-        text: 'Perfil',
-        containsSubitems: false
-      },
-      {
-        to: '/user-manager',
-        icon: 'mdi-account-group',
-        containsSubitems: false,
-        text: 'Gestor de usuarios'
-      },
-      {
-        to: '/notifications',
-        icon: 'mdi-bell',
-        text: 'Notificaciones',
-        containsSubitems: false
-      }
-    ]
+    items: []
   }),
 
   computed: {
@@ -151,6 +89,16 @@ export default {
 
   methods: {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
+  },
+  mounted () {
+    const role = this.$store.getters.role
+    console.log(role)
+    if (role === adminRole) {
+      this.items = adminView.items
+      console.log(adminView.items)
+    } else if (role === userRole) {
+      this.items = userView.items
+    }
   }
 }
 </script>

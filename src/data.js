@@ -6,6 +6,6 @@ export const dashboardRoute = '/dashboard'
 export const loginRoute = '/login'
 export const defaultRoute = '/'
 
-export const adminRole = 'admin'
-export const userRole = 'user'
+export const adminRole = 'Admin'
+export const userRole = 'User'
 export const defaultHTML = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>'
