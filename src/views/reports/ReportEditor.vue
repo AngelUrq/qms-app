@@ -105,6 +105,7 @@ import DecoupledEditor from 'ckeditor5-build-decoupled-document-qms-version/buil
 import axios from 'axios'
 
 import { saveAs } from 'file-saver'
+
 import htmlDocx from 'html-docx-js/dist/html-docx'
 
 import { defaultHTML, backendURL } from '@/data.js'
@@ -149,6 +150,7 @@ export default {
   mounted: function () {
     var self = this
 
+    // Initialize the editor
     DecoupledEditor.create(
       document.querySelector('.document-editor__editable'),
       {
@@ -179,6 +181,7 @@ export default {
         console.error(err)
       })
       .then(() => {
+        // Create new report
         if (this.$route.params.create) {
           let structure = this.$route.params.structure
 
@@ -194,6 +197,7 @@ export default {
           this.editor.data.set(data)
         }
 
+        // Load new report
         if (this.$route.params.load) {
           let report = this.$route.params.report
 
@@ -362,7 +366,7 @@ export default {
         })
     },
     createActionPlan: function () {
-      if (this.format) {
+      if (this.format && this.actionPlanName !== '' && this.actionPlanDescription !== '') {
         let actionPlan = {}
         actionPlan.name = this.actionPlanName
         actionPlan.description = this.actionPlanDescription
