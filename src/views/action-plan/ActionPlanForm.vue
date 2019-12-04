@@ -20,14 +20,16 @@
             sm="12"
             :md="getWidthColumns(row.length)"
           >
-            <v-text-field
-              v-if="column.fieldType === 'horizontal' || column.fieldType === 'vertical'"
-              :label="column.name"
-              class="mr-2"
+            <v-textarea
+              auto-grow
+              rows="2"
               color="blue darken-3"
+              class="mr-3"
+              label="Actividad"
               outlined
+              v-if="column.fieldType === 'horizontal' || column.fieldType === 'vertical'"
               v-model="column.value"
-            ></v-text-field>
+            ></v-textarea>
 
             <h4 v-if="column.fieldType === 'title'" class="text-center pb-5">{{ column.name }}</h4>
 
