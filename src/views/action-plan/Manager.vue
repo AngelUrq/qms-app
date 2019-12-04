@@ -115,6 +115,10 @@ export default {
           value: 'creationDate'
         },
         {
+          text: 'Tipo de hallazgo',
+          value: 'findingType'
+        },
+        {
           text: 'Formulario',
           value: 'toForm'
         },
