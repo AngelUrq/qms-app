@@ -16,7 +16,18 @@
             outlined
             dense
           ></v-combobox>
+          <v-combobox
+            color="red darken-1"
+            item-color="blue"
+            v-model="actualFindingType"
+            :items="findingTypes"
+            label="Tipo de hallazgo"
+            :autocomplete="false"
+            outlined
+            dense
+          ></v-combobox>
         </v-container>
+
     </v-form>
     <v-card-actions class="pb-5">
       <v-spacer></v-spacer>
@@ -35,7 +46,9 @@ export default {
       name: '',
       description: '',
       reportFormats: [],
-      actionPlanFormatID: ''
+      actionPlanFormatID: '',
+      findingTypes: ['No conformidad', 'Observación', 'Recomendación'],
+      actualFindingType: ''
     }
   },
   methods: {
@@ -65,6 +78,7 @@ export default {
         description: this.description,
         creationDate: new Date(),
         formatID: this.actionPlanFormatID.value,
+        findingType: this.actualFindingType,
         structure: []
       }
       const headers = {

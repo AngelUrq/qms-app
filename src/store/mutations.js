@@ -3,5 +3,8 @@
 export default {
   saveToken (state, token) {
     state.token = token
+  },
+  saveRole (state, role) {
+    state.role = role
   }
 }
