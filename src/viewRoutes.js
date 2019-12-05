@@ -1,8 +1,6 @@
-
 export const userView =
 {
   items: [
-
     {
       icon: 'mdi-clipboard-outline',
       text: 'Planes de acción',
@@ -28,6 +26,7 @@ export const userView =
     }
   ]
 }
+
 export const adminView = {
   items: [
     {
@@ -87,10 +86,10 @@ export const adminView = {
       text: 'Gestor de usuarios'
     },
     {
-      to: '/notifications',
-      icon: 'mdi-bell',
-      text: 'Notificaciones',
-      containsSubitems: false
+      to: '/',
+      icon: 'mdi-logout',
+      containsSubitems: false,
+      text: 'Cerrar sesión'
     }
   ]
 }

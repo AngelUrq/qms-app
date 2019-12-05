@@ -18,7 +18,6 @@ export default {
     CoreAppBar: () => import('@/components/core/AppBar')
   },
   created () {
-    console.log('dsd')
     this.$store.commit('saveToken', localStorage.getItem('token'))
     this.$store.commit('saveRole', localStorage.getItem('role'))
   },

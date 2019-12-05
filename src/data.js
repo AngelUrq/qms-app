@@ -7,5 +7,5 @@ export const loginRoute = '/login'
 export const defaultRoute = '/'
 
 export const adminRole = 'Admin'
-export const userRole = 'User'
+export const userRole = 'Usuario'
 export const defaultHTML = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>'

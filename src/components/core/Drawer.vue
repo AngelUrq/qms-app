@@ -91,10 +91,8 @@ export default {
   },
   mounted () {
     const role = this.$store.getters.role
-    console.log(role)
     if (role === adminRole) {
       this.items = adminView.items
-      console.log(adminView.items)
     } else if (role === userRole) {
       this.items = userView.items
     }

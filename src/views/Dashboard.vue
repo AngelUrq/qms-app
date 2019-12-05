@@ -12,7 +12,7 @@
           type="Line"
         >
           <h4 class="title font-weight-light">
-            Daily Sales
+            Avance de planes de acción
           </h4>
 
           <p class="category d-inline-flex font-weight-light">
@@ -23,7 +23,7 @@
               mdi-arrow-up
             </v-icon>
             <span class="green--text">55%</span>&nbsp;
-            increase in today's sales
+            del total de planes de acción están en progreso.
           </p>
 
           <template v-slot:actions>
@@ -33,7 +33,7 @@
             >
               mdi-clock-outline
             </v-icon>
-            <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
+            <span class="caption grey--text font-weight-light">actualizado 10 minutos atrás</span>
           </template>
         </material-chart-card>
       </v-col>
@@ -50,10 +50,10 @@
           type="Bar"
         >
           <h4 class="title font-weight-light">
-            Email Subscription
+            Informes de auditoría
           </h4>
           <p class="category d-inline-flex font-weight-light">
-            Last Campaign Performance
+            Avance anual
           </p>
 
           <template v-slot:actions>
@@ -63,7 +63,7 @@
             >
               mdi-clock-outline
             </v-icon>
-            <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
+            <span class="caption grey--text font-weight-light">actualizado 10 minutos atrás</span>
           </template>
         </material-chart-card>
       </v-col>
@@ -79,10 +79,10 @@
           type="Line"
         >
           <h3 class="title font-weight-light">
-            Completed Tasks
+            Actividades adjuntadas a planes de acción
           </h3>
           <p class="category d-inline-flex font-weight-light">
-            Last Last Campaign Performance
+            Un total de 60 actividades han sido terminadas.
           </p>
 
           <template v-slot:actions>
@@ -92,7 +92,7 @@
             >
               mdi-clock-outline
             </v-icon>
-            <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
+            <span class="caption grey--text font-weight-light">actualizado 10 minutos atrás</span>
           </template>
         </material-chart-card>
       </v-col>
@@ -104,11 +104,12 @@
       >
         <material-stats-card
           color="green"
-          icon="mdi-store"
-          title="Revenue"
-          value="$34,245"
-          sub-icon="mdi-calendar"
-          sub-text="Last 24 Hours"
+          icon="mdi-account"
+          title="Usuarios"
+          value="70"
+          sub-icon="mdi-account-badge"
+          sub-icon-color="success"
+          sub-text="30 usuarios asignados a actividades"
         />
       </v-col>
 
@@ -120,13 +121,11 @@
         <material-stats-card
           color="orange"
           icon="mdi-content-copy"
-          title="Used Space"
-          value="49/50"
-          small-value="GB"
-          sub-icon="mdi-alert"
-          sub-icon-color="error"
-          sub-text="Get More Space..."
-          sub-text-color="text-primary"
+          title="Planes de acción"
+          value="200"
+          sub-icon="mdi-align-vertical-bottom"
+          sub-icon-color="success"
+          sub-text="Total"
         />
       </v-col>
 
@@ -138,10 +137,11 @@
         <material-stats-card
           color="red"
           icon="mdi-information-outline"
-          title="Fixed Issues"
-          value="75"
+          title="Planes de acción sin concluir"
+          value="155"
           sub-icon="mdi-tag"
-          sub-text="Tracked from Github"
+          sub-icon-color="warning"
+          sub-text="En progreso"
         />
       </v-col>
 
@@ -152,251 +152,13 @@
       >
         <material-stats-card
           color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
+          icon="mdi-clipboard-check-outline"
+          title="Planes de acción concluidos"
+          value="45"
+          sub-icon="mdi-check"
+          sub-icon-color="success"
+          sub-text="Finalizado"
         />
-      </v-col>
-
-      <v-col
-        cols="12"
-        lg="6"
-      >
-        <material-card
-          color="orange"
-          title="Employee Stats"
-          text="New employees on 15th September, 2016"
-        >
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            hide-default-footer
-          />
-        </material-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        lg="6"
-      >
-        <material-card
-          class="card-tabs"
-          color="green"
-        >
-          <template v-slot:header>
-            <v-tabs
-              v-model="tabs"
-              background-color="transparent"
-              slider-color="white"
-            >
-              <span
-                class="subheading font-weight-light mx-3"
-                style="align-self: center"
-              >Tasks:</span>
-              <v-tab class="mr-3">
-                <v-icon class="mr-2">
-                  mdi-bug
-                </v-icon>
-                Bugs
-              </v-tab>
-              <v-tab class="mr-3">
-                <v-icon class="mr-2">
-                  mdi-code-tags
-                </v-icon>
-                Website
-              </v-tab>
-              <v-tab>
-                <v-icon class="mr-2">
-                  mdi-cloud
-                </v-icon>
-                Server
-              </v-tab>
-            </v-tabs>
-          </template>
-
-          <v-tabs-items v-model="tabs">
-            <v-tab-item
-              v-for="n in 3"
-              :key="n"
-            >
-              <v-list
-                three-line
-                class="py-0"
-              >
-                <v-list-item @click="complete(0)">
-                  <v-list-item-action class="align-self-center">
-                    <v-checkbox
-                      :value="list[0]"
-                      color="green"
-                    />
-                  </v-list-item-action>
-
-                  <v-list-item-title>
-                    Sign contract for "What are conference organized afraid of?"
-                  </v-list-item-title>
-
-                  <div class="d-flex">
-                    <v-tooltip
-                      top
-                      content-class="top"
-                    >
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          class="v-btn--simple"
-                          color="green"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon color="primary">
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Edit</span>
-                    </v-tooltip>
-
-                    <v-tooltip
-                      top
-                      content-class="top"
-                    >
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          class="v-btn--simple"
-                          color="danger"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon color="error">
-                            mdi-close
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Close</span>
-                    </v-tooltip>
-                  </div>
-                </v-list-item>
-
-                <v-divider />
-
-                <v-list-item @click="complete(1)">
-                  <v-list-item-action class="align-self-center">
-                    <v-checkbox
-                      :value="list[1]"
-                      color="green"
-                    />
-                  </v-list-item-action>
-
-                  <v-list-item-title>
-                    Lines From Great Russian Literature? Or E-mails From My Boss?
-                  </v-list-item-title>
-
-                  <div class="d-flex">
-                    <v-tooltip
-                      top
-                      content-class="top"
-                    >
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          class="v-btn--simple"
-                          color="green"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon color="primary">
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Edit</span>
-                    </v-tooltip>
-
-                    <v-tooltip
-                      top
-                      content-class="top"
-                    >
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          class="v-btn--simple"
-                          color="danger"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon color="error">
-                            mdi-close
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Close</span>
-                    </v-tooltip>
-                  </div>
-                </v-list-item>
-
-                <v-divider />
-
-                <v-list-item @click="complete(2)">
-                  <v-list-item-action class="align-self-center">
-                    <v-checkbox
-                      :value="list[2]"
-                      color="green"
-                    />
-                  </v-list-item-action>
-
-                  <v-list-item-title>
-                    Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit
-                  </v-list-item-title>
-
-                  <div class="d-flex">
-                    <v-tooltip
-                      top
-                      content-class="top"
-                    >
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          class="v-btn--simple"
-                          color="green"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon color="primary">
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Edit</span>
-                    </v-tooltip>
-
-                    <v-tooltip
-                      top
-                      content-class="top"
-                    >
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          class="v-btn--simple"
-                          color="danger"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon color="error">
-                            mdi-close
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Close</span>
-                    </v-tooltip>
-                  </div>
-                </v-list-item>
-              </v-list>
-            </v-tab-item>
-          </v-tabs-items>
-        </material-card>
       </v-col>
     </v-row>
   </v-container>
@@ -408,7 +170,7 @@ export default {
     return {
       dailySalesChart: {
         data: {
-          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+          labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
           series: [
             [12, 17, 7, 17, 23, 18, 38]
           ]
@@ -450,7 +212,7 @@ export default {
       },
       emailsSubscriptionChart: {
         data: {
-          labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
+          labels: ['En', 'Fe', 'Ma', 'Ab', 'Ma', 'Jun', 'Jul', 'Ag', 'Sep', 'Oct', 'Nov', 'Dic'],
           series: [
             [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
 
@@ -480,84 +242,12 @@ export default {
           }]
         ]
       },
-      headers: [
-        {
-          sortable: false,
-          text: 'ID',
-          value: 'id'
-        },
-        {
-          sortable: false,
-          text: 'Name',
-          value: 'name'
-        },
-        {
-          sortable: false,
-          text: 'Salary',
-          value: 'salary',
-          align: 'right'
-        },
-        {
-          sortable: false,
-          text: 'Country',
-          value: 'country',
-          align: 'right'
-        },
-        {
-          sortable: false,
-          text: 'City',
-          value: 'city',
-          align: 'right'
-        }
-      ],
-      items: [
-        {
-          id: 1,
-          name: 'Dakota Rice',
-          country: 'Niger',
-          city: 'Oud-Tunrhout',
-          salary: '$35,738'
-        },
-        {
-          id: 2,
-          name: 'Minerva Hooper',
-          country: 'Curaçao',
-          city: 'Sinaai-Waas',
-          salary: '$23,738'
-        },
-        {
-          id: 3,
-          name: 'Sage Rodriguez',
-          country: 'Netherlands',
-          city: 'Overland Park',
-          salary: '$56,142'
-        },
-        {
-          id: 4,
-          name: 'Philip Chanley',
-          country: 'Korea, South',
-          city: 'Gloucester',
-          salary: '$38,735'
-        },
-        {
-          id: 5,
-          name: 'Doris Greene',
-          country: 'Malawi',
-          city: 'Feldkirchen in Kārnten',
-          salary: '$63,542'
-        }
-      ],
       tabs: 0,
       list: {
         0: false,
         1: false,
         2: false
       }
-    }
-  },
-  methods: {
-    complete (index) {
-      this.list[index] = !this.list[index]
     }
   }
 }
