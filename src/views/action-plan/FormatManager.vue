@@ -29,7 +29,6 @@
               item-key="_id"
               :search="search"
               hide-default-footer
-              show-expand
             >
               <template v-slot:item.create="{ item }">
                 <v-btn

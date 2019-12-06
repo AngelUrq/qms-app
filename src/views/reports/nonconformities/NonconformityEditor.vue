@@ -10,6 +10,7 @@
             v-model="nonconformity.text"
             prepend-icon="mdi-clipboard-text"
             color="red darken-1"
+            auto-grow
             required
         ></v-textarea>
         <v-combobox

@@ -3,13 +3,12 @@
     <v-row justify="center">
       <v-col cols="12">
         <material-card
-          color="blue"
+          color="light-green darken-3"
           title="Gestor de planes de acción"
           buttonActivated
-          buttonColor="blue lighten-2"
+          buttonColor="light-green darken-1"
           actionPlanMakerActived
-              @updateList="updateList"
-
+          @updateList="updateList"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
