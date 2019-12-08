@@ -274,8 +274,10 @@ export default {
 
       ).then(response => {
         this.actionPlanFormat = response.data
-        this.actionPlanFormat.structure = {
-          rows: [[]]
+        if (this.actionPlanFormat.structure.rows === undefined) {
+          this.actionPlanFormat.structure = {
+            rows: [[]]
+          }
         }
       })
     }
