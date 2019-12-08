@@ -168,7 +168,13 @@ export default {
 
       axios.get(backendURL + '/api/action-plans', config).then(response => {
         this.actionPlans = response.data
+        for (let i = 0; i < this.actionPlans.length; i++) {
+          this.actionPlans[i].creationDate = this.changeDateFormat(this.actionPlans[i].creationDate)
+        }
       })
+        .catch(error => {
+          console.log(error)
+        })
     },
     deleteActionPlan () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
@@ -186,6 +192,11 @@ export default {
     showDeleteDialog (product) {
       this.showDelete = true
       this.selectedItem = product
+    },
+    changeDateFormat (date) {
+      let dateFormat = require('dateformat')
+
+      return dateFormat(date, 'yyyy/mm/dd, HH:MM:ss')
     }
   }
 }
