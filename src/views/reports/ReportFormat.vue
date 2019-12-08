@@ -41,10 +41,27 @@
                     @click="activateSaveButton()"
                     @keyup.tab="activateSaveButton()"
                   ></v-text-field>
+
                   <v-row no-gutters>
                     <h4 class="mb- mr-3">Subtítulos:</h4>
-                    <AddSubtitleToReportFormat />
+                    <v-btn color="red lighten-2" class="mb-5" fab x-small dark @click.stop="dialog = true">
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+
+                    <v-dialog v-model="dialog" max-width="40%">
+                      <v-card>
+                        <v-card-title>Añadir subtítulo</v-card-title>
+                        <v-card-text>
+                          <v-text-field color="teal darken-2" label="Subtítulo" v-model="newSubtitle"></v-text-field>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="teal darken-2" text @click="addSubtitle(item.subtitles)">AGREGAR</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </v-row>
+
                   <draggable>
                     <transition-group>
                       <v-card class="pb-3" v-for="(subtitle, j) in item.subtitles" :key="subtitle">
@@ -82,7 +99,6 @@
                       class="mt-4 white--text"
                       color="teal lighten-3"
                       text
-                      v-if="saveButtonActivated"
                       @click="updateReportFormat(item)"
                     >Guardar</v-btn>
                   </v-row>
@@ -133,17 +149,17 @@ import axios from 'axios'
 import { backendURL } from '@/data.js'
 
 import EditReportFormat from './EditReportFormat'
-import AddSubtitleToReportFormat from './AddSubtitleToReportFormat'
 
 export default {
   components: {
     draggable,
-    EditReportFormat,
-    AddSubtitleToReportFormat
+    EditReportFormat
   },
   data: () => ({
     fab: false,
     search: '',
+    dialog: false,
+    newSubtitle: '',
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
@@ -271,19 +287,22 @@ export default {
     disableSaveButton () {
       this.saveButtonActivated = false
     },
+    addSubtitle (subtitles) {
+      subtitles.push(this.newSubtitle)
+      this.dialog = false
+      this.newSubtitle = ''
+    },
     openEditReportFormat (item) {
       this.showEditReportFormat = true
-      this.$emit('editReportInfo', item)
+      // this.$emit('editReportInfo', item)
     }
   }
 }
 </script>
 
 <style scoped>
-
 .text-field {
   height: 3em;
   font-size: 90%;
 }
-
 </style>
