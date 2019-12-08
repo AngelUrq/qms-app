@@ -42,7 +42,7 @@
             color="red darken-1"
             item-color="blue"
             :items="reportFormatSelected.subtitles"
-            label="Formato de informe"
+            label="Subtítulo"
             :autocomplete="false"
             outlined
             dense
@@ -246,28 +246,30 @@ export default {
         }
       }
 
-      let report = {
-        'filename': this.reportName,
-        'data': data,
-        'creationDate': new Date(),
-        'lastModificationDate': new Date()
+      if (this.reportName && this.reportFormatSelected && this.subtitle) {
+        let report = {
+          'filename': this.reportName,
+          'data': data,
+          'creationDate': new Date(),
+          'lastModificationDate': new Date()
+        }
+
+        let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+        axios
+          .post(backendURL + '/api/reports', report, config)
+          .then(response => {
+            this.reportDialog = false
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+        this.reportFormatSelected = { text: '', subtitles: [] }
+        this.reportFormats = []
+        this.reportName = ''
+        this.subtitle = ''
       }
-
-      let config = { headers: { 'x-access-token': this.$store.state.token } }
-
-      axios
-        .post(backendURL + '/api/reports', report, config)
-        .then(response => {
-          this.reportDialog = false
-        })
-        .catch(error => {
-          console.log(error)
-        })
-
-      this.reportFormatSelected = { text: '', subtitles: [] }
-      this.reportFormats = []
-      this.reportName = ''
-      this.subtitle = ''
     }
   }
 }
