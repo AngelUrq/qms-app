@@ -33,6 +33,12 @@
               <v-card-actions class="justify-center">
                 <v-btn class="mb-3" dark color="indigo darken-1" @click="loginUser">Ingresar</v-btn>
               </v-card-actions>
+              <v-alert
+            type="error"
+            border="top"
+            :value="alert.error"
+            transition="scale-transition"
+          >{{ alert.message }}</v-alert>
             </v-card>
           </v-flex>
         </v-layout>
