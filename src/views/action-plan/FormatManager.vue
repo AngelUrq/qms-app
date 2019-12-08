@@ -153,6 +153,13 @@ export default {
         .get(backendURL + '/api/action-plan-formats', config)
         .then(response => {
           this.actionPlanFormats = response.data
+          for (let i = 0; i < this.actionPlanFormats.length; i++) {
+            this.actionPlanFormats[i].creationDate = this.changeDateFormat(this.actionPlanFormats[i].creationDate)
+            this.actionPlanFormats[i].lastModificationDate = this.changeDateFormat(this.actionPlanFormats[i].lastModificationDate)
+          }
+        })
+        .catch(error => {
+          console.log(error)
         })
     },
     saveActionPlanFormat (nameformat) {
@@ -164,6 +171,9 @@ export default {
       axios.post(backendURL + '/api/action-plan-formats', this.actionPlan, config)
         .then(response => {
           console.log(response.data)
+        })
+        .catch(error => {
+          console.log(error)
         })
     },
     showEditActionPlanFormat (actionPlanFormat) {
@@ -186,6 +196,11 @@ export default {
     showDeleteDialog (product) {
       this.showDelete = true
       this.selectedItem = product
+    },
+    changeDateFormat (date) {
+      let dateFormat = require('dateformat')
+
+      return dateFormat(date, 'yyyy/mm/dd, HH:MM:ss')
     }
   }
 }
