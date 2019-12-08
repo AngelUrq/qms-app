@@ -45,6 +45,15 @@
 
         <v-container class="pa-5">
           <v-text-field label="Nombre" v-model="actionPlanName"></v-text-field>
+          <v-combobox
+            item-color="blue"
+            v-model="findingType"
+            :items="types"
+            label="Tipo"
+            :autocomplete="false"
+            outlined
+            dense
+          ></v-combobox>
           <v-textarea label="Descripción" v-model="actionPlanDescription" rows="3"></v-textarea>
           <v-combobox
             color="blue darken-3"
@@ -131,6 +140,8 @@ export default {
       actionPlanDescription: '',
       replace: false,
       format: null,
+      findingType: '',
+      types: ['No conformidad', 'Observación', 'Recomendación'],
       formats: [],
       headers: [
         {
@@ -339,6 +350,14 @@ export default {
     },
     openCreateDialog: function (item) {
       this.actionPlanDescription = item
+
+      for (let type of this.types) {
+        if (this.actionPlanDescription.toLowerCase().includes(type.toLowerCase())) {
+          this.findingType = type
+          break
+        }
+      }
+
       this.dialogCreate = true
 
       let config = {
@@ -372,6 +391,7 @@ export default {
         actionPlan.description = this.actionPlanDescription
         actionPlan.creationDate = new Date()
         actionPlan.formatID = this.format.value
+        actionPlan.findingType = this.findingType
         actionPlan.structure = {}
 
         let config = { headers: { 'x-access-token': this.$store.state.token } }
