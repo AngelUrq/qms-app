@@ -60,6 +60,17 @@
         {{ text }}
         <v-progress-circular v-if="activateLoading" indeterminate color="white"></v-progress-circular>
       </v-btn>
+
+      <v-btn
+        x-large
+        color="light-green darken-3"
+        width="20%"
+        class="white--text mr-5"
+        @click="activateProgressCircular"
+      >
+        FINALIZAR
+        <v-progress-circular v-if="activateLoading" indeterminate color="white"></v-progress-circular>
+      </v-btn>
     </v-card-actions>
   </v-container>
 </template>
@@ -84,6 +95,7 @@ export default {
       text: 'GUARDAR',
       actionPlanFormat: {},
       structure: {},
+      responsible: [],
       descriptionIndex: {
         row: -1,
         column: -1
@@ -137,7 +149,7 @@ export default {
     saveActionPlan () {
       let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      if (this.descriptionIndex.row > -1 && this.descriptionIndex.column > -1) {
+      if (this.existDescription()) {
         this.actionPlanFormat.description = this.actionPlanFormat.structure.rows[this.descriptionIndex.row][this.descriptionIndex.column].value
       }
 
@@ -165,14 +177,19 @@ export default {
         }
       }
     },
+    existDescription () {
+      return this.descriptionIndex.row > -1 && this.descriptionIndex.column > -1
+    },
     setDescription () {
-      this.structure.rows[this.descriptionIndex.row][this.descriptionIndex.column].value = this.actionPlanFormat.description
+      if (this.existDescription()) {
+        this.structure.rows[this.descriptionIndex.row][this.descriptionIndex.column].value = this.actionPlanFormat.description
+      }
     },
     getActualUser () {
       let token = this.$store.state.token
       let config = { headers: { 'x-access-token': token } }
       axios
-        .get(backendURL + '/api/users/' + token, config)
+        .get(backendURL + '/api/users/token/' + token, config)
         .then(response => {
           this.user = response.data
           this.isUserAuthorized = this.verifyAuthorizedUser()
