@@ -4,6 +4,10 @@
       :showEditReportFormat="showEditReportFormat"
       @update-show-edit-report-format="setShowEditReportFormat"
     />
+    <v-snackbar color="green darken-1" v-model="snackbar" :timeout="timeout">
+      ¡Los datos se han actualizado correctamente!
+      <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
+    </v-snackbar>
 
     <v-row justify="center">
       <v-col cols="12">
@@ -187,6 +191,8 @@ export default {
   data: () => ({
     drag: false,
     fab: false,
+    timeout: 1200,
+    snackbar: false,
     search: '',
     dialog: false,
     newSubtitle: '',
@@ -249,7 +255,7 @@ export default {
   },
   methods: {
     listReportFormats () {
-      var config = {
+      let config = {
         headers: {
           'x-access-token': this.$store.state.token
         }
@@ -264,7 +270,7 @@ export default {
         })
     },
     updateReportFormat (reportFormat) {
-      var config = {
+      let config = {
         headers: {
           'x-access-token': this.$store.state.token
         }
@@ -276,19 +282,19 @@ export default {
           config
         )
         .then(response => {
-          console.log('Report updated successfully')
+          this.snackbar = true
         })
         .catch(e => {
           console.log('An exception has ocurred: ' + e.message)
         })
     },
     deleteReportFormat (item) {
-      var ans = confirm(
+      let ans = confirm(
         '¿Esta seguro que desea eliminar el formato de informe?'
       )
 
       if (ans) {
-        var config = {
+        let config = {
           headers: {
             'x-access-token': this.$store.state.token
           }
@@ -305,7 +311,7 @@ export default {
       }
     },
     createReport: function (item) {
-      var structure = {}
+      let structure = {}
       structure.title = item.title
       structure.subtitles = item.subtitles
       this.$router.push({
@@ -314,7 +320,7 @@ export default {
       })
     },
     deleteSubtitle (idReportFormat, indexSubtitle) {
-      var index = this.items
+      let index = this.items
         .map(function (item) {
           return item._id
         })
