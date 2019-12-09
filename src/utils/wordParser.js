@@ -29,7 +29,17 @@ export class WordParser {
 
     let rowIndex = 0
 
-    let maxRowSize = Math.max.apply(Math, rowsSize)
+    let maxRowSize = Math.max.apply(Math, rowsSize) + 1
+
+    let initialCells = []
+    for (let i = 0; i < maxRowSize; i++) {
+      initialCells.push(this.getCell('', true))
+    }
+    const initialTableRow = new TableRow({
+      children: initialCells
+    })
+
+    rows.push(initialTableRow)
 
     for (let row of this.actionPlan.structure.rows) {
       let cells = []
@@ -40,66 +50,59 @@ export class WordParser {
         if (column.fieldType === 'horizontal') {
           columnIndex += 2
 
-          cells.push(new TableCell({
-            children: [new Paragraph(column.name)],
-            shading: {
-              color: 'black',
-              fill: '#D8D8D8'
-            }
-          }))
+          cells.push(this.getCell(column.name, true))
 
           if (columnIndex === rowsSize[rowIndex]) {
             let remainingCells = (maxRowSize - rowsSize[rowIndex]) + 1
 
-            cells.push(new TableCell({
-              children: [new Paragraph(column.value)], columnSpan: remainingCells
-            }))
+            cells.push(this.getCell(column.value, false, remainingCells))
           } else {
-            cells.push(new TableCell({ children: [new Paragraph(column.value)] }))
+            cells.push(this.getCell(column.value, false))
           }
-        } else if (column.fieldType === 'vertical') {
-          columnIndex++
-
-          let remainingCells = (maxRowSize - rowsSize[rowIndex]) + 2
-
-          cells.push(new TableCell({
-            children: [new Paragraph(column.name)],
-            columnSpan: remainingCells,
-            shading: {
-              color: 'black',
-              fill: '#D8D8D8'
-            }
-          }))
-
-          const tableRow = new TableRow({
-            children: cells
-          })
-
-          rows.push(tableRow)
-
-          cells = []
-
-          cells.push(new TableCell({
-            children: [new Paragraph(column.value)],
-            columnSpan: remainingCells
-          }))
         } else if (column.fieldType === 'title') {
           columnIndex++
 
           if (columnIndex === rowsSize[rowIndex]) {
             let remainingCells = (maxRowSize - rowsSize[rowIndex]) + 2
 
-            cells.push(new TableCell({
-              children: [new Paragraph(column.name)],
-              columnSpan: remainingCells,
-              shading: {
-                color: 'black',
-                fill: '#D8D8D8'
-              }
-            }))
+            cells.push(this.getCell(column.name, true, remainingCells))
           } else {
-            cells.push(new TableCell({ children: [new Paragraph(column.name)] }))
+            cells.push(this.getCell(column.name, false))
           }
+        } else if (column.fieldType === 'responsible') {
+          cells.push(this.getCell(column.name, true, maxRowSize))
+
+          const tableRowName = new TableRow({
+            children: cells
+          })
+
+          rows.push(tableRowName)
+
+          cells = []
+
+          cells.push(this.getCell('Nombre', false))
+          cells.push(this.getCell('Puesto', false))
+          cells.push(this.getCell('Firma', false, maxRowSize - 2))
+
+          // Añadir responsables
+        } else if (column.fieldType === 'corrections' || column.fieldType === 'activities') {
+          cells.push(this.getCell(column.name, true, maxRowSize))
+
+          const tableRowName = new TableRow({
+            children: cells
+          })
+
+          rows.push(tableRowName)
+
+          cells = []
+
+          cells.push(this.getCell('Actividad', true))
+          cells.push(this.getCell('Responsable', true))
+          cells.push(this.getCell('Descripción', true))
+          cells.push(this.getCell('Fecha propuesta', true))
+          cells.push(this.getCell('Fecha real', true, maxRowSize - 4))
+
+          // Añadir correción
         }
       }
 
@@ -115,6 +118,24 @@ export class WordParser {
     return rows
   }
 
+  getCell (value, shading, columnSpan = 0) {
+    if (shading) {
+      return new TableCell({
+        children: [new Paragraph(value)],
+        columnSpan: columnSpan,
+        shading: {
+          color: 'black',
+          fill: '#D8D8D8'
+        }
+      })
+    } else {
+      return new TableCell({
+        children: [new Paragraph(value)],
+        columnSpan: columnSpan
+      })
+    }
+  }
+
   getRowsSize () {
     let rowsSize = []
 
@@ -124,7 +145,7 @@ export class WordParser {
       for (let column of row) {
         if (column.fieldType === 'horizontal') {
           rowSize += 2
-        } else if (column.fieldType === 'title' || column.fieldType === 'vertical') {
+        } else if (column.fieldType === 'title') {
           rowSize++
         } else {
           rowSize += 5

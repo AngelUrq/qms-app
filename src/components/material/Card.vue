@@ -21,10 +21,9 @@
                 <v-icon dark>mdi-plus</v-icon>
               </v-btn>
             </template>
-            <RegisterReportFormat v-if="reportFormatActionsActivated" />
+            <RegisterReportFormat @update-report-format-list="closeReportFormatRegister" @ v-if="reportFormatActionsActivated" />
             <NonconformityEditor v-if="nonconformityEditorActivated" />
             <RegisterActionPlan @updateList="updateList" v-if="actionPlanMakerActived" />
-
             <RegisterActionPlanFormat
               @saveActionPlanFormat="saveActionPlanFormat"
               v-if="formatManagerActived"
@@ -32,7 +31,6 @@
           </v-dialog>
         </v-row>
       </v-card>
-
       <slot v-else name="offset" />
     </helper-offset>
 
@@ -126,9 +124,11 @@ export default {
       this.$emit('saveActionPlanFormat', name)
     },
     updateList () {
-      // this.actionPlanMakerActived = false
-      // this.buttonActivated = false
       this.$emit('updateList')
+    },
+    closeReportFormatRegister () {
+      this.dialog = false
+      this.$emit('update-report-format-list')
     }
   },
   computed: {

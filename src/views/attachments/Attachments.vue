@@ -90,34 +90,36 @@ export default {
       this.file = this.$refs.file.files[0]
     },
     getAttachments: function () {
-      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      if (this.$route.query.actionPlanID && this.$route.query.activityID && this.$route.query.userID) {
+        let config = { headers: { 'x-access-token': this.$store.state.token } }
 
-      axios
-        .get(backendURL + '/api/attachments', config)
-        .then(response => {
-          this.items = []
-          for (let attachment of response.data) {
-            let item = attachment
+        axios
+          .get(backendURL + '/api/attachments/search/' + this.$route.query.actionPlanID + '/' + this.$route.query.activityID, config)
+          .then(response => {
+            this.items = []
+            for (let attachment of response.data) {
+              let item = attachment
 
-            axios
-              .get(backendURL + '/api/users/' + item.userID, config)
-              .then(response => {
-                item.user =
-                  response.data.firstNames +
-                  ' ' +
-                  response.data.paternalLastName +
-                  ' ' +
-                  response.data.maternalLastName
-                this.items.push(item)
-              })
-              .catch(error => {
-                console.log(error)
-              })
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+              axios
+                .get(backendURL + '/api/users/' + item.userID, config)
+                .then(response => {
+                  item.user =
+                    response.data.firstNames +
+                    ' ' +
+                    response.data.paternalLastName +
+                    ' ' +
+                    response.data.maternalLastName
+                  this.items.push(item)
+                })
+                .catch(error => {
+                  console.log(error)
+                })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
     },
     saveFile: function () {
       if (this.isCorrectURL()) {
@@ -149,7 +151,6 @@ export default {
               .then(response => {
                 this.file = ''
                 this.getAttachments()
-                console.log(response)
               })
               .catch(error => {
                 console.log(error)
@@ -169,12 +170,9 @@ export default {
     isCorrectURL: function () {
       return (
         this.file &&
-        this.$route.query.userID !== '' &&
-        this.$route.query.userID &&
-        this.$route.query.actionPlanID !== '' &&
         this.$route.query.actionPlanID &&
-        this.$route.query.activityID !== '' &&
-        this.$route.query.activityID
+        this.$route.query.activityID &&
+        this.$route.query.userID
       )
     },
     deleteAttachment: function (attachment) {

@@ -34,16 +34,16 @@
 
             <h4 v-if="column.fieldType === 'title'" class="text-center pb-5" :readonly="!isUserAuthorized">{{ column.name }}</h4>
 
-            <div v-if="column.fieldType === 'reponsable'">
+            <div v-if="column.fieldType === 'responsible'">
               <ReponsibleTable v-bind:responsibleData="column.value" v-bind:actualUser="user"/>
             </div>
 
             <div v-if="column.fieldType === 'corrections'">
-              <CorrectionTable v-bind:correctionsData="column.value" v-bind:actualUser="user" v-bind:responsible="structure.rows[responsibleIndex.row][responsibleIndex.column].value"/>
+              <CorrectionTable v-bind:correctionsData="column.value" v-bind:actualUser="user" @save-action-plan="saveActionPlan()"/>
             </div>
 
-            <div v-if="column.fieldType === 'activities'">
-              <ActivitiesTable v-bind:activitiesData="column.value" v-bind:actualUser="user" v-bind:responsible="structure.rows[responsibleIndex.row][responsibleIndex.column].value"/>
+            <div v-if="column.fieldType === 'actions'">
+              <ActionsTable v-bind:actionsData="column.value" v-bind:actualUser="user" @save-action-plan="saveActionPlan()"/>
             </div>
           </v-col>
         </v-row>
@@ -78,7 +78,7 @@
 <script>
 import ReponsibleTable from './ResponsibleTable'
 import CorrectionTable from './CorrectionsTable'
-import ActivitiesTable from './ActivitiesTable'
+import ActionsTable from './ActionsTable'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 
@@ -86,7 +86,7 @@ export default {
   components: {
     ReponsibleTable,
     CorrectionTable,
-    ActivitiesTable
+    ActionsTable
   },
   data () {
     return {
@@ -142,8 +142,8 @@ export default {
         })
         .then(() => {
           this.structure = this.actionPlanFormat.structure
-          this.getFieldIndexes()
-          this.setDescription()
+          // this.getFieldIndexes()
+          // this.setDescription()
         })
     },
     saveActionPlan () {

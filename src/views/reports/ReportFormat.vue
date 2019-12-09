@@ -1,5 +1,14 @@
 <template>
   <v-container fill-height fluid grid-list-xl>
+    <EditReportFormat
+      :showEditReportFormat="showEditReportFormat"
+      @update-show-edit-report-format="setShowEditReportFormat"
+    />
+    <v-snackbar color="green darken-1" v-model="snackbar" :timeout="timeout">
+      ¡Los datos se han actualizado correctamente!
+      <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
+    </v-snackbar>
+
     <v-row justify="center">
       <v-col cols="12">
         <material-card
@@ -8,6 +17,7 @@
           buttonActivated
           buttonColor="teal lighten-1"
           reportFormatActionsActivated
+          @update-report-format-list="listReportFormats"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
@@ -35,16 +45,18 @@
               <td class="pa-5" :colspan="headers.length">
                 <div>
                   <h4>Titulo:</h4>
-                  <v-text-field
-                    solo
-                    v-model="item.title"
-                    @click="activateSaveButton()"
-                    @keyup.tab="activateSaveButton()"
-                  ></v-text-field>
+                  <v-text-field solo v-model="item.title"></v-text-field>
 
                   <v-row no-gutters>
                     <h4 class="mb- mr-3">Subtítulos:</h4>
-                    <v-btn color="red lighten-2" class="mb-5" fab x-small dark @click.stop="dialog = true">
+                    <v-btn
+                      color="red lighten-2"
+                      class="mb-5"
+                      fab
+                      x-small
+                      dark
+                      @click.stop="dialog = true"
+                    >
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
 
@@ -52,19 +64,32 @@
                       <v-card>
                         <v-card-title>Añadir subtítulo</v-card-title>
                         <v-card-text>
-                          <v-text-field color="teal darken-2" label="Subtítulo" v-model="newSubtitle"></v-text-field>
+                          <v-text-field
+                            color="teal darken-2"
+                            label="Subtítulo"
+                            v-model="newSubtitle"
+                          ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="teal darken-2" text @click="addSubtitle(item.subtitles)">AGREGAR</v-btn>
+                          <v-btn
+                            color="teal darken-2"
+                            text
+                            @click="addSubtitle(item.subtitles)"
+                          >AGREGAR</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
                   </v-row>
 
-                  <draggable>
+                  <draggable
+                    v-model="item.subtitles"
+                    v-bind="dragOptions"
+                    @start="drag = true"
+                    @end="drag = false"
+                  >
                     <transition-group>
-                      <v-card class="pb-3" v-for="(subtitle, j) in item.subtitles" :key="subtitle">
+                      <v-card class="pb-3" v-for="(subtitle, j) in item.subtitles" :key="j">
                         <v-row no-gutters>
                           <v-col :cols="2">
                             <v-icon class="pt-4 pl-3">mdi-drag</v-icon>
@@ -72,10 +97,8 @@
                           <v-col :cols="8">
                             <v-text-field
                               class="text-field"
-                              :value="subtitle"
+                              v-model="item.subtitles[j]"
                               color="teal lighten-3"
-                              @click="activateSaveButton()"
-                              @keyup.tab="activateSaveButton()"
                             ></v-text-field>
                           </v-col>
                           <v-col :cols="2" class="d-flex flex-row-reverse">
@@ -94,6 +117,7 @@
                       </v-card>
                     </transition-group>
                   </draggable>
+
                   <v-row no-gutters justify="end">
                     <v-btn
                       class="mt-4 white--text"
@@ -117,8 +141,17 @@
                 <v-icon>mdi-clipboard-text-outline</v-icon>
               </v-btn>
             </template>
-            <template v-slot:item.update="{ item }" @click="openEditReportFormat(item)">
-              <EditReportFormat />
+            <template v-slot:item.update="{ item }">
+              <v-btn
+                x-small
+                text
+                icon
+                color="blue-grey lighten-1"
+                @click="openEditReportFormat(item)"
+                class="mr-1"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
             </template>
             <template v-slot:item.delete="{ item }">
               <v-btn
@@ -136,6 +169,7 @@
           <div class="text-center pt-2">
             <v-pagination color="teal darken-2" v-model="page" :length="pageCount"></v-pagination>
           </div>
+          <draggable tag="ul"></draggable>
         </material-card>
       </v-col>
     </v-row>
@@ -145,10 +179,9 @@
 <script>
 import draggable from 'vuedraggable'
 import axios from 'axios'
-
 import { backendURL } from '@/data.js'
-
 import EditReportFormat from './EditReportFormat'
+import { EventBus } from '../../main'
 
 export default {
   components: {
@@ -156,7 +189,10 @@ export default {
     EditReportFormat
   },
   data: () => ({
+    drag: false,
     fab: false,
+    timeout: 1200,
+    snackbar: false,
     search: '',
     dialog: false,
     newSubtitle: '',
@@ -204,12 +240,22 @@ export default {
     ],
     items: []
   }),
+  computed: {
+    dragOptions () {
+      return {
+        animation: 200,
+        group: 'description',
+        disabled: false,
+        ghostClass: 'ghost'
+      }
+    }
+  },
   mounted: function () {
     this.listReportFormats()
   },
   methods: {
     listReportFormats () {
-      var config = {
+      let config = {
         headers: {
           'x-access-token': this.$store.state.token
         }
@@ -224,7 +270,7 @@ export default {
         })
     },
     updateReportFormat (reportFormat) {
-      var config = {
+      let config = {
         headers: {
           'x-access-token': this.$store.state.token
         }
@@ -236,17 +282,19 @@ export default {
           config
         )
         .then(response => {
-          console.log('Report updated successfully')
+          this.snackbar = true
         })
         .catch(e => {
           console.log('An exception has ocurred: ' + e.message)
         })
     },
     deleteReportFormat (item) {
-      var ans = confirm('¿Esta seguro que desea eliminar el reporte?')
+      let ans = confirm(
+        '¿Esta seguro que desea eliminar el formato de informe?'
+      )
 
       if (ans) {
-        var config = {
+        let config = {
           headers: {
             'x-access-token': this.$store.state.token
           }
@@ -263,7 +311,7 @@ export default {
       }
     },
     createReport: function (item) {
-      var structure = {}
+      let structure = {}
       structure.title = item.title
       structure.subtitles = item.subtitles
       this.$router.push({
@@ -272,17 +320,12 @@ export default {
       })
     },
     deleteSubtitle (idReportFormat, indexSubtitle) {
-      var index = this.items
+      let index = this.items
         .map(function (item) {
           return item._id
         })
         .indexOf(idReportFormat)
       this.items[index].subtitles.splice(indexSubtitle, 1)
-    },
-    activateSaveButton () {
-      if (!this.saveButtonActivated) {
-        this.saveButtonActivated = true
-      }
     },
     disableSaveButton () {
       this.saveButtonActivated = false
@@ -294,7 +337,13 @@ export default {
     },
     openEditReportFormat (item) {
       this.showEditReportFormat = true
-      // this.$emit('editReportInfo', item)
+      EventBus.$emit('edit-report-info', item)
+    },
+    setShowEditReportFormat () {
+      this.showEditReportFormat = false
+    },
+    sort () {
+      this.list = this.list.sort((a, b) => a.order - b.order)
     }
   }
 }

@@ -1,82 +1,69 @@
 <template>
-  <v-row no-gutters>
-    <v-dialog v-model="dialog" scrollable max-width="60%">
-      <template v-slot:activator="{ on }">
-        <v-btn x-small text icon color="blue-grey lighten-1" v-on="on" fab>
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="headline">Actualizar datos de formato de reporte</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="4">
-                <v-text-field
-                  label="Nombre"
-                  v-model="name"
-                  prepend-icon="mdi-clipboard-text"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-text-field label="Versión" v-model="version" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-text-field
-                  label="Fecha de creación del documento"
-                  v-model="lastModificationDate"
-                  value="14/06/2016"
-                  readonly="true"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-row class="pb-3 pr-3" justify="end" no-gutters>
-            <v-btn color="blue darken-1" text>Actualizar</v-btn>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+  <v-dialog v-model="showEditReportFormat" persistent scrollable max-width="40%">
+    <v-card>
+      <v-card-title>
+        <span class="headline">Actualizar datos de formato de informe</span>
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-text-field
+            color="teal darken-2"
+            label="Nombre*"
+            v-model="item.name"
+            prepend-icon="mdi-clipboard-text"
+            required
+          ></v-text-field>
+          <v-text-field color="teal darken-2" label="Versión*" v-model="item.version" required></v-text-field>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-row class="pb-3 pr-3" justify="end" no-gutters>
+          <v-btn color="teal darken-2" @click="updateReportFormat" text>Actualizar</v-btn>
+          <v-btn color="teal darken-2" @click="cancelUpdateReportFormat" text>Cancelar</v-btn>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
+
 <script>
 import axios from 'axios'
 import { backendURL } from '@/data.js'
+import { EventBus } from '../../main'
 
 export default {
-  data () {
-    return {
-      dialog: false,
-      name: '',
-      version: '',
-      lastModificationDate: ''
+  props: {
+    showEditReportFormat: {
+      type: Boolean,
+      default: false
     }
   },
+  data () {
+    return {
+      item: {}
+    }
+  },
+  created () {
+    EventBus.$on('edit-report-info', item => {
+      this.item = item
+    })
+  },
   methods: {
-    updateReportFormat (reportFormat) {
+    updateReportFormat () {
+      var show = this.showEditReportFormat
+
       if (this.isFormCompleted()) {
         var config = {
           headers: {
             'x-access-token': this.$store.state.token
           }
         }
-        var reportFormatUpdated = {
-          name: this.name,
-          version: this.version,
-          createDate: reportFormat.creationDate,
-          lastModificationDate: new Date(Date.now()).toLocaleString(),
-          title: reportFormat.title,
-          subtitles: reportFormat.subtitles
-        }
+        this.item.lastModificationDate = new Date(Date.now())
+
         axios
           .put(
-            backendURL + '/api/report-format/' + reportFormat._id,
-            reportFormatUpdated,
+            backendURL + '/api/report-format/' + this.item._id,
+            this.item,
             config
           )
           .then(response => {
@@ -86,9 +73,14 @@ export default {
             console.log('An exception has ocurred: ' + e)
           })
       }
+
+      this.$emit('update-show-edit-report-format', show)
     },
     isFormCompleted () {
-      return this.name !== '' && this.version !== ''
+      return this.item.name !== '' || this.item.version !== ''
+    },
+    cancelUpdateReportFormat () {
+      this.$emit('update-show-edit-report-format')
     }
   }
 }
