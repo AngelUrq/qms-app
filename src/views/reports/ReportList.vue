@@ -10,7 +10,7 @@
     <v-container fill-height fluid grid-list-xl>
       <v-row justify="center">
         <v-col cols="12">
-          <material-card color="green " title="Informes" buttonColor="light-green">
+          <material-card color="deep-orange darken-3" title="Informes">
             <v-card-title class="mb-5">
               <v-spacer></v-spacer>
               <v-text-field append-icon="mdi-magnify" label="Buscar" single-line hide-details v-model="search"></v-text-field>
@@ -55,7 +55,7 @@
               </template>
             </v-data-table>
             <div class="text-center pt-2">
-              <v-pagination color="light-green" v-model="page" :length="pageCount"></v-pagination>
+              <v-pagination color="deep-orange lighten-1" v-model="page" :length="pageCount"></v-pagination>
             </div>
           </material-card>
         </v-col>

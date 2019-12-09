@@ -26,13 +26,6 @@
         align="center"
         class="mx-0"
       >
-        <v-text-field
-          class="mr-4 purple-input"
-          color="purple"
-          label="Buscar..."
-          hide-details
-        />
-
         <v-btn
           icon
           to="/dashboard"

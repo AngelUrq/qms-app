@@ -40,7 +40,14 @@
         <v-col v-for="(col,colId) in row" :key="colId">
           <v-row>
             <v-col>
-              <component v-bind:is="col.type" :mainTitle="col.mainTitle" />
+              <component
+                v-bind:is="col.type"
+                :mainTitle="col.mainTitle"
+                :ref="col.id"
+                :idCol="colId"
+                :idRow="rowId"
+                :newTitle = "col.name"
+              />
             </v-col>
 
             <v-btn
@@ -119,14 +126,13 @@ export default {
   data () {
     return {
       largeTables: ['Label', 'Table3Rows', 'Table5Rows', 'Table1Row'],
+      actualColId: 0,
       actionPlanFormat: {
         id: 1,
         name: 'test',
         creationDate: 2018 / 10 / 10,
         lastModificationDate: 2015 / 20 / 10,
-        structure: {
-
-        }
+        structure: {}
       }
     }
   },
@@ -135,65 +141,64 @@ export default {
       this.actionPlanFormat.structure.rows.push([])
     },
     createTableId: function (tableId, rowId) {
-      console.log(this.actionPlanFormat)
-
       switch (tableId) {
         case 1:
           this.actionPlanFormat.structure.rows[rowId].push({
+            id: this.getIdCol(),
             name: 'Observación',
             fieldType: 'vertical',
             type: 'Table1Row',
-            permission: 'test'
+            value: ''
           })
           console.log(this.actionPlanFormat.structure.rows)
           break
         case 2:
           this.actionPlanFormat.structure.rows[rowId].push({
+            id: this.getIdCol(),
             name: 'Observación',
             fieldType: 'horizontal',
             type: 'SimpleRow',
-            permission: 'test'
+            value: ''
           })
-          console.log(this.actionPlanFormat.structure.rows)
           break
         case 3:
           this.actionPlanFormat.structure.rows[rowId].push({
+            id: this.getIdCol(),
             name: 'Observación',
             fieldType: 'responsable',
             type: 'Table3Rows',
-            permission: 'test'
+            value: []
           })
-          console.log(this.actionPlanFormat.structure.rows)
           break
         case 4:
           this.actionPlanFormat.structure.rows[rowId].push({
+            id: this.getIdCol(),
             name: 'Observación',
             fieldType: 'title',
             type: 'Label',
-            permission: 'test'
+            value: ''
           })
-          console.log(this.actionPlanFormat.structure.rows)
           break
         case 5:
           this.actionPlanFormat.structure.rows[rowId].push({
+            id: this.getIdCol(),
             name: 'Observación',
             fieldType: 'corrections',
             type: 'Table5Rows',
-            permission: 'test',
-            mainTitle: 'Corrección inmediata'
+            mainTitle: 'Corrección inmediata',
+            value: []
           })
-          console.log(this.actionPlanFormat.structure.rows)
           break
 
         case 6:
           this.actionPlanFormat.structure.rows[rowId].push({
+            id: this.getIdCol(),
             name: 'Observación',
             fieldType: 'activities',
             type: 'Table5Rows',
-            permission: 'test',
-            mainTitle: 'Acciones para eliminar la causa raiz'
+            mainTitle: 'Acciones para eliminar la causa raiz',
+            value: []
           })
-          console.log(this.actionPlanFormat.structure.rows)
           break
 
         default:
@@ -201,7 +206,6 @@ export default {
       }
     },
     deleteTable: function (tableId, rowId) {
-      console.log(tableId + ' ' + rowId)
       this.$delete(this.actionPlanFormat.structure.rows[rowId], tableId)
     },
     deleteRow: function (rowId) {
@@ -211,8 +215,6 @@ export default {
       this.actionPlanFormat.structure.rows.splice(rowId + 1, 0, [])
     },
     IsFreeForTable (row) {
-      // console.log('numero es '+ rowId);
-
       var isFree = true
       row.forEach(col => {
         if (this.largeTables.includes(col.type)) isFree = false
@@ -246,47 +248,76 @@ export default {
           }
         })
       })
-      console.log(availablesTable)
       return availablesTable
     },
     saveFormat () {
+      this.updateTitle()
+      this.actionPlanFormat.structure.lastModificationDate = new Date()
       const headers = {
         'x-access-token': this.$store.state.token
       }
       axios.put(
-        backendURL + '/api/action-plan-formats/' + this.$router.currentRoute.query.id,
+        backendURL +
+          '/api/action-plan-formats/' +
+          this.$router.currentRoute.query.id,
         this.actionPlanFormat,
         {
           headers: headers
         }
       )
     },
-    getFormatData () {
-      console.log(this.$router.currentRoute.query.id)
-      const headers = {
-        'x-access-token': this.$store.state.token
-      }
-      axios.get(
-        backendURL + '/api/action-plan-formats/' + this.$router.currentRoute.query.id,
-        {
-          headers: headers
-        }
-
-      ).then(response => {
-        this.actionPlanFormat = response.data
-        if (this.actionPlanFormat.structure.rows === undefined) {
-          this.actionPlanFormat.structure = {
-            rows: [[]]
+    updateTitle () {
+      Object.keys(this.$refs).forEach(el => {
+        if (this.$refs[el][0] !== undefined) {
+          const idRow = this.$refs[el][0].$attrs.idRow
+          const idCol = this.$refs[el][0].$attrs.idCol
+          if (this.$refs[el][0].$data.title !== undefined) {
+            this.actionPlanFormat.structure.rows[idRow][idCol].name =
+        this.$refs[el][0].$data.title
           }
         }
       })
+    },
+    getIdCol () {
+      this.actionPlanFormat.structure.rows.forEach(row => {
+        row.forEach(col => {
+          this.actualColId += 1
+        })
+      })
+      return this.actualColId + 1
+    },
+    getFormatData () {
+      const headers = {
+        'x-access-token': this.$store.state.token
+      }
+      axios
+        .get(
+          backendURL +
+            '/api/action-plan-formats/' +
+            this.$router.currentRoute.query.id,
+          {
+            headers: headers
+          }
+        )
+        .then(response => {
+          this.actionPlanFormat = response.data
+          if (this.actionPlanFormat.structure.rows === undefined) {
+            this.actionPlanFormat.structure = {
+              rows: [[]]
+            }
+          }
+          let idColId = 0
+          this.actionPlanFormat.structure.rows.forEach(row => {
+            row.forEach(col => {
+              idColId += 1
+            })
+          })
+          this.actualColId = idColId
+        })
     }
   },
-
   beforeMount () {
     this.getFormatData()
-
-    console.log(this.actionPlanFormat)
   }
 }
 </script>

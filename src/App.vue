@@ -19,7 +19,7 @@ export default {
   },
   created () {
     this.$store.commit('saveToken', localStorage.getItem('token'))
-    this.$store.commit('role', localStorage.getItem('role'))
+    this.$store.commit('saveRole', localStorage.getItem('role'))
   },
   computed: {
     isVisible () {
@@ -30,6 +30,6 @@ export default {
 
 window.addEventListener('beforeunload', function (e) {
   localStorage.setItem('token', this.$store.getters.token)
-  localStorage.setItem('token', this.$store.getters.token)
+  localStorage.setItem('rol', this.$store.getters.role)
 })
 </script>
