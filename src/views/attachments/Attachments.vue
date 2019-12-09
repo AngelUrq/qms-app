@@ -69,7 +69,7 @@ export default {
           value: 'user'
         },
         {
-          sortable: true,
+          sortable: false,
           text: 'Descargar',
           value: 'download'
         },

@@ -1,4 +1,4 @@
-import { Document, Packer, Table, TableRow, TableCell, Paragraph } from 'docx'
+import { Document, Packer, Table, TableRow, TableCell, Paragraph, UnderlineType, TextRun, Header } from 'docx'
 
 import { saveAs } from 'file-saver'
 
@@ -8,7 +8,21 @@ export class WordParser {
   }
 
   parse () {
+    let startTime = new Date()
+
     const doc = new Document()
+
+    const title = new TextRun({
+      text: 'FORMULARIO DE PLAN DE ACCIÓN',
+      bold: true,
+      underline: {
+        type: UnderlineType.SINGLE
+      }
+    })
+
+    const paragraph = new Paragraph({
+      children: [title]
+    })
 
     let rows = this.getRows()
 
@@ -16,8 +30,15 @@ export class WordParser {
       rows
     })
 
+    let time = (new Date() - startTime)
+
     doc.addSection({
-      children: [table]
+      headers: {
+        default: new Header({
+          children: [new Paragraph('Generado automáticamente en ' + String(time) + ' milisegundos por QMS APP.')]
+        })
+      },
+      children: [paragraph, table]
     })
 
     this.download(doc)
@@ -84,8 +105,23 @@ export class WordParser {
           cells.push(this.getCell('Puesto', false))
           cells.push(this.getCell('Firma', false, maxRowSize - 2))
 
-          // Añadir responsables
-        } else if (column.fieldType === 'corrections' || column.fieldType === 'activities') {
+          rows.push(new TableRow({ children: cells }))
+
+          if (column.value.length > 0) {
+            for (let i = 0; i < column.value.length; i++) {
+              let responsible = column.value[i]
+              cells = []
+
+              cells.push(this.getCell(responsible.name), false)
+              cells.push(this.getCell(responsible.position), false)
+              cells.push(this.getCell(responsible.signature), false, maxRowSize - 2)
+
+              if (i !== column.value.length - 1) {
+                rows.push(new TableRow({ children: cells }))
+              }
+            }
+          }
+        } else if (column.fieldType === 'corrections' || column.fieldType === 'actions') {
           cells.push(this.getCell(column.name, true, maxRowSize))
 
           const tableRowName = new TableRow({
@@ -102,7 +138,24 @@ export class WordParser {
           cells.push(this.getCell('Fecha propuesta', true))
           cells.push(this.getCell('Fecha real', true, maxRowSize - 4))
 
-          // Añadir correción
+          rows.push(new TableRow({ children: cells }))
+
+          if (column.value.length > 0) {
+            for (let i = 0; i < column.value.length; i++) {
+              let activity = column.value[i]
+              cells = []
+
+              cells.push(this.getCell(activity.name, false))
+              cells.push(this.getCell(activity.responsable, false))
+              cells.push(this.getCell(activity.description, false))
+              cells.push(this.getCell(activity.proposedDate, false))
+              cells.push(this.getCell(activity.realDate, false, maxRowSize - 4))
+
+              if (i !== column.value.length - 1) {
+                rows.push(new TableRow({ children: cells }))
+              }
+            }
+          }
         }
       }
 
