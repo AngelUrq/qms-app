@@ -1,7 +1,9 @@
 <template>
   <v-container fill-height fluid grid-list-xl>
-
-    <EditReportFormat :showEditReportFormat="showEditReportFormat" @update-show-edit-report-format="setShowEditReportFormat"/>
+    <EditReportFormat
+      :showEditReportFormat="showEditReportFormat"
+      @update-show-edit-report-format="setShowEditReportFormat"
+    />
 
     <v-row justify="center">
       <v-col cols="12">
@@ -39,14 +41,18 @@
               <td class="pa-5" :colspan="headers.length">
                 <div>
                   <h4>Titulo:</h4>
-                  <v-text-field
-                    solo
-                    v-model="item.title"
-                  ></v-text-field>
+                  <v-text-field solo v-model="item.title"></v-text-field>
 
                   <v-row no-gutters>
                     <h4 class="mb- mr-3">Subtítulos:</h4>
-                    <v-btn color="red lighten-2" class="mb-5" fab x-small dark @click.stop="dialog = true">
+                    <v-btn
+                      color="red lighten-2"
+                      class="mb-5"
+                      fab
+                      x-small
+                      dark
+                      @click.stop="dialog = true"
+                    >
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
 
@@ -54,19 +60,32 @@
                       <v-card>
                         <v-card-title>Añadir subtítulo</v-card-title>
                         <v-card-text>
-                          <v-text-field color="teal darken-2" label="Subtítulo" v-model="newSubtitle"></v-text-field>
+                          <v-text-field
+                            color="teal darken-2"
+                            label="Subtítulo"
+                            v-model="newSubtitle"
+                          ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="teal darken-2" text @click="addSubtitle(item.subtitles)">AGREGAR</v-btn>
+                          <v-btn
+                            color="teal darken-2"
+                            text
+                            @click="addSubtitle(item.subtitles)"
+                          >AGREGAR</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
                   </v-row>
 
-                  <draggable>
+                  <draggable
+                    v-model="item.subtitles"
+                    v-bind="dragOptions"
+                    @start="drag = true"
+                    @end="drag = false"
+                  >
                     <transition-group>
-                      <v-card class="pb-3" v-for="(subtitle, j) in item.subtitles" :key="subtitle">
+                      <v-card class="pb-3" v-for="(subtitle, j) in item.subtitles" :key="j">
                         <v-row no-gutters>
                           <v-col :cols="2">
                             <v-icon class="pt-4 pl-3">mdi-drag</v-icon>
@@ -74,7 +93,7 @@
                           <v-col :cols="8">
                             <v-text-field
                               class="text-field"
-                              :value="subtitle"
+                              v-model="item.subtitles[j]"
                               color="teal lighten-3"
                             ></v-text-field>
                           </v-col>
@@ -94,6 +113,7 @@
                       </v-card>
                     </transition-group>
                   </draggable>
+
                   <v-row no-gutters justify="end">
                     <v-btn
                       class="mt-4 white--text"
@@ -145,6 +165,7 @@
           <div class="text-center pt-2">
             <v-pagination color="teal darken-2" v-model="page" :length="pageCount"></v-pagination>
           </div>
+          <draggable tag="ul"></draggable>
         </material-card>
       </v-col>
     </v-row>
@@ -164,6 +185,7 @@ export default {
     EditReportFormat
   },
   data: () => ({
+    drag: false,
     fab: false,
     search: '',
     dialog: false,
@@ -212,6 +234,16 @@ export default {
     ],
     items: []
   }),
+  computed: {
+    dragOptions () {
+      return {
+        animation: 200,
+        group: 'description',
+        disabled: false,
+        ghostClass: 'ghost'
+      }
+    }
+  },
   mounted: function () {
     this.listReportFormats()
   },
@@ -251,7 +283,9 @@ export default {
         })
     },
     deleteReportFormat (item) {
-      var ans = confirm('¿Esta seguro que desea eliminar el formato de informe?')
+      var ans = confirm(
+        '¿Esta seguro que desea eliminar el formato de informe?'
+      )
 
       if (ans) {
         var config = {
@@ -301,6 +335,9 @@ export default {
     },
     setShowEditReportFormat () {
       this.showEditReportFormat = false
+    },
+    sort () {
+      this.list = this.list.sort((a, b) => a.order - b.order)
     }
   }
 }
