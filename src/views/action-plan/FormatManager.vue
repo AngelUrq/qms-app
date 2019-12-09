@@ -91,6 +91,7 @@ import { EventBus } from '../../main'
 import axios from 'axios'
 
 import { backendURL } from '@/data'
+import { changeDateFormat } from '@/utils/date'
 
 import EditActionPlanFormat from './EditActionPlanFormatForm'
 
@@ -154,8 +155,8 @@ export default {
         .then(response => {
           this.actionPlanFormats = response.data
           for (let i = 0; i < this.actionPlanFormats.length; i++) {
-            this.actionPlanFormats[i].creationDate = this.changeDateFormat(this.actionPlanFormats[i].creationDate)
-            this.actionPlanFormats[i].lastModificationDate = this.changeDateFormat(this.actionPlanFormats[i].lastModificationDate)
+            this.actionPlanFormats[i].creationDate = changeDateFormat(this.actionPlanFormats[i].creationDate)
+            this.actionPlanFormats[i].lastModificationDate = changeDateFormat(this.actionPlanFormats[i].lastModificationDate)
           }
         })
         .catch(error => {

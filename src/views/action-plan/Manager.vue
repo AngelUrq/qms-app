@@ -96,8 +96,10 @@
 import { EventBus } from '../../main'
 
 import axios from 'axios'
+
 import { backendURL } from '@/data'
 import { WordParser } from '@/utils/wordParser'
+import { changeDateFormat } from '@/utils/date'
 
 import EditActionPlan from './EditActionPlanForm'
 
@@ -169,7 +171,7 @@ export default {
       axios.get(backendURL + '/api/action-plans', config).then(response => {
         this.actionPlans = response.data
         for (let i = 0; i < this.actionPlans.length; i++) {
-          this.actionPlans[i].creationDate = this.changeDateFormat(this.actionPlans[i].creationDate)
+          this.actionPlans[i].creationDate = changeDateFormat(this.actionPlans[i].creationDate)
         }
       })
         .catch(error => {
@@ -192,11 +194,6 @@ export default {
     showDeleteDialog (product) {
       this.showDelete = true
       this.selectedItem = product
-    },
-    changeDateFormat (date) {
-      let dateFormat = require('dateformat')
-
-      return dateFormat(date, 'yyyy/mm/dd, HH:MM:ss')
     }
   }
 }
