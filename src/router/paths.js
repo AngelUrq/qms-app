@@ -21,14 +21,6 @@ export default [
     view: 'TableList'
   },
   {
-    path: '/typography',
-    view: 'Typography'
-  },
-  {
-    path: '/maps',
-    view: 'Maps'
-  },
-  {
     path: '/notifications',
     name: 'Notificaciones',
     view: 'Notifications'
