@@ -21,7 +21,7 @@
           label="Actividad"
           outlined
           v-model="activity.name"
-          :readonly="!verifyAuthorizedUser(activity.responsable)"
+          :readonly="!isAdminOrGeneralResponsable()"
         ></v-textarea>
       </v-col>
       <v-col>
@@ -33,7 +33,7 @@
           label="Responsable"
           :autocomplete="false"
           dense
-          :readonly="!isUserAdmin()"
+          :readonly="!isAdminOrGeneralResponsable()"
         ></v-combobox>
       </v-col>
       <v-col>
@@ -112,7 +112,7 @@
         class="mt-4 mr-2 white--text"
         color="light-blue darken-2"
         @click="removeActivity(index)"
-        :disabled="!isUserAdmin()"
+        :disabled="!isAdminOrGeneralResponsable()"
         fab
         small
       >
@@ -123,14 +123,21 @@
         class="mt-4 mr-2 white--text"
         color="light-blue darken-2"
         @click="addActivity"
-        :disabled="!isUserAdmin()"
+        :disabled="!isAdminOrGeneralResponsable()"
         fab
         small
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
 
-      <v-btn class="mt-4 mr-2 white--text" color="light-blue darken-2" fab small @click="getAttachmentRoute(activity)">
+      <v-btn
+        class="mt-4 mr-2 white--text"
+        color="light-blue darken-2"
+        fab
+        small
+        @click="getAttachmentRoute(activity)"
+        :disabled="!verifyAuthorizedUser(activity.responsable)"
+      >
         <v-icon dark>mdi-paperclip</v-icon>
       </v-btn>
     </v-row>
@@ -142,6 +149,7 @@ import verifyLastRow from '@/utils/rows.js'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 import { generateId, isActivityFieldsCompleted } from '@/utils/activity.js'
+import { isAdmin, isGeneralResponsable } from '@/utils/permissions.js'
 
 export default {
   props: {
@@ -237,17 +245,21 @@ export default {
         this.addActivity()
       }
     },
-    isUserAdmin () {
-      return this.actualUser.role === 'Admin'
+    isAdminOrGeneralResponsable () {
+      return isAdmin(this.actualUser) || isGeneralResponsable(this.responsible, this.actualUser)
     },
-    verifyAuthorizedUser (responsable) {
-      return this.isUserAdmin() || responsable.value === this.actualUser._id
+    verifyAuthorizedUser (responsableActivity) {
+      return this.isAdminOrGeneralResponsable() || responsableActivity.value === this.actualUser._id
     },
     getAttachmentRoute (activity) {
       if (isActivityFieldsCompleted(activity)) {
-        this.attachmentRoute = '/attachments?userID=' + activity.responsable.value +
-                              '&actionPlanID=' + this.actionPlanID +
-                              '&activityID=' + activity.id
+        this.attachmentRoute =
+          '/attachments?userID=' +
+          this.actualUser.value +
+          '&actionPlanID=' +
+          this.actionPlanID +
+          '&activityID=' +
+          activity.id
 
         this.$emit('save-action-plan')
         this.$router.push(this.attachmentRoute)

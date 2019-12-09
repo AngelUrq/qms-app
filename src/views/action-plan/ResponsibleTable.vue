@@ -18,6 +18,7 @@
             :items="items"
             label="Responsable"
             :autocomplete="false"
+            @click="$emit('update-responsible-list')"
             dense
             :readonly="actualUser.role !== 'Admin'"
           ></v-combobox>
@@ -34,7 +35,7 @@
         ></v-text-field>
       </v-col>
       <v-col>
-        <v-text-field color="blue darken-3" v-model="res.signature" placeholder="Firma" readonly single-line outlined></v-text-field>
+        <v-text-field color="blue darken-3" v-model="res.sign" placeholder="Firma" readonly single-line outlined></v-text-field>
       </v-col>
       <v-btn
         v-if="!verifyLastRow(r, responsibleData.length)"
@@ -136,7 +137,7 @@ export default {
       let responsible = {
         name: '',
         position: '',
-        signature: ''
+        sign: ''
       }
 
       this.responsibleData.push(responsible)
