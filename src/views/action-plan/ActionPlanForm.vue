@@ -32,18 +32,36 @@
               :readonly="!isUserAuthorized"
             ></v-textarea>
 
-            <h4 v-if="column.fieldType === 'title'" class="text-center pb-5" :readonly="!isUserAuthorized">{{ column.name }}</h4>
+            <h4
+              v-if="column.fieldType === 'title'"
+              class="text-center pb-5"
+              :readonly="!isUserAuthorized"
+            >{{ column.name }}</h4>
 
             <div v-if="column.fieldType === 'responsible'">
-              <ReponsibleTable v-bind:responsibleData="column.value" v-bind:actualUser="user"/>
+              <ReponsibleTable
+                v-bind:responsibleData="column.value"
+                v-bind:actualUser="user"
+                @update-responsible-list="updateResponsibleList"
+              />
             </div>
 
             <div v-if="column.fieldType === 'corrections'">
-              <CorrectionTable v-bind:correctionsData="column.value" v-bind:actualUser="user" @save-action-plan="saveActionPlan()"/>
+              <CorrectionTable
+                v-bind:correctionsData="column.value"
+                v-bind:actualUser="user"
+                v-bind:responsible="responsible"
+                @save-action-plan="saveActionPlan"
+              />
             </div>
 
             <div v-if="column.fieldType === 'actions'">
-              <ActionsTable v-bind:actionsData="column.value" v-bind:actualUser="user" @save-action-plan="saveActionPlan()"/>
+              <ActionsTable
+                v-bind:actionsData="column.value"
+                v-bind:actualUser="user"
+                v-bind:responsible="responsible"
+                @save-action-plan="saveActionPlan"
+              />
             </div>
           </v-col>
         </v-row>
@@ -61,16 +79,7 @@
         <v-progress-circular v-if="activateLoading" indeterminate color="white"></v-progress-circular>
       </v-btn>
 
-      <v-btn
-        x-large
-        color="light-green darken-3"
-        width="20%"
-        class="white--text mr-5"
-        @click="activateProgressCircular"
-      >
-        FINALIZAR
-        <v-progress-circular v-if="activateLoading" indeterminate color="white"></v-progress-circular>
-      </v-btn>
+      <v-btn x-large color="light-green darken-3" width="20%" class="white--text mr-5">FINALIZAR</v-btn>
     </v-card-actions>
   </v-container>
 </template>
@@ -81,6 +90,7 @@ import CorrectionTable from './CorrectionsTable'
 import ActionsTable from './ActionsTable'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
+import { isAdmin } from '@/utils/permissions.js'
 
 export default {
   components: {
@@ -136,14 +146,13 @@ export default {
         .get(backendURL + '/api/action-plans/' + this.idActionPlan, config)
         .then(response => {
           this.actionPlanFormat = response.data
+          this.structure = this.actionPlanFormat.structure
+          this.getFieldIndexes()
+          this.setDescription()
+          this.checkResponsible()
         })
         .catch(error => {
           console.log(error)
-        })
-        .then(() => {
-          this.structure = this.actionPlanFormat.structure
-          // this.getFieldIndexes()
-          // this.setDescription()
         })
     },
     saveActionPlan () {
@@ -154,7 +163,11 @@ export default {
       }
 
       axios
-        .put(backendURL + '/api/action-plans/' + this.idActionPlan, this.actionPlanFormat, config)
+        .put(
+          backendURL + '/api/action-plans/' + this.idActionPlan,
+          this.actionPlanFormat,
+          config
+        )
         .then(response => {
           console.log(response)
         })
@@ -169,16 +182,24 @@ export default {
             this.descriptionIndex.row = i
             this.descriptionIndex.column = j
           }
-
-          if (this.structure.rows[i][j].fieldType === 'reponsable') {
+          if (this.structure.rows[i][j].fieldType === 'responsible') {
             this.responsibleIndex.row = i
             this.responsibleIndex.column = j
           }
         }
       }
     },
+    checkResponsible () {
+      if (this.responsibleIndex.row > -1 && this.responsibleIndex.column > -1) {
+        this.responsible = this.structure.rows[this.responsibleIndex.row][this.responsibleIndex.column].value
+      } else {
+        this.responsible = []
+      }
+    },
     existDescription () {
-      return this.descriptionIndex.row > -1 && this.descriptionIndex.column > -1
+      return (
+        this.descriptionIndex.row > -1 && this.descriptionIndex.column > -1
+      )
     },
     setDescription () {
       if (this.existDescription()) {
@@ -192,14 +213,14 @@ export default {
         .get(backendURL + '/api/users/token/' + token, config)
         .then(response => {
           this.user = response.data
-          this.isUserAuthorized = this.verifyAuthorizedUser()
+          this.isUserAuthorized = isAdmin(this.user)
         })
         .catch(error => {
           console.log(error)
         })
     },
-    verifyAuthorizedUser () {
-      return this.user.role === 'Admin'
+    updateResponsibleList () {
+      this.responsible = this.structure.rows[this.responsibleIndex.row][this.responsibleIndex.column].value
     }
   }
 }
