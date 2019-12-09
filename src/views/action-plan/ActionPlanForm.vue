@@ -34,7 +34,7 @@
 
             <h4 v-if="column.fieldType === 'title'" class="text-center pb-5" :readonly="!isUserAuthorized">{{ column.name }}</h4>
 
-            <div v-if="column.fieldType === 'reponsable'">
+            <div v-if="column.fieldType === 'responsible'">
               <ReponsibleTable v-bind:responsibleData="column.value" v-bind:actualUser="user"/>
             </div>
 

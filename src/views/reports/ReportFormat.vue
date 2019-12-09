@@ -1,5 +1,8 @@
 <template>
   <v-container fill-height fluid grid-list-xl>
+
+    <EditReportFormat :showEditReportFormat="showEditReportFormat" @update-show-edit-report-format="setShowEditReportFormat"/>
+
     <v-row justify="center">
       <v-col cols="12">
         <material-card
@@ -8,6 +11,7 @@
           buttonActivated
           buttonColor="teal lighten-1"
           reportFormatActionsActivated
+          @update-report-format-list="listReportFormats"
         >
           <v-card-title class="mb-5">
             <v-spacer></v-spacer>
@@ -38,8 +42,6 @@
                   <v-text-field
                     solo
                     v-model="item.title"
-                    @click="activateSaveButton()"
-                    @keyup.tab="activateSaveButton()"
                   ></v-text-field>
 
                   <v-row no-gutters>
@@ -74,8 +76,6 @@
                               class="text-field"
                               :value="subtitle"
                               color="teal lighten-3"
-                              @click="activateSaveButton()"
-                              @keyup.tab="activateSaveButton()"
                             ></v-text-field>
                           </v-col>
                           <v-col :cols="2" class="d-flex flex-row-reverse">
@@ -117,8 +117,17 @@
                 <v-icon>mdi-clipboard-text-outline</v-icon>
               </v-btn>
             </template>
-            <template v-slot:item.update="{ item }" @click="openEditReportFormat(item)">
-              <EditReportFormat />
+            <template v-slot:item.update="{ item }">
+              <v-btn
+                x-small
+                text
+                icon
+                color="blue-grey lighten-1"
+                @click="openEditReportFormat(item)"
+                class="mr-1"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
             </template>
             <template v-slot:item.delete="{ item }">
               <v-btn
@@ -145,10 +154,9 @@
 <script>
 import draggable from 'vuedraggable'
 import axios from 'axios'
-
 import { backendURL } from '@/data.js'
-
 import EditReportFormat from './EditReportFormat'
+import { EventBus } from '../../main'
 
 export default {
   components: {
@@ -243,7 +251,7 @@ export default {
         })
     },
     deleteReportFormat (item) {
-      var ans = confirm('¿Esta seguro que desea eliminar el reporte?')
+      var ans = confirm('¿Esta seguro que desea eliminar el formato de informe?')
 
       if (ans) {
         var config = {
@@ -279,11 +287,6 @@ export default {
         .indexOf(idReportFormat)
       this.items[index].subtitles.splice(indexSubtitle, 1)
     },
-    activateSaveButton () {
-      if (!this.saveButtonActivated) {
-        this.saveButtonActivated = true
-      }
-    },
     disableSaveButton () {
       this.saveButtonActivated = false
     },
@@ -294,7 +297,10 @@ export default {
     },
     openEditReportFormat (item) {
       this.showEditReportFormat = true
-      // this.$emit('editReportInfo', item)
+      EventBus.$emit('edit-report-info', item)
+    },
+    setShowEditReportFormat () {
+      this.showEditReportFormat = false
     }
   }
 }
