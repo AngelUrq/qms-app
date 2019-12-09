@@ -1,38 +1,33 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">Registro de formato de reporte</span>
+      <span class="headline">Registro de formato de informe</span>
     </v-card-title>
     <v-card-text>
       <v-container>
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              label="Nombre"
-              v-model="reportFormat.name"
-              prepend-icon="mdi-clipboard-text"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field label="Versión" v-model="reportFormat.version" required></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field label="Título" v-model="reportFormat.title" required></v-text-field>
-          </v-col>
-          <v-row class="pa-3" no-gutters>
-            <h3>Subtítulos:</h3>
-            <v-text-field solo v-model="newSubtitle" class="ml-3 mr-3"></v-text-field>
-            <v-btn fab dark color="green" @click="addSubtitle()">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-row>
+        <v-text-field
+          label="Nombre"
+          color="teal darken-2"
+          v-model="reportFormat.name"
+          prepend-icon="mdi-clipboard-text"
+          required
+        ></v-text-field>
+        <v-text-field label="Versión" color="teal darken-2" v-model="reportFormat.version" required></v-text-field>
+        <v-text-field label="Título" color="teal darken-2" v-model="reportFormat.title" required></v-text-field>
+        <v-row class="pa-3" no-gutters>
+          <h3>Subtítulos:</h3>
+          <v-text-field solo v-model="newSubtitle" class="ml-3 mr-3"></v-text-field>
+          <v-btn fab small dark color="red lighten-2" @click="addSubtitle()">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </v-row>
+
         <v-row class="ml-3" v-for="(subtitle, i) in reportFormat.subtitles" :key="i">
+          <v-spacer></v-spacer>
           <v-text-field solo class="mr-3" :value="subtitle"></v-text-field>
           <v-btn
             class="mr-5"
-            small
+            large
             text
             icon
             color="blue-grey lighten-1"
@@ -40,12 +35,13 @@
           >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
+           <v-spacer></v-spacer>
         </v-row>
       </v-container>
     </v-card-text>
     <v-card-actions>
       <v-row class="pa-3" justify="end" no-gutters>
-        <v-btn color="blue darken-1" @click="register()" text>Registrar</v-btn>
+        <v-btn color="teal darken-2" @click="register()" text>Registrar</v-btn>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -78,23 +74,23 @@ export default {
         var newReportFormat = {
           name: this.reportFormat.name,
           version: this.reportFormat.version,
-          creationDate: new Date(Date.now()).toLocaleString(),
-          lastModificationDate: new Date(Date.now()).toLocaleString(),
+          creationDate: new Date(Date.now()),
+          lastModificationDate: new Date(Date.now()),
           title: this.reportFormat.title,
           subtitles: this.reportFormat.subtitles
         }
         axios
           .post(backendURL + '/api/report-format', newReportFormat, config)
           .then(response => {
-            console.log(response)
+            this.clearFields()
           })
           .catch(e => {
             console.log('An exception has occurred: ' + e)
           })
 
-        this.clearFields()
+        this.$emit('update-report-format-list')
       } else {
-        alert('Por favor asegurese de completar correctamente los campos')
+        alert('Por favor asegurese de completar correctamente los campos.')
       }
     },
     addSubtitle () {
@@ -107,10 +103,13 @@ export default {
     },
     deleteSubtitle (index) {
       this.reportFormat.subtitles.splice(index, 1)
-      console.log(this.reportFormat.subtitles)
     },
     isFormCompleted () {
-      return this.reportFormat.name !== '' && this.reportFormat.version !== '' && this.reportFormat.title !== ''
+      return (
+        this.reportFormat.name !== '' &&
+        this.reportFormat.version !== '' &&
+        this.reportFormat.title !== ''
+      )
     },
     clearFields () {
       this.reportFormat.name = ''
