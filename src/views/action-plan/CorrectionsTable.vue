@@ -5,10 +5,13 @@
     </v-card>
     <v-row>
       <v-col v-for="(header, i) in correctionHeaders" :key="i">
-        <h4>{{ header.name }}</h4>
+        <h4>{{ header }}</h4>
       </v-col>
+      <div class="mr-5 mt-3">
+        <b>Opciones</b>
+      </div>
     </v-row>
-    <v-row v-for="(correction, index) in correctionsData" :key="index">
+    <v-row v-for="(activity, index) in correctionsData" :key="index">
       <v-col>
         <v-textarea
           auto-grow
@@ -18,6 +21,7 @@
           label="Actividad"
           outlined
           single-line
+          v-model="activity.name"
           :readonly="!isUserAdmin()"
         ></v-textarea>
       </v-col>
@@ -26,7 +30,7 @@
           <v-combobox
             color="blue darken-3"
             item-color="blue"
-            v-model="correction.responsable"
+            v-model="activity.responsable"
             :items="items"
             label="Responsable"
             :autocomplete="false"
@@ -41,10 +45,11 @@
           rows="1"
           color="blue darken-3"
           class="mt-3"
-          label="VoBo responsable"
+          label="Descripcion"
           outlined
           single-line
-          :readonly="!verifyAuthorizedUser(correction.responsable)"
+          v-model="activity.description"
+          :readonly="!verifyAuthorizedUser(activity.responsable)"
         ></v-textarea>
       </v-col>
       <v-col>
@@ -54,23 +59,24 @@
           offset-y
           max-width="290px"
           min-width="290px"
-
         >
           <template v-slot:activator="{ on }">
             <v-text-field
-              v-model="correction.proposedDate"
+              v-model="activity.proposedDate"
               placeholder="YY/mm/dd"
               prepend-icon="mdi-calendar"
+              :autocomplete="false"
               v-on="on"
             ></v-text-field>
           </template>
           <v-date-picker
-            v-model="correction.proposedDate"
+            v-model="activity.proposedDate"
             color="light-blue darken-4"
             locale="es-419"
             min="2017/01"
             no-title
-            :disabled="!verifyAuthorizedUser(correction.responsable)"
+            :disabled="!verifyAuthorizedUser(activity.responsable)"
+            :autocomplete="false"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -85,19 +91,21 @@
         >
           <template v-slot:activator="{ on }">
             <v-text-field
-              v-model="correction.realDate"
+              v-model="activity.realDate"
               placeholder="YY/mm/dd"
               prepend-icon="mdi-calendar"
+              :autocomplete="false"
               v-on="on"
             ></v-text-field>
           </template>
           <v-date-picker
-            v-model="correction.realDate"
+            v-model="activity.realDate"
             color="light-blue darken-4"
             locale="es-419"
+            :autocomplete="false"
             min="2017/01"
             no-title
-            :disabled="!verifyAuthorizedUser(correction.responsable)"
+            :disabled="!verifyAuthorizedUser(activity.responsable)"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -124,6 +132,16 @@
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
+
+      <v-btn
+        class="mt-4 mr-2 white--text"
+        @click="getAttachmentRoute(activity)"
+        color="light-blue darken-2"
+        fab
+        small
+      >
+        <v-icon dark>mdi-paperclip</v-icon>
+      </v-btn>
     </v-row>
   </v-container>
 </template>
@@ -132,6 +150,7 @@
 import verifyLastRow from '@/utils/rows.js'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
+import { generateId, isActivityFieldsCompleted } from '@/utils/activity.js'
 
 export default {
   props: {
@@ -157,42 +176,36 @@ export default {
   data () {
     return {
       correctionHeaders: [
-        {
-          name: 'Actividad'
-        },
-        {
-          name: 'Responsable'
-        },
-        {
-          name: 'VoBo responsable'
-        },
-        {
-          name: 'Fecha propuesta'
-        },
-        {
-          name: 'Fecha real'
-        }
+        'Actividad',
+        'Responsable',
+        'Descripción',
+        'Fecha propuesta',
+        'Fecha real'
       ],
       verifyLastRow: verifyLastRow,
       users: [],
-      items: []
+      items: [],
+      attachmentRoute: '',
+      actionPlanID: ''
     }
   },
   mounted () {
     this.getUsers()
     this.checkCorrectionsData()
+    this.actionPlanID = this.$route.query.id
   },
   methods: {
     addCorrection () {
-      let correction = {
+      let activity = {
+        id: generateId(),
         name: '',
         responsable: '',
-        voBo: '',
+        description: '',
         proposedDate: '',
         realDate: ''
       }
 
-      this.correctionsData.push(correction)
+      this.correctionsData.push(activity)
     },
     removeCorrection (index) {
       this.correctionsData.splice(index, 1)
@@ -204,12 +217,10 @@ export default {
         .get(backendURL + '/api/users', config)
         .then(response => {
           this.users = response.data
+          this.formatUsers()
         })
         .catch(error => {
           console.log(error)
-        })
-        .then(() => {
-          this.formatUsers()
         })
     },
     formatUsers () {
@@ -219,12 +230,10 @@ export default {
           user.paternalLastName,
           user.maternalLastName
         )
-        if (fullname !== '  ') {
-          this.items.push({
-            text: fullname,
-            value: user._id
-          })
-        }
+        this.items.push({
+          text: fullname,
+          value: user._id
+        })
       })
     },
     getNameWithFormat (name, paternalLastName, maternalLastName) {
@@ -239,11 +248,29 @@ export default {
       return this.actualUser.role === 'Admin'
     },
     isGeneralResponsable () {
-      let responsable = this.responsible.find(r => r.name.value === this.actualUser._id)
+      let responsable = this.responsible.find(
+        r => r.name.value === this.actualUser._id
+      )
       return responsable !== undefined
     },
     verifyAuthorizedUser (responsable) {
-      return this.isUserAdmin() || this.isGeneralResponsable() || responsable.value === this.actualUser._id
+      return (
+        this.isUserAdmin() ||
+        this.isGeneralResponsable() ||
+        responsable.value === this.actualUser._id
+      )
+    },
+    getAttachmentRoute (activity) {
+      if (isActivityFieldsCompleted(activity)) {
+        this.attachmentRoute = '/attachments?userID=' + activity.responsable.value +
+                              '&actionPlanID=' + this.actionPlanID +
+                              '&activityID=' + activity.id
+
+        this.$emit('save-action-plan')
+        this.$router.push(this.attachmentRoute)
+      } else {
+        this.attachmentRoute = ''
+      }
     }
   }
 }
