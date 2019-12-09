@@ -179,9 +179,11 @@
 <script>
 import draggable from 'vuedraggable'
 import axios from 'axios'
-import { backendURL } from '@/data.js'
 import EditReportFormat from './EditReportFormat'
+
+import { backendURL } from '@/data.js'
 import { EventBus } from '../../main'
+import { changeDateFormat } from '@/utils/date'
 
 export default {
   components: {
@@ -263,7 +265,13 @@ export default {
       axios
         .get(backendURL + '/api/report-format', config)
         .then(response => {
-          this.items = response.data
+          this.items = []
+          for (let item of response.data) {
+            item.creationDate = changeDateFormat(item.creationDate)
+            item.lastModificationDate = changeDateFormat(item.lastModificationDate)
+
+            this.items.push(item)
+          }
         })
         .catch(e => {
           console.log('An exception has occurred: ' + e)
@@ -290,7 +298,7 @@ export default {
     },
     deleteReportFormat (item) {
       let ans = confirm(
-        '¿Esta seguro que desea eliminar el formato de informe?'
+        '¿Está seguro que desea eliminar el formato de informe?'
       )
 
       if (ans) {
