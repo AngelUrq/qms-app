@@ -68,6 +68,7 @@
 import axios from 'axios'
 
 import { backendURL } from '@/data'
+import { changeDateFormat } from '@/utils/date'
 
 export default {
   data: function () {
@@ -105,13 +106,22 @@ export default {
     }
   },
   mounted: function () {
-    let config = { headers: { 'x-access-token': this.$store.state.token } }
-
-    axios.get(backendURL + '/api/reports', config).then(response => {
-      this.reports = response.data
-    })
+    this.loadReports()
   },
   methods: {
+    loadReports: function () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      axios.get(backendURL + '/api/reports', config).then(response => {
+        this.reports = []
+        for (let item of response.data) {
+          item.creationDate = changeDateFormat(item.creationDate)
+          item.lastModificationDate = changeDateFormat(item.lastModificationDate)
+
+          this.reports.push(item)
+        }
+      })
+    },
     loadReport: function (report) {
       this.$router.push({
         name: 'Editor de informes',
@@ -127,9 +137,7 @@ export default {
         }
       })
 
-      axios.get(backendURL + '/api/reports', config).then(response => {
-        this.reports = response.data
-      })
+      this.loadReports()
     }
   }
 }

@@ -22,7 +22,7 @@
           outlined
           single-line
           v-model="activity.name"
-          :readonly="!isUserAdmin()"
+          :readonly="!isAdminOrGeneralResponsable()"
         ></v-textarea>
       </v-col>
       <v-col>
@@ -35,7 +35,7 @@
             label="Responsable"
             :autocomplete="false"
             dense
-            :readonly="!isUserAdmin()"
+            :readonly="!isAdminOrGeneralResponsable()"
           ></v-combobox>
         </v-col>
       </v-col>
@@ -117,7 +117,7 @@
         small
         color="light-blue darken-2"
         @click="removeCorrection(index)"
-        :disabled="!isUserAdmin()"
+        :disabled="!isAdminOrGeneralResponsable()"
       >
         <v-icon dark>mdi-minus</v-icon>
       </v-btn>
@@ -128,7 +128,7 @@
         small
         color="light-blue darken-2"
         @click="addCorrection"
-        :disabled="!isUserAdmin()"
+        :disabled="!isAdminOrGeneralResponsable()"
       >
         <v-icon dark>mdi-plus</v-icon>
       </v-btn>
@@ -136,6 +136,7 @@
       <v-btn
         class="mt-4 mr-2 white--text"
         @click="getAttachmentRoute(activity)"
+        :disabled="!verifyAuthorizedUser(activity.responsable)"
         color="light-blue darken-2"
         fab
         small
@@ -151,6 +152,7 @@ import verifyLastRow from '@/utils/rows.js'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 import { generateId, isActivityFieldsCompleted } from '@/utils/activity.js'
+import { isAdmin, isGeneralResponsable } from '@/utils/permissions.js'
 
 export default {
   props: {
@@ -244,25 +246,15 @@ export default {
         this.addCorrection()
       }
     },
-    isUserAdmin () {
-      return this.actualUser.role === 'Admin'
+    isAdminOrGeneralResponsable () {
+      return isAdmin(this.actualUser) || isGeneralResponsable(this.responsible, this.actualUser)
     },
-    isGeneralResponsable () {
-      let responsable = this.responsible.find(
-        r => r.name.value === this.actualUser._id
-      )
-      return responsable !== undefined
-    },
-    verifyAuthorizedUser (responsable) {
-      return (
-        this.isUserAdmin() ||
-        this.isGeneralResponsable() ||
-        responsable.value === this.actualUser._id
-      )
+    verifyAuthorizedUser (responsableActivity) {
+      return this.isAdminOrGeneralResponsable() || responsableActivity.value === this.actualUser._id
     },
     getAttachmentRoute (activity) {
       if (isActivityFieldsCompleted(activity)) {
-        this.attachmentRoute = '/attachments?userID=' + activity.responsable.value +
+        this.attachmentRoute = '/attachments?userID=' + this.actualUser.value +
                               '&actionPlanID=' + this.actionPlanID +
                               '&activityID=' + activity.id
 
