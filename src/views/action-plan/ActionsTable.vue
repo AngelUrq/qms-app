@@ -201,7 +201,8 @@ export default {
         responsable: '',
         description: '',
         proposedDate: '',
-        realDate: ''
+        realDate: '',
+        eventCreated: false
       }
 
       this.actionsData.push(activity)
