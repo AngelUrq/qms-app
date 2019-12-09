@@ -204,7 +204,8 @@ export default {
         responsable: '',
         description: '',
         proposedDate: '',
-        realDate: ''
+        realDate: '',
+        eventCreated: false
       }
 
       this.correctionsData.push(activity)
@@ -263,6 +264,9 @@ export default {
       } else {
         this.attachmentRoute = ''
       }
+    },
+    createEvent () {
+      console.log('llegue')
     }
   }
 }

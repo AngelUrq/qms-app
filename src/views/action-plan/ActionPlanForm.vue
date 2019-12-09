@@ -1,5 +1,10 @@
 <template>
   <v-container class="pa-12">
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ textMessage }}
+      <v-btn color="green" text @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
+
     <v-card class="pa-7">
       <header>
         <v-row class="mb-5">
@@ -80,6 +85,13 @@
       </v-btn>
 
       <v-btn x-large color="light-green darken-3" width="20%" class="white--text mr-5">FINALIZAR</v-btn>
+      <v-btn
+        x-large
+        color="pink darken-3"
+        width="20%"
+        class="white--text mr-5"
+        @click="createEvent()"
+      >Google calendar</v-btn>
     </v-card-actions>
   </v-container>
 </template>
@@ -106,6 +118,9 @@ export default {
       actionPlanFormat: {},
       structure: {},
       responsible: [],
+      textMessage: '',
+      snackbar: false,
+      timeout: 1200,
       descriptionIndex: {
         row: -1,
         column: -1
@@ -170,6 +185,8 @@ export default {
         )
         .then(response => {
           console.log(response)
+          this.snackbar = true
+          this.textMessage = 'Se ha guardado correctamente el plan de acción'
         })
         .catch(error => {
           console.log(error)
@@ -221,6 +238,67 @@ export default {
     },
     updateResponsibleList () {
       this.responsible = this.structure.rows[this.responsibleIndex.row][this.responsibleIndex.column].value
+    },
+    createEvent () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+
+      this.structure.rows.forEach(row => {
+        row.forEach(column => {
+          if (
+            column.fieldType === 'corrections' ||
+            column.fieldType === 'actions'
+          ) {
+            column.value.forEach(activity => {
+              if (
+                this.isActivityInformationCompleted(activity) &&
+                !activity.eventCreated
+              ) {
+                axios
+                  .get(
+                    backendURL + '/api/users/' + activity.responsable.value,
+                    config
+                  )
+                  .then(response => {
+                    const event = {
+                      summary: activity.name,
+                      description: '',
+                      startDate: new Date(Date.now()),
+                      endDate: activity.proposedDate,
+                      location: 'Bolivia',
+                      attendees: [{ email: response.data.email }]
+                    }
+
+                    axios
+                      .post(
+                        backendURL + '/api/calendar-events/add-event',
+                        event,
+                        config
+                      )
+                      .then(response => {
+                        activity.eventCreated = true
+                        this.snackbar = true
+                        this.textMessage = 'Se han notificado correctamente a los usuarios'
+                        console.log(response)
+                      })
+                      .catch(error => {
+                        console.log(error)
+                      })
+                  })
+                  .catch(error => {
+                    console.log(error)
+                  })
+              }
+            })
+          }
+        })
+      })
+    },
+    isActivityInformationCompleted (activity) {
+      return (
+        activity.name !== '' &&
+        activity.responsable !== '' &&
+        activity.proposedDate !== ''
+      )
     }
   }
 }
