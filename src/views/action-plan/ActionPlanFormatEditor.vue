@@ -165,7 +165,7 @@ export default {
           this.actionPlanFormat.structure.rows[rowId].push({
             id: this.getIdCol(),
             name: 'Observación',
-            fieldType: 'responsable',
+            fieldType: 'responsible',
             type: 'Table3Rows',
             value: []
           })
@@ -194,7 +194,7 @@ export default {
           this.actionPlanFormat.structure.rows[rowId].push({
             id: this.getIdCol(),
             name: 'Observación',
-            fieldType: 'activities',
+            fieldType: 'actions',
             type: 'Table5Rows',
             mainTitle: 'Acciones para eliminar la causa raiz',
             value: []
