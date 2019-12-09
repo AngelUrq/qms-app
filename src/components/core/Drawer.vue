@@ -51,6 +51,12 @@
           <v-list-item-title v-text="item.text" />
         </v-list-item>
       </div>
+      <v-list-item @click="logout" active-class="green darken-2 white--text">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-title v-text="'Cerrar sesión'"/>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -87,7 +93,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
+    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
+    logout: function () {
+      localStorage.clear()
+      this.$router.push('/login')
+    }
   },
   mounted () {
     const role = this.$store.getters.role

@@ -84,12 +84,6 @@ export const adminView = {
       icon: 'mdi-account-group',
       containsSubitems: false,
       text: 'Gestor de usuarios'
-    },
-    {
-      to: '/',
-      icon: 'mdi-logout',
-      containsSubitems: false,
-      text: 'Cerrar sesión'
     }
   ]
 }
