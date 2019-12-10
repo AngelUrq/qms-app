@@ -173,6 +173,7 @@ export default {
         .delete(backendURL + '/api/users/' + user._id, config)
         .then(response => {
           this.getUsers()
+          this.ConfirmDialog = false
         })
         .catch(error => {
           console.log(error)

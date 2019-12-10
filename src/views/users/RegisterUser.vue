@@ -179,6 +179,21 @@ export default {
           console.log(error)
         })
     },
+    sendNotification () {
+      let newNotification = {
+        email: this.user.email,
+        type: 'Success',
+        message: 'Bienvenido a tu nueva cuenta, ' + this.user.firstName + '!'
+      }
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      axios.post(backendURL + '/api/notifications/add', newNotification, config)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
 
     registerUserAPI () {
       let newUser = {
@@ -208,6 +223,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.registerUserAPI()
         this.sendMailNotification()
+        this.sendNotification()
         this.clearFields()
         this.successAlert = true
         setTimeout(() => {
