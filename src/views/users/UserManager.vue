@@ -63,18 +63,20 @@
         <v-pagination color="pink lighten-2" v-model="page" :length="pageCount"></v-pagination>
       </div>
     </material-card>
+    <ChangePassword />
   </v-container>
 </template>
 
 <script>
 import { EventBus } from '../../main'
 import RegisterUser from './RegisterUser'
+import ChangePassword from './ChangePassword'
 import EditUser from './EditUser'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 
 export default {
-  components: { RegisterUser, EditUser },
+  components: { RegisterUser, EditUser, ChangePassword },
   data () {
     return {
       showEditUser: false,

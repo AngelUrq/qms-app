@@ -39,6 +39,10 @@
             :value="alert.error"
             transition="scale-transition"
           >{{ alert.message }}</v-alert>
+              <v-card-text>
+                Olvidaste tu contraseña? Haz click en
+                <ChangePassword />
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
@@ -54,10 +58,12 @@
 
 <script>
 import axios from 'axios'
+import ChangePassword from './ChangePassword'
 
 import { backendURL, production } from '@/data.js'
 
 export default {
+  components: { ChangePassword },
   data () {
     return {
       User: {
