@@ -9,7 +9,6 @@
   >
     <v-toolbar-title class="tertiary--text font-weight-light align-self-center">
       <v-btn
-        v-if="responsive"
         dark
         icon
         @click.stop="onClick"
@@ -41,13 +40,12 @@
           offset-y
           transition="slide-y-transition"
         >
-          <template v-slot:activator="{ attrs, on }">
+          <template v-slot:activator="{ on }">
             <v-btn
               class="toolbar-items"
               icon
-              to="/notifications"
-              v-bind="attrs"
               v-on="on"
+              @click="getUserNotifications"
             >
               <v-badge
                 color="error"
@@ -67,10 +65,10 @@
             <v-list dense>
               <v-list-item
                 v-for="notification in notifications"
-                :key="notification"
-                @click="onClick"
+                :key="notification.message"
+                @click="deleteNotification(notification)"
               >
-                <v-list-item-title v-text="notification" />
+                <v-list-item-title v-text="notification.message" />
               </v-list-item>
             </v-list>
           </v-card>
@@ -90,24 +88,18 @@
 </template>
 
 <script>
-// Utilities
-import {
-  mapMutations
-} from 'vuex'
+import axios from 'axios'
+import { backendURL } from '@/data.js'
 
 export default {
-  data: () => ({
-    notifications: [
-      'Mike, John responded to your email',
-      'You have 5 new tasks',
-      'You\'re now a friend with Andrew',
-      'Another Notification',
-      'Another One'
-    ],
-    title: null,
-    responsive: false
-  }),
-
+  data () {
+    return {
+      email: '',
+      user: [],
+      notifications: [],
+      title: null
+    }
+  },
   watch: {
     '$route' (val) {
       this.title = val.name
@@ -115,24 +107,41 @@ export default {
   },
 
   mounted () {
-    this.onResponsiveInverted()
-    window.addEventListener('resize', this.onResponsiveInverted)
+    this.getUserNotifications()
   },
-  beforeDestroy () {
-    window.removeEventListener('resize', this.onResponsiveInverted)
-  },
-
   methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
-    onClick () {
-      this.setDrawer(!this.$store.state.app.drawer)
+    getUserNotifications () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      axios
+        .get(backendURL + '/api/users/token/' + this.$store.state.token, config)
+        .then(response => {
+          this.user = response.data
+          this.email = this.user.email
+          this.getNotifications()
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
-    onResponsiveInverted () {
-      if (window.innerWidth < 991) {
-        this.responsive = true
-      } else {
-        this.responsive = false
-      }
+    getNotifications () {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      axios.get(backendURL + '/api/notifications/' + this.email, config)
+        .then(response => {
+          this.notifications = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    deleteNotification (notif) {
+      let config = { headers: { 'x-access-token': this.$store.state.token } }
+      axios.delete(backendURL + '/api/notifications/' + notif._id, config)
+        .then(response => {
+          this.getUserNotifications()
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
