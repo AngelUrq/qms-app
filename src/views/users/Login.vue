@@ -6,7 +6,7 @@
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-toolbar dark color="indigo darken-4">
-                <v-toolbar-title>Inicio de sesión</v-toolbar-title>
+                <v-toolbar-title>Inicio de sesión - QMS APP</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -40,7 +40,7 @@
             transition="scale-transition"
           >{{ alert.message }}</v-alert>
               <v-card-text>
-                Olvidaste tu contraseña? Haz click en
+                ¿Olvidaste tu contraseña? Presiona
                 <ChangePassword />
               </v-card-text>
             </v-card>
@@ -50,7 +50,7 @@
     </section>
     <div class="fullscreen-bg" v-if="production">
       <video id="mi-video" loop autoplay muted class="fullscreen">
-        <source src="../../assets/upb-video.mp4" type="video/mp4" />
+        <source src="https://firebasestorage.googleapis.com/v0/b/qms-db.appspot.com/o/upb-video.mp4?alt=media&token=0c26a48a-b8a8-45c2-971c-2b60cb92cb35" type="video/mp4" />
       </video>
     </div>
   </div>

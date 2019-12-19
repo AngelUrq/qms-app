@@ -23,7 +23,7 @@
                 <v-select
                   :items="['Admin', 'Usuario']"
                   label="Rol*"
-                  :rules="[v => !!v || 'Se debe escojer un Rol']"
+                  :rules="[v => !!v || 'Se debe escojer un rol']"
                   required
                   color="blue"
                   v-model="user.role"
@@ -117,6 +117,7 @@ import { backendURL } from '@/data.js'
 export default {
   data () {
     return {
+      backendURL: '',
       dialogRegister: '',
       valuePass: String,
       warningAlert: false,
@@ -126,16 +127,16 @@ export default {
         v => /.+@.+\..+/.test(v) || 'Correo debe ser valido'
       ],
       phoneRules: [
-        v => !!v || 'Numero Celular/Telefono es necesario',
-        v => /^\d+$/.test(v) || 'Numero debe ser valido'
+        v => !!v || 'Número celular/Teléfono es necesario',
+        v => /^\d+$/.test(v) || 'Nñumero debe ser valido'
       ],
       codeRules: [
         v => !!v || 'Codigo es necesario',
-        v => /^\d+$/.test(v) || 'Codigo debe ser valido'
+        v => /^\d+$/.test(v) || 'Código debe ser valido'
       ],
       passwordRules: [
-        v => !!v || 'Contraseña es necesario',
-        v => v.length >= 5 || 'Contraseña debe ser mas de 5 caracteres'
+        v => !!v || 'Contraseña es necesaria',
+        v => v.length >= 5 || 'Contraseña debe ser más de 5 caracteres'
 
       ],
       user: {
@@ -153,18 +154,21 @@ export default {
       }
     }
   },
+  mounted: function () {
+    this.backendURL = backendURL
+  },
   methods: {
     sendMailNotification () {
       const htmlBody = `
         <p>¡Hola ${this.user.firstName}!</p>
         <p>Tu nueva cuenta ha sido creada.</p>
         <h3>¡Ingresa ahora!</h3>
-        <p>Entra al siguiente enlace http://localhost:8080/login e inicia sesión. </p>
+        <p>Entra al siguiente enlace ${this.backendURL} e inicia sesión. </p>
       `
       let newMail = {
         from: '<UPBgestiondecalidad@gmail.com>',
         to: this.user.email,
-        subject: 'UPB Gestion de Calidad: Nuevo usuario',
+        subject: 'UPB Gestión de calidad: Nuevo usuario',
         text: '',
         html: htmlBody
       }
