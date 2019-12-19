@@ -51,6 +51,12 @@
           <v-list-item-title v-text="item.text" />
         </v-list-item>
       </div>
+      <v-list-item @click="help" active-class="green darken-2 white--text">
+        <v-list-item-action>
+          <v-icon>mdi-help-circle-outline</v-icon>
+        </v-list-item-action>
+        <v-list-item-title v-text="'Ayuda'"/>
+      </v-list-item>
       <v-list-item @click="logout" active-class="green darken-2 white--text">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
@@ -97,6 +103,9 @@ export default {
     logout: function () {
       localStorage.clear()
       this.$router.push('/login')
+    },
+    help: function () {
+      window.open('https://gitlab.com/AngelUrq/qms-app/-/wikis/home', '_blank')
     }
   },
   mounted () {
