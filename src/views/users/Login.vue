@@ -14,7 +14,7 @@
                     prepend-icon="mdi-account-circle"
                     name="login"
                     label="Usuario"
-                    id="login"
+                    id="username"
                     type="text"
                     color="amber accent-4"
                     v-model="User.emailOrCode"
@@ -31,14 +31,14 @@
                 </v-form>
               </v-card-text>
               <v-card-actions class="justify-center">
-                <v-btn class="mb-3" dark color="indigo darken-1" @click="loginUser">Ingresar</v-btn>
+                <v-btn id="login-button" class="mb-3" dark color="indigo darken-1" @click="loginUser">Ingresar</v-btn>
               </v-card-actions>
               <v-alert
-            type="error"
-            border="top"
-            :value="alert.error"
-            transition="scale-transition"
-          >{{ alert.message }}</v-alert>
+                type="error"
+                border="top"
+                :value="alert.error"
+                transition="scale-transition"
+              >{{ alert.message }}</v-alert>
               <v-card-text>
                 ¿Olvidaste tu contraseña? Presiona
                 <ChangePassword />
