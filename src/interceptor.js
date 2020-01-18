@@ -32,7 +32,6 @@ export default {
       if (authToken) {
         config.headers.Authorization = `Bearer ${authToken}`
       } else {
-        console.log('no tiene token')
         window.location.href = data.login.URL
       }
       return config

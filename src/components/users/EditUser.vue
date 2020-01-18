@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { EventBus } from '../../main'
+import { EventBus } from '@/main'
 import { backendURL } from '@/data.js'
 
 import axios from 'axios'

@@ -69,9 +69,9 @@
 
 <script>
 import { EventBus } from '../../main'
-import RegisterUser from './RegisterUser'
+import RegisterUser from '@/components/users/RegisterUser'
 import ChangePassword from './ChangePassword'
-import EditUser from './EditUser'
+import EditUser from '@/components/users/EditUser'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 
