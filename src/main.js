@@ -6,9 +6,12 @@ import './plugins'
 import vuetify from './plugins/vuetify'
 import { sync } from 'vuex-router-sync'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-import { defaultRoute, dashboardRoute, loginRoute } from './data'
+import interceptor from './interceptor'
 
-const loginVerification = require('../src/utils/isLogged')
+interceptor.init()
+// import { defaultRoute, dashboardRoute, loginRoute } from './data'
+
+// const loginVerification = require('../src/utils/isLogged')
 
 Vue.use(CKEditor)
 
@@ -18,7 +21,7 @@ export const EventBus = new Vue()
 
 Vue.config.productionTip = false
 
-router.beforeEach(async (to, from, next) => {
+/* router.beforeEach(async (to, from, next) => {
   var isAllowed = await loginVerification.isLogged()
   if (isAllowed === undefined) {
     isAllowed = false
@@ -35,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
       next(loginRoute)
     }
   }
-})
+}) */
 
 new Vue({
   router,
