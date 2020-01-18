@@ -47,10 +47,11 @@
 </template>
 
 <script>
-import RegisterReportFormat from '../../views/reports/RegisterReportFormat'
-import NonconformityEditor from '../../views/reports/nonconformities/NonconformityEditor'
-import RegisterActionPlanFormat from '@/views/action-plan/RegisterActionPlanFormat'
-import RegisterActionPlan from '@/views/action-plan/RegisterActionPlan'
+import RegisterReportFormat from '@/components/reports/format/RegisterReportFormat'
+import NonconformityEditor from '@/views/reports/nonconformities/NonconformityEditor'
+import RegisterActionPlanFormat from '@/components/action-plan/manager/RegisterActionPlanFormat'
+import RegisterActionPlan from '@/components/action-plan/manager/RegisterActionPlan'
+
 export default {
   name: 'MaterialCard',
   components: {

@@ -86,14 +86,14 @@
 </template>
 
 <script>
-import { EventBus } from '../../main'
+import { EventBus } from '../../../main'
 
 import axios from 'axios'
 
 import { backendURL } from '@/data'
 import { changeDateFormat } from '@/utils/date'
 
-import EditActionPlanFormat from './EditActionPlanFormatForm'
+import EditActionPlanFormat from '@/components/action-plan/manager/EditActionPlanFormatForm'
 
 export default {
   components: {

@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { EventBus } from '../../main'
+import { EventBus } from '../../../main'
 
 import axios from 'axios'
 
@@ -101,7 +101,7 @@ import { backendURL } from '@/data'
 import { WordParser } from '@/utils/wordParser'
 import { changeDateFormat } from '@/utils/date'
 
-import EditActionPlan from './EditActionPlanForm'
+import EditActionPlan from '@/components/action-plan/manager/EditActionPlanForm'
 
 export default {
   components: {

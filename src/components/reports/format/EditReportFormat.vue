@@ -29,7 +29,7 @@
 <script>
 import axios from 'axios'
 import { backendURL } from '@/data.js'
-import { EventBus } from '../../main'
+import { EventBus } from '../../../main'
 
 export default {
   props: {

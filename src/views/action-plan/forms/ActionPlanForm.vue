@@ -97,9 +97,9 @@
 </template>
 
 <script>
-import ReponsibleTable from './ResponsibleTable'
-import CorrectionTable from './CorrectionsTable'
-import ActionsTable from './ActionsTable'
+import ReponsibleTable from '@/components/action-plan/forms/ResponsibleTable'
+import CorrectionTable from '@/components/action-plan/forms/CorrectionsTable'
+import ActionsTable from '@/components/action-plan/forms/ActionsTable'
 import axios from 'axios'
 import { backendURL } from '@/data.js'
 import { isAdmin } from '@/utils/permissions.js'

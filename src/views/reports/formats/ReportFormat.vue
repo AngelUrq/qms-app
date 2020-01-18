@@ -179,10 +179,10 @@
 <script>
 import draggable from 'vuedraggable'
 import axios from 'axios'
-import EditReportFormat from './EditReportFormat'
+import EditReportFormat from '@/components/reports/format/EditReportFormat'
 
 import { backendURL } from '@/data.js'
-import { EventBus } from '../../main'
+import { EventBus } from '../../../main'
 import { changeDateFormat } from '@/utils/date'
 
 export default {

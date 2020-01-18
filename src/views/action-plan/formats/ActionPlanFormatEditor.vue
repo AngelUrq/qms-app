@@ -105,12 +105,12 @@
 </template>
 
 <script>
-import FormatOptions from './FormatOptions'
-import Table1Row from './Table1Rows'
-import SimpleRow from './SimpleRow'
-import Label from './Label'
-import Table5Rows from './Table5Rows'
-import Table3Rows from './Table3Rows'
+import FormatOptions from '@/components/action-plan/format-editor/FormatOptions'
+import Table1Row from '@/components/action-plan/format-editor/Table1Rows'
+import SimpleRow from '@/components/action-plan/format-editor/SimpleRow'
+import Label from '@/components/action-plan/format-editor/Label'
+import Table5Rows from '@/components/action-plan/format-editor/Table5Rows'
+import Table3Rows from '@/components/action-plan/format-editor/Table3Rows'
 import { backendURL } from '@/data.js'
 import axios from 'axios'
 

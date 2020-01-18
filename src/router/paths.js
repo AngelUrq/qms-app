@@ -7,7 +7,6 @@
 export default [
   {
     path: '/dashboard',
-    // Relative to /src/views
     view: 'Dashboard'
   },
   {
@@ -37,32 +36,32 @@ export default [
   {
     path: '/report-format',
     name: 'Formatos de informe',
-    view: 'reports/ReportFormat'
+    view: 'reports/formats/ReportFormat'
   },
   {
     path: '/report-editor',
     name: 'Editor de informes',
-    view: 'reports/ReportEditor'
+    view: 'reports/editor/ReportEditor'
   },
   {
     path: '/report-list',
     name: 'Lista de informes',
-    view: 'reports/ReportList'
+    view: 'reports/list/ReportList'
   },
   {
     path: '/action-plan-manager',
     name: 'Gestor de planes de acción',
-    view: 'action-plan/Manager'
+    view: 'action-plan/manager/Manager'
   },
   {
     path: '/action-plan-format-manager',
     name: 'Gestor de formatos para planes de acción',
-    view: 'action-plan/FormatManager'
+    view: 'action-plan/manager/FormatManager'
   },
   {
     path: '/action-plan-form',
     name: 'Formulario de plan de accion',
-    view: 'action-plan/ActionPlanForm'
+    view: 'action-plan/forms/ActionPlanForm'
   },
   {
     path: '/',
@@ -71,7 +70,7 @@ export default [
   {
     path: '/action-plan-format-editor',
     name: 'Editor de formatos para planes de acción',
-    view: 'action-plan/ActionPlanFormatEditor'
+    view: 'action-plan/formats/ActionPlanFormatEditor'
   },
   {
     path: '/nonconformities',
