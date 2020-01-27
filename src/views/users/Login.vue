@@ -6,7 +6,7 @@
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-toolbar dark color="indigo darken-4">
-                <v-toolbar-title>Inicio de sesión - QMS APP</v-toolbar-title>
+                <v-toolbar-title>Inicio de sesión - Versión Beta {{ version }} - QMS APP</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -33,6 +33,9 @@
               <v-card-actions class="justify-center">
                 <v-btn id="login-button" class="mb-3" dark color="indigo darken-1" @click="loginUser">Ingresar</v-btn>
               </v-card-actions>
+              <v-card-text>
+                <p>* Ten en cuenta que esta aplicación está en desarrollo, aún en fase de pruebas antes de su lanzamiento oficial.</p>
+              </v-card-text>
               <v-alert
                 type="error"
                 border="top"
@@ -50,7 +53,7 @@
     </section>
     <div class="fullscreen-bg" v-if="production">
       <video id="mi-video" loop autoplay muted class="fullscreen">
-        <source src="https://firebasestorage.googleapis.com/v0/b/qms-db.appspot.com/o/upb-video.mp4?alt=media&token=0c26a48a-b8a8-45c2-971c-2b60cb92cb35" type="video/mp4" />
+        <source src="../../assets/upb.mp4" type="video/mp4" />
       </video>
     </div>
   </div>
@@ -61,6 +64,7 @@ import axios from 'axios'
 import ChangePassword from './ChangePassword'
 
 import { backendURL, production } from '@/data.js'
+import packageJSON from '../../../package.json'
 
 export default {
   components: { ChangePassword },
@@ -74,7 +78,8 @@ export default {
         message: '',
         error: false
       },
-      production: production
+      production: production,
+      version: packageJSON.version
     }
   },
   methods: {

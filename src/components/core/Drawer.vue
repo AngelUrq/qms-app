@@ -64,6 +64,9 @@
           <v-list-item-title v-text="'Cerrar sesión'"/>
       </v-list-item>
     </v-list>
+    <div class="version">
+      <p>Versión Beta {{ version }}</p>
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -72,6 +75,8 @@
 import { mapMutations, mapState } from 'vuex'
 import { adminView, userView } from '../../viewRoutes'
 import { adminRole, userRole } from '../../data'
+import packageJSON from '../../../package.json'
+
 export default {
   props: {
     opened: {
@@ -80,7 +85,8 @@ export default {
     }
   },
   data: () => ({
-    items: []
+    items: [],
+    version: packageJSON.version
   }),
 
   computed: {
@@ -105,6 +111,7 @@ export default {
       this.$router.push('/login')
     },
     help: function () {
+      console.log(packageJSON.version)
       window.open('https://gitlab.com/AngelUrq/qms-app/-/wikis/home', '_blank')
     }
   },
@@ -118,3 +125,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+.version {
+  color: white;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+}
+</style>
