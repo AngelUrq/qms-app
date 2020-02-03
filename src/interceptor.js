@@ -8,7 +8,7 @@ export default {
       return response
     }, function (error) {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
-      if (error.response !== undefined) {
+      if (error.response) {
         switch (error.response.status) {
           case 401:
             window.location.href = data.login.URL
@@ -29,9 +29,7 @@ export default {
 
     axios.interceptors.request.use(function (config) {
       const authToken = localStorage.getItem('token')
-      if (authToken) {
-        config.headers.Authorization = `Bearer ${authToken}`
-      } else {
+      if (!authToken && window.location.pathname !== data.login.URL) {
         window.location.href = data.login.URL
       }
       return config

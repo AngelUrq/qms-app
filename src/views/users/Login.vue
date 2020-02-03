@@ -103,9 +103,9 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error.response.data)
+          console.log(error)
           this.alert.error = true
-          this.alert.message = error.response.data.message
+          this.alert.message = 'No se ha podido iniciar sesión correctamente, por favor revisa tus datos.'
         })
     }
   }
