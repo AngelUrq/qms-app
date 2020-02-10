@@ -1,5 +1,6 @@
 {
   "login" : {
     "URL" : "/login"
-  }
+  },
+  "docs": "https://nancyorellanat.github.io/qms-docs/#/"
 }

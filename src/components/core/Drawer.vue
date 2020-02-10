@@ -76,6 +76,7 @@ import { mapMutations, mapState } from 'vuex'
 import { adminView, userView } from '../../viewRoutes'
 import { adminRole, userRole } from '../../data'
 import packageJSON from '../../../package.json'
+import config from '@/config.json'
 
 export default {
   props: {
@@ -111,8 +112,7 @@ export default {
       this.$router.push('/login')
     },
     help: function () {
-      console.log(packageJSON.version)
-      window.open('https://gitlab.com/AngelUrq/qms-app/-/wikis/home', '_blank')
+      window.open(config.docs, '_blank')
     }
   },
   mounted () {
